@@ -1,0 +1,101 @@
+<% include('../layouts/header.ejs') %>
+<style>
+  body {
+    background-image: url("/assets/two.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  .center-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 80vh;
+  }
+  .container {
+    margin-top: 20px;
+  }
+  .a {
+    color: rgb(78, 188, 78);
+  }
+
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    font-weight: bold;
+  }
+
+  .btn-margin {
+    margin-right: 10px;
+  }
+</style>
+
+<div class="center-div">
+  <div class="container">
+    <h1 class="a">Edit User</h1>
+
+    <form action="" method="post">
+      <div class="mb-3">
+        <label for="name" class="a form-label">Name</label>
+        <input
+          type="text"
+          name="name"
+          class="form-control"
+          placeholder="Enter Name"
+          value="<%= user.name %>"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="email" class="a form-label">Email</label>
+        <input
+          type="email"
+          name="email"
+          class="form-control"
+          placeholder="Enter Email"
+          value="<%= user.email %>"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="mno" class="a form-label">Mobile</label>
+        <input
+          type="text"
+          name="mno"
+          class="form-control"
+          placeholder="Enter Mobile"
+          value="<%= user.mobile %>"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label class="a form-label">Verified</label>
+        <div class="form-check">
+          <input type="radio" name="verify" value="1" class="form-check-input"
+          <% if (user.is_varified == 1) { %> checked <% } %>>
+          <label class="a form-check-label">Verified</label>
+        </div>
+        <div class="a form-check">
+          <input type="radio" name="verify" value="0" class="form-check-input"
+          <% if (user.is_varified == 0) { %> checked <% } %>>
+          <label class="form-check-label">Unverified</label>
+        </div>
+      </div>
+      <input type="hidden" name="id" value="<%= user._id %>" />
+      <br /><br />
+      <input type="submit" value="Update User" class="a btn btn-primary" />
+    </form>
+
+    <button>
+      <a href="/admin/" class="a btn btn-secondary">Go Dashboard</a>
+    </button>
+  </div>
+</div>
+<% include('../layouts/footer.ejs') %>

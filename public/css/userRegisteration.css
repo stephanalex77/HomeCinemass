@@ -1,0 +1,64 @@
+.header {
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0 1px 0 0 hsla(0,0%,82.7%,.5);
+}
+.form-control{
+  border-radius: 0;
+  border-color: #000000;
+}
+.full-width{
+  width: 100%;
+}
+
+.btnn {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 30px;
+  padding-right: 30px;
+  border-radius: 30px;
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: .05rem;
+  border-radius: 0; }
+  .btnn:active, .btnn:focus {
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none; }
+  .btnn.btn-primary {
+    background: black;
+    border-color: black; }
+    .btnn.btn-primary:hover {
+      border-color: black;
+      background: black; }
+  .btnn.btn-sm {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px; }
+  .btnn.btn-black {
+    background: #000000;
+    color: #ffffff; }
+  .btnn.btn-outline-black {
+    background: transparent;
+    border-color: #000000;
+    color: #000000; }
+    .btnn.btn-outline-black:hover {
+      color: #ffffff;
+      background: #000000; }
+  .btnn.btn-outline-primary {
+    border-color: black;
+    color: black; }
+    .btnn.btn-outline-primary:hover {
+      background: black;
+      color: #ffffff; }
+  .btnn.btn-outline-white {
+    border-color: #ffffff;
+    color: #ffffff; }
+    .btnn.btn-outline-white:hover {
+      background: #ffffff;
+      color: #000000; }

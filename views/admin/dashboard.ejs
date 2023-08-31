@@ -1,0 +1,124 @@
+<% include('../layouts/header.ejs') %>
+<style>
+  body {
+    background-image: url("/assets/two.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  .center-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 80vh;
+  }
+  .container {
+    margin-top: 20px;
+  }
+  .a {
+    color: rgb(78, 188, 78);
+  }
+  .b {
+    color: white;
+  }
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .table {
+    width: 100%;
+  }
+
+  .table th,
+  .table td {
+    padding: 10px;
+  }
+
+  .btn-margin {
+    margin-right: 5px;
+  }
+</style>
+
+<div class="center-div">
+  <div class="container">
+    <h1 class="a">Dashboard</h1>
+
+    <form action="">
+      <div class="input-group mb-3">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search User name, email, mobile"
+          name="search"
+        />
+        <button class="btn btn-primary a" type="submit">Search</button>
+      </div>
+    </form>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th class="a">Name</th>
+          <th class="a">Email</th>
+          <th class="a">Mobile</th>
+          <th class="a">Image</th>
+          <th class="a">Verified</th>
+          <th class="a">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (users.length > 0) { %> <% for (let i = 0; i < users.length; i++)
+        { %>
+        <tr>
+          <td class="b"><%= users[i].name %></td>
+          <td class="b"><%= users[i].email %></td>
+          <td class="b"><%= users[i].mobile %></td>
+          <td>
+            <img
+              src="/userImages/<%= users[i].image %>"
+              alt="<%= users[i].image %>"
+              width="50px"
+              height="50px"
+            />
+          </td>
+          <td class="b">
+            <% if (users[i].is_varified == 0) { %>
+            <p>Not Verified</p>
+            <% } else { %>
+            <p>Verified</p>
+            <% } %>
+          </td>
+          <td>
+            <button class="round-pill">
+              <a
+                href="/admin/edit-user?id=<%= users[i]._id %>"
+                class="a btn btn-primary"
+                >Edit</a
+              >
+            </button>
+            <button class="">
+              <a
+                href="/admin/delete-user?id=<%= users[i]._id %>"
+                class="a btn btn-danger"
+                >Delete</a
+              >
+            </button>
+          </td>
+        </tr>
+        <% } %> <% } %>
+      </tbody>
+    </table>
+
+    <button class="">
+      <a href="/admin/home" class="a btn btn-secondary rounded-pill"
+        >Go to Home</a
+      >
+    </button>
+  </div>
+</div>
+<% include('../layouts/header.ejs') %>
