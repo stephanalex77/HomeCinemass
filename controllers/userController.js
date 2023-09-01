@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const { name } = require("ejs");
 
 const nodemailer = require("nodemailer");
+const randomString= require("randomstring");
 
 const securePassword = async (password) => {
   try {
@@ -14,7 +15,7 @@ const securePassword = async (password) => {
 };
 //for send mail
 
-const sendVerifyMail = async (name, email, user_id) => {
+const sendVerifyMail = async (name, email, otp) => {
   try {
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
@@ -26,16 +27,13 @@ const sendVerifyMail = async (name, email, user_id) => {
         pass: "jrdjzrshqrxkgckm",
       },
     });
+    console.log(otp);
     const mailOptions = {
       from: "stephanalex22@gmail.com",
       to: email,
       subject: "for varification mail",
       html:
-        "<p>Hii " +
-        name +
-        ', please click here to <a href="http://localhost:3000/verify?id=' +
-        user_id +
-        '"> verify </a> your mail.</p>',
+        "<p>Hello " + name + " " + "this is your otp " + "  " + otp + ' "</p>',
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -49,6 +47,9 @@ const sendVerifyMail = async (name, email, user_id) => {
     console.log(error.message);
   }
 };
+
+
+
 
 const loadRegister = async (req, res) => {
   try {
@@ -115,6 +116,9 @@ const insertUser = async (req, res) => {
 //   }
 // };
 
+
+
+
 // login user methods started
 const loginLoad = async (req, res) => {
   try {
@@ -125,13 +129,38 @@ const loginLoad = async (req, res) => {
   }
 };
 
+const verifyOtp = async(req, res) =>{
+  try{
+    const email = req.body.email;
+    const otp = req.body.otp;
+
+    const userData = await User.findOne({email: email});
+    if (userData) {
+      if (userData.otp===otp) {
+        if (userData.is_varified === 0) {
+          res.render("login", { message: "Please verify your mail" });
+        } else {
+          req.session.user = userData;
+          res.redirect("/home");
+        }
+      } else {
+        res.render("login", { message: "OTP incorrect" });
+      }
+    } else {
+      res.render("login", { message: "user not exist" });
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 const verifyLogin = async (req, res) => {
   try {
     const email = req.body.email;
     const password = req.body.password;
-console.log(req.body);
+
     const userData = await User.findOne({ email: email });
-console.log(userData);
+
     if (userData) {
       const passwordMatch = await bcrypt.compare(password, userData.password);
       if (passwordMatch) {
@@ -170,21 +199,21 @@ const userLogout = (req, res) => {
   }
 };
 
-const editLoad = async (req, res) => {
-  try {
-    const id = req.query.id;
+// const editLoad = async (req, res) => {
+//   try {
+//     const id = req.query.id;
 
-    const userData = await User.findById({ _id: id });
+//     const userData = await User.findById({ _id: id });
 
-    if (userData) {
-      res.render("edit", { user: userData });
-    } else {
-      res.redirect("/home");
-    }
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+//     if (userData) {
+//       res.render("edit", { user: userData });
+//     } else {
+//       res.redirect("/home");
+//     }
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// };
 
 const updateProfile = async (req, res) => {
   try {
@@ -228,13 +257,41 @@ const updateProfile = async (req, res) => {
   }
 };
 
+const getOtp = async (req, res) => {
+  try {
+    res.set("cache-Control", "no-store");
+    res.render("otpGenerate");
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+
+const sendOtp= async (req, res) => {
+  try {
+    // userData._id=req.session.user_id 
+    // console.log(userData._id)
+ 
+    const userData= await User.findOne({email:req.body.email})
+ 
+    const  otp = randomString.generate({length:4,charset:"numeric"})
+
+   
+    sendVerifyMail( userData['name'],req.body.email,otp);
+    res.render("otp");
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 module.exports = {
   loadRegister,
   insertUser,
   loginLoad,
   verifyLogin,
+  verifyOtp,
   loadHome,
   userLogout,
-  editLoad,
   updateProfile,
+  getOtp,
+  sendOtp
 };

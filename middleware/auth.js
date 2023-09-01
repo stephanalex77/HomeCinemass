@@ -1,6 +1,6 @@
 const isLogin = async (req, res, next) => {
   try {
-    if (req.session.user_id) {
+    if (req.session && req.session.user_id) {
       next();
     } else {
      return res.redirect('/login'); // Redirect the user to the login page if not logged in
