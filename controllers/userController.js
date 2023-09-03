@@ -149,7 +149,7 @@ const verifyOtp = async(req, res) =>{
         res.render("otp", { message: "OTP incorrect" });
       }
     } else {
-      res.render("login", { message: "user tfhjnot exist" });
+      res.render("login", { message: "user not exist" });
     }
   } catch (error) {
     console.log(error.message);

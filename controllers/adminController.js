@@ -122,6 +122,20 @@ const deleteUser = async(req,res)=>{
   }
 }
 
+const getUsers = async(req, res)=>{
+    try{
+        const users= await User.find()
+        res.render('user',{users})
+    }catch(error){
+        console.log(error.message)
+    }
+}
+
+
+
+
+
+
 module.exports = {
  loadLogin,
  verifyLogin,
@@ -130,5 +144,6 @@ module.exports = {
  adminDashboard,
  editUserLoad,
  updateUsers,
- deleteUser
+ deleteUser,
+ getUsers
 }

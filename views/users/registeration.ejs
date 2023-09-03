@@ -94,4 +94,25 @@
   <% } %>
 </div>
 
+
+
+ 
 <% include('../layouts/footer.ejs') %>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("form");
+
+    form.addEventListener("submit", function (event) {
+      const email = document.getElementById("email").value.trim();
+      const name = document.getElementById("name").value.trim();
+      const mno = document.getElementById("mno").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!email || !name || !mno || !password) {
+        event.preventDefault(); // Prevent form submission
+        alert("Please fill in all required fields.");
+      }
+    });
+  });
+</script>

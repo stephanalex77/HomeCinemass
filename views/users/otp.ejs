@@ -36,3 +36,20 @@
   </form>
 </div>
 <% include('../layouts/footer.ejs') %>
+
+
+<script>
+  function validateLoginForm() {
+    // const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (!password) {
+      alert("Please fill in all required fields.");
+      return false; // Prevent form submission
+    }
+
+    // You can add more advanced validation if needed
+
+    return true; // Allow form submission
+  }
+</script>
