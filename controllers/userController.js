@@ -27,7 +27,6 @@ const sendVerifyMail = async (name, email, otp) => {
         pass: "jrdjzrshqrxkgckm",
       },
     });
-    console.log(otp);
     const mailOptions = {
       from: "stephanalex22@gmail.com",
       to: email,
@@ -68,10 +67,6 @@ const insertUser = async (req, res) => {
     if (existEmail) {
       return res.status(400).json({ error: "Email already exists." });
     }
-    //  function generateOtp(
-
-    //  )
-    // const otp=generateOtp()
 
     const user = new User({
       name: req.body.name,
@@ -79,47 +74,53 @@ const insertUser = async (req, res) => {
       mobile: req.body.mno,
       password: spassword,
       is_admin: 0,
+      otp:0,
     });
 
-    console.log(user);
+    
+
     if (req.body.name.trim() === "" || !req.body.name) {
       return res.status(400).json({ error: "must enter name" });
     }
 
     const userData = await user.save();
-    console.log("jfgs");
+    req.session.email= req.body.email
     if (userData) {
-      sendVerifyMail(req.body.name, req.body.email, userData._id);
+      const  otp = randomString.generate({length:4,charset:"numeric"})
+      userData.otp=otp
+      await userData.save()
 
-      res.render("registeration", {
+      
+      sendVerifyMail(req.body.name, req.body.email, otp);
+      req.session.otp= otp
+
+      res.render("otp", {
         message: "your registration is successfull",
       });
     } else {
-      res.render("registeration", { message: "your registration is failed" });
+      res.render("registeration", { message: "your registration is failed", });
     }
   } catch (error) {
     console.log(error.massage);
   }
 };
 
-// const verifyMail = async (req, res) => {
-//   try {
-//     const updateInfo = await User.updateOne(
-//       { _id: req.query.id },
-//       { $set: { is_varified: 1 } }
-//     );
+const verifyMail = async (req, res) => {
+  try {
+    const updateInfo = await User.updateOne(
+      { _id: req.query.id },
+      { $set: { is_varified: 1 } }
+    );
 
-//     console.log(updateInfo);
-//     res.render("email-verified");
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// };
-
-
+    console.log(updateInfo);
+    res.render("email-verified");
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 
-// login user methods started
+// login user methods startedconst otp
 const loginLoad = async (req, res) => {
   try {
     res.set("cache-Control", "no-store");
@@ -131,23 +132,24 @@ const loginLoad = async (req, res) => {
 
 const verifyOtp = async(req, res) =>{
   try{
-    const email = req.body.email;
+    
+    
     const otp = req.body.otp;
-
-    const userData = await User.findOne({email: email});
-    if (userData) {
-      if (userData.otp===otp) {
-        if (userData.is_varified === 0) {
-          res.render("login", { message: "Please verify your mail" });
-        } else {
-          req.session.user = userData;
-          res.redirect("/home");
-        }
+     const storedotp = req.session.otp
+    
+    const userData = await User.findOne({email: req.session.email})
+    if(userData){
+      if (otp===storedotp) {
+        
+        userData.is_varified = 1;
+        await userData.save()
+        res.redirect("/")
+    
       } else {
-        res.render("login", { message: "OTP incorrect" });
+        res.render("otp", { message: "OTP incorrect" });
       }
     } else {
-      res.render("login", { message: "user not exist" });
+      res.render("login", { message: "user tfhjnot exist" });
     }
   } catch (error) {
     console.log(error.message);
@@ -157,6 +159,7 @@ const verifyOtp = async(req, res) =>{
 const verifyLogin = async (req, res) => {
   try {
     const email = req.body.email;
+    console.log("============", email);
     const password = req.body.password;
 
     const userData = await User.findOne({ email: email });
@@ -167,6 +170,7 @@ const verifyLogin = async (req, res) => {
         if (userData.is_varified === 0) {
           res.render("login", { message: "Please verify your mail" });
         } else {
+          console.log("otp verified    :",userData.is_varified);
           req.session.user_id = userData._id;
           res.redirect("/home");
         }
@@ -180,11 +184,19 @@ const verifyLogin = async (req, res) => {
     console.log(error.message);
   }
 };
+
 const loadHome = async (req, res) => {
   try {
-    const userData = await User.findById({ _id: req.session.user_id });
-    res.set("cache-Control", "no-store");
-    res.render("home", { user: userData });
+    const userData = await User.findById({_id:req.session.user_id})
+    res.render("home", {user: userData});
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const homeLoad = async (req, res) => {
+  try {
+    res.render("home");
   } catch (error) {
     console.log(error.message);
   }
@@ -257,32 +269,33 @@ const updateProfile = async (req, res) => {
   }
 };
 
-const getOtp = async (req, res) => {
+const generateOtp = async (req, res) => {
   try {
     res.set("cache-Control", "no-store");
-    res.render("otpGenerate");
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
-
-const sendOtp= async (req, res) => {
-  try {
-    // userData._id=req.session.user_id 
-    // console.log(userData._id)
- 
-    const userData= await User.findOne({email:req.body.email})
- 
-    const  otp = randomString.generate({length:4,charset:"numeric"})
-
-   
-    sendVerifyMail( userData['name'],req.body.email,otp);
     res.render("otp");
   } catch (error) {
     console.log(error.message);
   }
 };
+
+
+// const sendOtp= async (req, res) => {
+//   console.log(req.body)
+//   try {
+//     // userData._id=req.session.user_id 
+//     // console.log(userData._id)
+ 
+//     const userData= await User.findOne({email:req.body.email})
+ 
+//     const  otp = randomString.generate({length:4,charset:"numeric"})
+
+//   //  console.log(otp);
+//     sendVerifyMail( userData['name'],req.body.email,otp);
+//     res.render("otp");
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// };
 module.exports = {
   loadRegister,
   insertUser,
@@ -290,8 +303,10 @@ module.exports = {
   verifyLogin,
   verifyOtp,
   loadHome,
+  homeLoad,
   userLogout,
   updateProfile,
-  getOtp,
-  sendOtp
+  generateOtp,
+  verifyMail
+  
 };

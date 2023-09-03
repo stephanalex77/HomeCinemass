@@ -4,7 +4,7 @@
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
   />
-  <link rel="stylesheet" href="/public/css/otp.css" />
+  <link rel="stylesheet" href="/public/css/userlogin.css" />
 </head>
 <div class="header">
   <a>
@@ -12,38 +12,27 @@
   </a>
 </div>
 <div class="container w-25 my-5">
+  <form action="/verifyotp" method="post">
   <h3 class="mb-4">Email verification</h3>
   <h5 class="mb-3 text-muted">* required fields</h5>
     <h5 class="m-0"></h5>
-   
-    <!-- <div class="mb-3">
-      <label for="email" class="form-label"></label>
-      <input
-        type="email"
-        name="email"
-        id="email"
-        class="form-control"
-        placeholder="Email*"
-        required
-      />
-      <div class="invalid-feedback">Please provide a valid email.</div>
-    </div> -->
-   
     <div class="form-row">
       <div class="form-group col">
         <label for="otp"></label>
-        <input id="otp" type="text" placeholder="Enter your OTP*" class="form-control"/>
+        <input id="otp" name="otp" type="text" placeholder="Enter your OTP*" class="form-control"/>
+        <input type="email" name = "email" hidden value="">
       </div>
     </div>
 
     <div class="text-center mt-5">
       <div class="text-center  mb-3"> <!-- Center the button within the form -->
-        <button type="submit" class="btnn btn-dark sharp-button form-control full-width btn-outline-black btn-sm ">Verify</button>
+        <button type="submit" class="btnn btn-dark sharp-button form-control full-width btn-outline-black btn-sm ">
+          Verify OTP
+        </button>
       </div>
       <span class="d-block mobile-text">Don't receive the code?</span
       ><span class="font-weight-bold text-black cursor">Resend</span>
     </div>
-  <!-- </div> -->
-  <!-- </div> -->
+  </form>
 </div>
 <% include('../layouts/footer.ejs') %>

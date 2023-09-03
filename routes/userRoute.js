@@ -37,7 +37,7 @@ const storage = multer.diskStorage({
         cb(null,path.join(__dirname,'../public/userImages'))
     },
     filename:function(req,file,cb){
-        const  name = Date.now()+'-'+file.orginalname;
+        const  name = Date.now()+'-'+file.originalname;
         cb(null,name);
     }
 })
@@ -49,20 +49,23 @@ const userController = require("../controllers/userController");
 user_route.get('/register',auth.isLogout,userController.loadRegister);
 
 user_route.post('/register',userController.insertUser);
-
+user_route.post('/otp', userController.insertUser)
+// user_route.get('/otp',userController.generateOtp)
+// user_route.post('/send-otp',userController.sendOtp)
+user_route.post('/verifyotp',userController.verifyOtp)
 
 
 // user_route.get('/verify',userController.verifyMail);
 
-user_route.get('/',auth.isLogout,userController.loginLoad);
+user_route.get('/',auth.isLogout,userController.homeLoad);
 
 user_route.get('/login',auth.isLogout,userController.loginLoad);
+
 user_route.post('/login',userController.verifyLogin)
 
-user_route.get('/otp',auth.isLogout,userController.getOtp)
+user_route.get('/registeration',userController.loadRegister)
 
-user_route.post('/otp',userController.sendOtp)
-user_route.post('/otp',userController.verifyOtp)
+
 
 
 

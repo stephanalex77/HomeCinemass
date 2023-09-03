@@ -13,17 +13,19 @@ const loadLogin = async(req,res)=>{
 
 const verifyLogin = async(req,res)=>{
     try{
+        
         const email = req.body.email;
+       
         const password = req.body.password;
 
         const userData = await User.findOne({email:email});
 
         if(userData){
+           
           const passwordMatch =  bcrypt.compare(password,userData.password)
-
-
           if(passwordMatch){
-               if(userData.is_admin === 0){
+            
+               if(userData.is_admin === false){
                 res.render('login',{message:"Email and password is incorrect"});
                }else{
                 req.session.user_id = userData._id;
@@ -68,11 +70,12 @@ const adminDashboard = async(req,res)=>{
         search = req.query.search;
     }
         const userData = await User.find({
-            is_admin:0,
+            is_admin:false,
             $or:[
                 {name:{ $regex:'.*'+search+'.*',$options:'i'}},
                 {email:{ $regex:'.*'+search+'.*',$options:'i'}},
                 {mobile:{ $regex:'.*'+search+'.*',$options:'i'}}
+                
             ]
         });
          res.render('dashboard',{users:userData})
