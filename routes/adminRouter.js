@@ -1,6 +1,6 @@
 const express = require("express")
 const admin_route = express();
-
+const uploadProduct = require('../multer/productMulter')
 const session = require("express-session")
 const config = require("../config/config");
 admin_route.use(session({secret:config.sessionSecret,
@@ -23,6 +23,8 @@ const adminController = require("../controllers/adminController");
 
 const categoryController= require("../controllers/categoryController")
 
+const productController= require("../controllers/productController")
+
 admin_route.get('/',auth.isLogout,adminController.loadLogin)
 
 admin_route.post('/', adminController.verifyLogin)
@@ -41,7 +43,22 @@ admin_route.get('/delete-user',adminController.deleteUser)
   
 admin_route.get('/users',adminController.getUsers)
 
+// category get and post
 admin_route.get('/category', categoryController.getCategory)
+
+admin_route.post('/category', categoryController.addCategory)
+
+admin_route.post('/category', categoryController.unListCategory)
+
+admin_route.post('/category', categoryController.listCategory)
+
+
+// product management
+
+admin_route.get('/products', productController.getProduct)
+
+admin_route.post('/products',uploadProduct.array('file'), productController.addProduct)
+
 
 
 

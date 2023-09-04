@@ -9,10 +9,6 @@ const categorySchema = new mongoose.Schema({
     type:String,
     require:true
   },
-  img:{
-    type:String,
-    require:true
-  },
   is_listed:{
     type:Boolean,
     require:true

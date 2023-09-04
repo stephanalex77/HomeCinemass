@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
+const path = require('path')
 
 mongoose
   .connect(process.env.MONGO_DB_URL)
@@ -22,6 +23,8 @@ app.use("/", userRoute);
 
 app.set("view engine", "ejs");
 app.set("views", "../views/users");
+// app.set("views", "../views/admin");
+
 
 app.get("/register", function (req, res) {
   res.render("registeration");
@@ -29,6 +32,7 @@ app.get("/register", function (req, res) {
 
 const adminRoute = require("./routes/adminRouter");
 app.use("/admin", adminRoute);
+
 
 app.listen(3001, function () {
   console.log("server is running...");
