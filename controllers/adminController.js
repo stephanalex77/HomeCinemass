@@ -84,22 +84,7 @@ const adminDashboard = async(req,res)=>{
     }
 }
 
-const editUserLoad = async(req,res)=>{
-    try{
-        const id = req.query.id;
-        const userData = await User.findById({_id:id});
-        if(userData){
-            res.render('edit-user',{user:userData});
-            
-        }
-        else{
-            res.redirect('/admin/dashboard');
-        }
-         
-    }catch (error){
-        console.log(error.message)
-    }
-}
+
 
 
 
@@ -125,6 +110,6 @@ module.exports = {
  loadDashboard,
  logout,
  adminDashboard,
- editUserLoad,
+
  getUsers
 }

@@ -1,7 +1,6 @@
 const Product = require("../models/productModel");
 const multer = require('multer');
 const path = require('path')
-
 const cropImage = require('../multer/cropProductImg')
 
 
@@ -9,7 +8,6 @@ const cropImage = require('../multer/cropProductImg')
 
 const getProduct = async (req, res)=>{
   try {
-    // const products = await Product.find();
       res.render('product')
   } catch (error) {
       console.log(error);
@@ -47,6 +45,7 @@ const listProduct = async(req, res)=>{
       try {
         const products = await Product.find()
         res.render('productList',{products})
+        await cropImage.crop(req)
       } catch (error) {
         
       }
