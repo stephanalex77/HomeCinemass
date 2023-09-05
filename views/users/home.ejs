@@ -225,23 +225,45 @@
 				</div>
 			</div> <!-- /.heading -->
 
+<!-- ============================== -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ========================== -->
+
 
 			<div class="owl-3-slider owl-carousel">
 
-				
+				<% products.forEach(product => { %>
 				<div class="item">
 					<div class="product-item">
 						<a href="shop-single.html" class="product-img">
 							<div class="label sale top-right">
 								<div class='content'>Sale</div>
 							</div>
-							<img src="/userHome/images/products/watch-1-min.jpg" alt="Image" class="img-fluid">
+							<img src="/public/uploadProduct/<%= product.image[0] %>" alt="<%= product.product_name %>" class="img-fluid">
 						</a>
-						<h3 class="title"><a href="#">The Murray</a></h3>
+						<h3 class="title"><a href="#"><%= product.product_name %></a></h3>
 						<div class="price">
-							<del>£99.00</del> &mdash; <span>£69.00</span>
+							<del>₹<% product.product_price %></del> &mdash; <span>₹<%= product.product_sales_price %></span>
 						</div>
 					</div>
+					<% }); %>
+					
 				</div> <!-- /.item -->
 
 			

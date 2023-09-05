@@ -1,7 +1,7 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const { name } = require("ejs");
-
+const Product = require('../models/productModel')
 const nodemailer = require("nodemailer");
 const randomString= require("randomstring");
 
@@ -168,7 +168,8 @@ const verifyLogin = async (req, res) => {
       const passwordMatch = await bcrypt.compare(password, userData.password);
       if (passwordMatch) {
         if (userData.is_varified === 0) {
-          res.render("login", { message: "Please verify your mail" });
+          const products = await Product.find()
+          res.render("login", { message: "Please verify your mail" ,products});
         } else {
           console.log("otp verified    :",userData.is_varified);
           req.session.user_id = userData._id;
@@ -187,8 +188,9 @@ const verifyLogin = async (req, res) => {
 
 const loadHome = async (req, res) => {
   try {
+    const products= await Product.find()
     const userData = await User.findById({_id:req.session.user_id})
-    res.render("home", {user: userData});
+    res.render("home", {user: userData,products});
   } catch (error) {
     console.log(error.message);
   }
@@ -196,7 +198,8 @@ const loadHome = async (req, res) => {
 
 const homeLoad = async (req, res) => {
   try {
-    res.render("home");
+    const products= await Product.find()
+    res.render("home",{products});
   } catch (error) {
     console.log(error.message);
   }

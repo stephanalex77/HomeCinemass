@@ -33,13 +33,11 @@ admin_route.get('/home',auth.isLogin,adminController.loadDashboard);
 
 admin_route.get('/logout',auth.isLogin,adminController.logout)
 
-// admin_route.get('/dashboard',auth.isLogin,adminController.adminDashboard);
-
 admin_route.get('/edit-user',auth.isLogin,adminController.editUserLoad)
 
-admin_route.post('/edit-user',adminController.updateUsers);
 
-admin_route.get('/delete-user',adminController.deleteUser)
+
+
   
 admin_route.get('/users',adminController.getUsers)
 
@@ -48,17 +46,16 @@ admin_route.get('/category', categoryController.getCategory)
 
 admin_route.post('/category', categoryController.addCategory)
 
-admin_route.post('/category', categoryController.unListCategory)
 
-admin_route.post('/category', categoryController.listCategory)
 
 
 // product management
 
 admin_route.get('/products', productController.getProduct)
 
-admin_route.post('/products',uploadProduct.array('file'), productController.addProduct)
-
+admin_route.post('/products',uploadProduct.array('images',4), productController.addProduct)
+ 
+admin_route.get('/productlist',productController.listProduct)
 
 
 

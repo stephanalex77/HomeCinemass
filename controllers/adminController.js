@@ -100,27 +100,10 @@ const editUserLoad = async(req,res)=>{
         console.log(error.message)
     }
 }
-const updateUsers = async(req,res)=>{
-    try{
-    const userData =  await  User.findByIdAndUpdate({_id:req.body.id},{ $set:{ name:req.body.name, email:req.body.eamil, mobile:req.body.mno, is_varified:req.body.verify}});
 
-    res.redirect('/admin/dashboard');
 
-    } catch(error) {
-        console.log(error.message);
-    }
-}
 
-const deleteUser = async(req,res)=>{
-  try{
-    const id = req.query.id;
-    await User.deleteOne({_id:id });
-    res.redirect('/admin/dashboard');
 
-  }catch(error){
-    console.log(error.message)
-  }
-}
 
 const getUsers = async(req, res)=>{
     try{
@@ -143,7 +126,5 @@ module.exports = {
  logout,
  adminDashboard,
  editUserLoad,
- updateUsers,
- deleteUser,
  getUsers
 }

@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
     is_varified:{
         type:Number,
         default:0
+    },
+    is_block:{
+        type:Boolean,
+        default:false
     }
    
 });

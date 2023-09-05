@@ -47,40 +47,17 @@ const addCategory= async(req, res)=>{
 // }
 
 // category unlist
-const unListCategory = async(req, res) =>{
-  try{
-      console.log('unlisstt')
-      const categoryId = req.params.categoryId;
-      console.log(categoryId)
-      const validCateogryId = new mongoose.Types.ObjectId(categoryId);
-      await Category.findByIdAndUpdate(validCateogryId, {isListed: false});
-      
-      res.redirect(302,'/category')
-  }catch(error){
-      console.log(error.message);
-  }
-}
+
 
 // category list
-const listCategory = async(req, res)=>{
-  try{ 
-      console.log('listtt')
-      const categoryId = req.params.categoryId;
-      const validCategoryId = new mongoose.Types.ObjectId(categoryId);
-      await Category.findByIdAndUpdate(validCategoryId, {isListed: true});
-      res.redirect(302,'category')
-  }catch(error){
-      console.log(error.message)
-  }
-}
+
 
 
 
 module.exports = {
   getCategory,
   addCategory,
-  unListCategory,
-  listCategory
+
   
  
 }
