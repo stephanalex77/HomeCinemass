@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema({
     is_block:{
         type:Boolean,
         default:false
+    },
+    active: {
+        type: Boolean,
+        default: true 
     }
    
 });

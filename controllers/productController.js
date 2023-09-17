@@ -1,5 +1,4 @@
 const Product = require("../models/productModel");
-const multer = require('multer');
 const path = require('path')
 const cropImage = require('../multer/cropProductImg')
 
@@ -47,12 +46,56 @@ const listProduct = async(req, res)=>{
         res.render('productList',{products})
         await cropImage.crop(req)
       } catch (error) {
-        
+        console.log(error);
       }
 }
+
+const getProductDetails = async(req, res)=>{
+  try {
+    const productId = req.params._id;
+
+    const product = getProductDetails(productId);
+    if (!product) {
+      // Handle the case where the product is not found (e.g., send an error response)
+      return res.status(404).send('Product not found');
+  }
+
+  // Render the product details page and pass the product data to the template
+  res.render('users/productDetails', { product });
+
+    const products = await Product.find();
+    res.render('productDetails',{products})
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const showProductDetails = async(req, res)=>{
+  try {
+    const productId = req.params._id;
+
+    const product = showProductDetails(productId);
+    if (!product) {
+      // Handle the case where the product is not found (e.g., send an error response)
+      return res.status(404).send('Product not found');
+  }
+
+  // Render the product details page and pass the product data to the template
+  res.render('users/singleProduct', { product });
+
+    const products = await Product.find();
+    res.render('singleProduct',{products})
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 
 module.exports = {
   getProduct,
   addProduct,
-  listProduct
+  listProduct,
+  getProductDetails,
+  showProductDetails
+ 
 }

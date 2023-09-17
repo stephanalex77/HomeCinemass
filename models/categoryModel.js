@@ -5,11 +5,15 @@ const categorySchema = new mongoose.Schema({
     type:String,
     require:true
   },
+  category_id:{
+    type:Number,
+    require:true
+  },
   description:{
     type:String,
     require:true
   },
-  is_listed:{
+  isListed:{
     type:Boolean,
     require:true
   }

@@ -45,6 +45,8 @@ const upload = multer({storage:storage});
 
 
 const userController = require("../controllers/userController");
+const cartController = require("../controllers/cartController")
+const productController = require("../controllers/productController")
 
 user_route.get('/register',auth.isLogout,userController.loadRegister);
 
@@ -65,6 +67,17 @@ user_route.get('/registeration',userController.loadRegister)
 user_route.get('/home',auth.isLogin,userController.loadHome)
 
 user_route.get('/logout',auth.isLogin,userController.userLogout)
+
+
+// cart management
+user_route.get('/cartt', auth.isLogin, cartController.getCart)
+user_route.post('/addToCartt',auth.isLogin,cartController.addToCart)
+
+// product details 
+
+user_route.get('/productDetails/:productId',productController.getProductDetails)
+
+
 
 
 

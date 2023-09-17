@@ -36,15 +36,25 @@ admin_route.get('/home',auth.isLogin,adminController.loadDashboard);
 
 admin_route.get('/logout',auth.isLogin,adminController.logout)
 
-admin_route.get('/users',adminController.getUsers)
+admin_route.get('/users',auth.isLogin, adminController.getUsers)
+
+admin_route.get('/users',auth.isLogin,adminController.adminDashboard);
 
 
+// admin_route.post('/users',adminController.user_toggle)
+
+admin_route.get('/block', adminController.blockUser)
+admin_route.get('/unblock', adminController.unblockuser)
 
 
 // category get and post
 admin_route.get('/category', categoryController.getCategory)
 
 admin_route.post('/category', categoryController.addCategory)
+
+// admin_route.post('/category/list/:_id', categoryController.listCategory);
+
+// admin_route.post('/category/unlist/:_id', categoryController.unListCategory);
 
 
 
@@ -58,8 +68,12 @@ admin_route.post('/products',uploadProduct.array('images',4), productController.
 admin_route.get('/productlist',productController.listProduct)
 
 
-
 admin_route.get('*',function(req,res){
     res.redirect('/admin');
 })
+
+// Assuming you have fetched the 'users' data and stored it in a variable called 'users'
+
+admin_route.get('/productList',adminController.editUserLoad);
+
 module.exports = admin_route;

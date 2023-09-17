@@ -1,0 +1,29 @@
+<%- include('../layouts/homeLayout/header')%>
+
+<div class="untree_co-section">
+  <div class="container">
+    <div class="product-details">
+      <div class="product-image">
+        <!-- Replace with the actual product image URL -->
+        <img src="/public/uploadProduct/<%= product.image[0] %>" alt="<%= product.product_name %>">
+      </div>
+      <div class="product-info">
+        <!-- Replace with the actual product name, prices, and description -->
+        <h1><%= product.product_name %></h1>
+        <div class="product-price">
+          <del>₹<%= product.product_price %></del>
+          <span>₹<%= product.product_sales_price %></span>
+        </div>
+        <p class="product-description"><%= product.product_description %></p>
+        <!-- Add to Cart button with data-product-id attribute for identification -->
+        <button class="btn btn-primary add-to-cart" data-product-id="<%= product._id %>">Add to Cart</button>
+        <!-- Buy Now button with a link to the checkout page -->
+        <a href="/checkout?product=<%= product._id %>" class="btn btn-success buy-now">Buy Now</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<%- include('../layouts/homeLayout/footer')%>

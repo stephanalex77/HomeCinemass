@@ -110,24 +110,30 @@
 		</div> <!-- /.heading -->
 		<div class="untree_co-section">
 			<div class="container">
-	
+			<form action="addToCartt" method="post">
 				<div class="row">
 					<% products.forEach(product => { %>
-					<div class="col-6 col-sm-6 col-md-6 mb-4 col-lg-4">
-									<div class="product-item" style="border: 1px solid black; padding: 10px;">
-										<a href="shop-single.html" class="product-img">
-											<img src="/public/uploadProduct/<%= product.image[0] %>" alt="<%= product.product_name %>" class="img-fluid">
-										</a>
-										<h3 class="title"><a href="#"><%= product.product_name %></a></h3>
-										<div class="price">
-											<del>₹<% product.product_price %></del> &mdash;<span>₹<%= product.product_sales_price %></span>
-										</div>
-									</div>
+						<div class="col-6 col-sm-6 col-md-6 mb-4 col-lg-4">
+							<div class="product-item" style="border: 1px solid black; padding: 10px;">
+								<a href="/singleProduct" class="product-img">
+									<img src="/public/uploadProduct/<%= product.image[0] %>" alt="<%= product.product_name %>" class="img-fluid">
+								</a>
+								<h3 class="title"><a href="/singleProductah"><%= product.product_name %></a></h3>
+								<div class="price">
+									<del>₹<%= product.product_price %></del> &mdash; <span>₹<%= product.product_sales_price %></span>
 								</div>
-						<% }); %>
+								<div class="buttons">
+									<button type="submit" class="btn btn-primary add-to-cart" data-product-id="<%= product._id %>">Add to Cart</button>
+									<a href="/checkout?product=<%= product._id %>" class="btn btn-success buy-now" style="background-color: white; border: 1px solid black; color: black;">Buy Now</a>
+
+								</div>
+							</div>
+						</div>
+					<% }); %>
+				</form>
 				</div>
 			</div>
-		</div> /.untree_co-section
+		</div> 
 
 
 

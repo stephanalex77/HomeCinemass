@@ -5,6 +5,10 @@ const productSchema = new mongoose.Schema({
     type:String,
     require:true
   },
+  product_id:{
+    type:String,
+    require:true
+  },
   product_price:{
     type:Number,
     require:true
@@ -24,6 +28,10 @@ const productSchema = new mongoose.Schema({
   image:{
     type:Array,
     require:true
+  },
+  category_id:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Categories"
   }
 })
 
