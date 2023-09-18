@@ -32,6 +32,8 @@ const path = require("path");
 
 user_route.use(express.static('public'))
 
+
+
 const storage = multer.diskStorage({
     destination:function(req,file,cb){
         cb(null,path.join(__dirname,'../public/userImages'))
@@ -77,7 +79,7 @@ user_route.post('/addToCartt',auth.isLogin,cartController.addToCart)
 
 user_route.get('/productDetails/:productId',productController.getProductDetails)
 
-
+user_route.get('/profile',auth.isLogin,userController.goToProfile);
 
 
 

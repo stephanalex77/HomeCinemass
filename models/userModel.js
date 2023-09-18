@@ -36,7 +36,42 @@ const userSchema = new mongoose.Schema({
     active: {
         type: Boolean,
         default: true 
-    }
+    },
+    address: [{
+        firstname:{
+          type: String,
+        },
+        lastname:{
+            type: String,
+          },
+        email:{
+            type:String,
+            unique: true
+        },
+        mobile:{
+          type: Number
+        },
+        address1:{
+          type:String
+        },
+        address2:{
+          type:String
+        },
+        pincode:{
+          type:String
+        },
+        state:{
+          type:String
+        },
+        
+       
+        city:{
+          type:String
+        },
+         country:{
+          type:String
+        }    
+      }]
    
 });
 

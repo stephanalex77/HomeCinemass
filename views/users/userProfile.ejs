@@ -1,0 +1,87 @@
+<%- include('../layouts/homeLayout/header')%>
+ <!-- Page Header Start -->
+ <div class="container-fluid bg-secondary mb-5">
+  <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+      <h1 class="font-weight-semi-bold text-uppercase mb-3">Who am I?</h1>
+      <div class="d-inline-flex">
+          <p class="m-0"><a href="#">Home</a></p>
+          <p class="m-0 px-2">/</p>
+          <p class="m-0">Profile</p>
+      </div>
+  </div>
+</div>
+<!-- Page Header End -->
+
+<div class="container">
+  <div class="row">
+      <!-- Sidebar Menu (e.g., Profile, Addresses, Orders, etc.) -->
+      <div class="col-md-4">
+          <ul class="list-group">
+              <li class="list-group-item active">Profile</li>
+              <li class="list-group-item">Addresses</li>
+              <li class="list-group-item">Orders</li>
+              <li class="list-group-item">Change Password</li>
+              <li class="list-group-item">Logout</li>
+          </ul>
+      </div>
+
+      <!-- Main Content Area (User Details, Addresses, Orders, etc.) -->
+      <div class="col-md-8">
+          <!-- User Details -->
+          <div id="profile">
+              <h2>User Profile</h2>
+              <p>Name: <%= user.name %></p>
+              <p>Email: <%= user.email %></p>
+              <p>Phone: <%= user.phone %></p>
+          </div>
+
+          <!-- Addresses -->
+          <div id="addresses">
+              <h2>Addresses</h2>
+              <!-- List of Addresses Here -->
+              <% addresses.forEach(address => { %>
+                  <div class="address">
+                      <p><%= address.addressLine1 %>, <%= address.city %>, <%= address.country %></p>
+                      <button class="btn btn-primary">Edit</button>
+                      <button class="btn btn-danger">Delete</button>
+                  </div>
+              <% }); %>
+              <button class="btn btn-success">Add New Address</button>
+          </div>
+
+          <!-- Orders -->
+          <div id="orders">
+              <h2>Orders</h2>
+              <!-- List of Orders Here -->
+              <% orders.forEach(order => { %>
+                  <div class="order">
+                      <p>Order #<%= order.orderNumber %>: Date: <%= order.orderDate %>, Total: $<%= order.totalAmount %></p>
+                      <button class="btn btn-danger">Cancel Order</button>
+                  </div>
+              <% }); %>
+          </div>
+
+          <!-- Change Password Form -->
+          <div id="change-password">
+              <h2>Change Password</h2>
+              <form>
+                  <div class="form-group">
+                      <label for="current-password">Current Password</label>
+                      <input type="password" class="form-control" id="current-password">
+                  </div>
+                  <div class="form-group">
+                      <label for="new-password">New Password</label>
+                      <input type="password" class="form-control" id="new-password">
+                  </div>
+                  <div class="form-group">
+                      <label for="confirm-password">Confirm New Password</label>
+                      <input type="password" class="form-control" id="confirm-password">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Change Password</button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+
+<%- include('../layouts/homeLayout/footer')%>

@@ -299,6 +299,37 @@ const generateOtp = async (req, res) => {
 //     console.log(error.message);
 //   }
 // };
+
+
+// 
+
+
+const goToProfile = async (req, res) => {
+  try {
+    if (req.session && req.session.user_id) {
+      const userId = req.session.user_id; // Adjust the key based on what you set in your session
+      const user = await User.findOne({ _id: userId });
+
+      if (user) {
+        console.log(user); // Check user data in the console
+        res.render('users/userProfile', { user, addresses: user.address, orders: user.orders });
+      } else {
+        console.log('User not found');
+        res.status(404).send('User not found');
+      }
+    } else {
+      console.log('User session not found');
+      res.status(401).redirect('/login');
+    }
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+
+
+
 module.exports = {
   loadRegister,
   insertUser,
@@ -310,6 +341,7 @@ module.exports = {
   userLogout,
   updateProfile,
   generateOtp,
-  verifyMail
+  verifyMail,
+  goToProfile
   
 };
