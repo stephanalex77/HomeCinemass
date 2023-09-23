@@ -1,4 +1,5 @@
 <%- include('../layouts/homeLayout/header')%>
+
 <div class="page-heading bg-light">
   <div class="container">
     <div class="row align-items-end text-center">
@@ -15,16 +16,16 @@
     <div class="container mt-5">
       <div class="row">
         <div class="col-md-12">
-          <% cart.forEach(product => { %>
+          <% cart.products.forEach(product => { %>
             <div class="card">
               <div class="card-body">
                 <div class="row">
                   <div class="col-md-2">
-                    <img src="/public/uploadProduct/<%= product.image[0] %>" alt="<%= product.product_name %>" class="img-fluid">
+                    <img src="/public/uploadProduct/<%= product.product.image[0] %>" alt="<%= product.product_name %>" class="img-fluid" style="width: 100px; height: 100px; object-fit: contain;">
                   </div>
                   <div class="col-md-4">
-                    <h5 class="card-title"><%= product.product_name %></h5>
-                    <p class="card-text"><% product.product_price %></p>
+                    <h5 class="card-title"><%= product.product.product_name %></h5>
+                    <p class="card-text">₹<%= product.product.product_price %></p>
                   </div>
                   <div class="col-md-3">
                     <div class="input-group">
@@ -34,10 +35,10 @@
                     </div>
                   </div>
                   <div class="col-md-2">
-                    <p class="card-text"><%= product.product_sales_price %></p>
+                    <p class="card-text">₹<%= product.product.product_sales_price %></p>
                   </div>
                   <div class="col-md-1">
-                    <button class="btn btn-danger">Remove</button>
+                    <button  class="btn btn-danger" onclick="removeFromCart(this)" data-product-id="<%= product._id %>" >Remove</button>
                   </div>
                 </div>
               </div>
@@ -46,6 +47,36 @@
         </div>
       </div>
     </div>
+
+
+    <script>
+
+      function removeFromCart(button) {
+        const productId = button.getAttribute('data-product-id');
+    
+        fetch(`/removeFromCart/${productId}`, {
+          method: 'DELETE',
+        })
+          .then((response) => {
+            if (response.ok) {
+              // The item was successfully removed from the cart
+              // You can update the UI or take further actions as needed
+              // For example, you can reload the cart page or update the cart summary.
+              location.reload(); // Reload the current page
+            } else {
+              // Handle the case where the removal was not successful
+              console.error('Failed to remove item from cart');
+              
+            }
+          })
+          .catch((error) => {
+            console.error('Error occurred while removing item from cart', error);
+          });
+      }
+    </script>
+    
+
+
 
     <div class="row">
       <div class="col-md-6">
@@ -57,16 +88,20 @@
             <button class="btn btn-outline-black btn-sm btn-block">Continue Shopping</button>
           </div>
         </div>
-        <div class="row">
+        <div class="row mb-5">
           <div class="col-md-12">
-            <label class="text-black h4" for="coupon">Coupon</label>
-            <p>Enter your coupon code if you have one.</p>
-          </div>
-          <div class="col-md-8 mb-3 mb-md-0">
-            <input type="text" class="form-control py-3" id="coupon" placeholder="Coupon Code">
-          </div>
-          <div class="col-md-4">
-            <button class="btn btn-black">Apply Coupon</button>
+            <h2 class="h3 mb-3 text-black">Coupon Code</h2>
+            <div class="p-3 p-lg-5 border">
+
+              <label for="c_code" class="text-black mb-3">Enter your coupon code if you have one</label>
+              <div class="input-group w-75">
+                <input type="text" class="form-control" id="c_code" placeholder="Coupon Code" aria-label="Coupon Code" aria-describedby="button-addon2">
+                <div class="input-group-append">
+                  <button class="btn btn-black btn-sm" type="button" id="button-addon2">Apply</button>
+                </div>
+              </div>
+
+            </div>
           </div>
         </div>
       </div>
@@ -78,41 +113,43 @@
                 <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
               </div>
             </div>
-            <% if (cart.products && cart.products.length > 0) { %>
+            <% if (cart && cart.products && cart.products.length > 0) { %>
               <!-- Loop through products to calculate subtotals -->
               <% let totalSubtotal = 0; %>
-              <% for (const product of cart.products) { %>
-                <% const subtotal = product.product.price * product.quantity; %>
+              <% cart.products.forEach(product => { %>
+                <% const subtotal = product.product.product_sales_price * product.quantity; %>
+                <% totalSubtotal += subtotal; %>
                 <div class="row mb-3">
-                  <div class="col-md-6">
-                    <span class="text-black"><%= product.product.name %></span>
+                  <div class="col-md-6 d-flex align-items-center">
+                    <span class="text-black"><%= product.product.product_name %></span>
                   </div>
                   <div class="col-md-6 text-right">
-                    <strong class="text-black">$<%= subtotal.toFixed(2) %></strong>
+                    <strong class="text-black">₹<%= subtotal.toFixed(2) %></strong>
                   </div>
                 </div>
-                <% totalSubtotal += subtotal; %>
-              <% } %>
-      
+              <% }); %>
+            
               <!-- Display the total subtotal -->
               <div class="row mb-5">
                 <div class="col-md-6">
                   <span class="text-black">Total Subtotal</span>
                 </div>
                 <div class="col-md-6 text-right">
-                  <strong class="text-black">$<%= totalSubtotal.toFixed(2) %></strong>
+                  <strong class="text-black">₹<%= totalSubtotal.toFixed(2) %></strong>
                 </div>
               </div>
-      
-      
-            <div class="row">
-              <div class="col-md-12">
-                <button class="btn btn-black btn-lg py-3 btn-block" onclick="window.location='checkout.html'">Proceed To Checkout</button>
+            
+              <div class="row">
+                <div class="col-md-12">
+                  <button class="btn btn-black btn-lg py-3 btn-block" onclick="window.location='checkoutpage'">Proceed To Checkout</button>
+                </div>
               </div>
-            </div>
             <% } else { %>
               <p>No products in the cart.</p>
             <% } %>
+            
+
+            
           </div>
         </div>
       </div>

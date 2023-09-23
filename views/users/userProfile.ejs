@@ -32,7 +32,7 @@
               <h2>User Profile</h2>
               <p>Name: <%= user.name %></p>
               <p>Email: <%= user.email %></p>
-              <p>Phone: <%= user.phone %></p>
+              <p>Phone: <%= user.mobile %></p>
           </div>
 
           <!-- Addresses -->
@@ -53,7 +53,7 @@
           <div id="orders">
               <h2>Orders</h2>
               <!-- List of Orders Here -->
-              <% orders.forEach(order => { %>
+              <% ord.forEach(order => { %>
                   <div class="order">
                       <p>Order #<%= order.orderNumber %>: Date: <%= order.orderDate %>, Total: $<%= order.totalAmount %></p>
                       <button class="btn btn-danger">Cancel Order</button>

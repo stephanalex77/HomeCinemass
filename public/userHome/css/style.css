@@ -915,7 +915,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h6, .h6 {
       font-size: 3rem; }
       .deal-hero .deal-contents .title a {
         color: #ffffff;
-        text-decoration: underline; }
+        text-decoration: aliceblue; }
     @media (max-width: 991.98px) {
       .deal-hero .deal-contents {
         width: auto;

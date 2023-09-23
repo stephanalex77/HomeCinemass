@@ -72,8 +72,14 @@ user_route.get('/logout',auth.isLogin,userController.userLogout)
 
 
 // cart management
+
 user_route.get('/cartt', auth.isLogin, cartController.getCart)
-user_route.post('/addToCartt',auth.isLogin,cartController.addToCart)
+
+user_route.post('/add-item-to-cart',auth.isLogin,cartController.addToCart)
+
+user_route.delete('/removeFromCart/:productId', auth.isLogin, cartController.removeFromCart)
+
+user_route.get('/checkoutpage', auth.isLogin, cartController.getCheckOutPage)
 
 // product details 
 
@@ -81,7 +87,7 @@ user_route.get('/productDetails/:productId',productController.getProductDetails)
 
 user_route.get('/profile',auth.isLogin,userController.goToProfile);
 
-
+user_route.get('/singleProduct/:productId',productController.showProductDetails)
 
 
 

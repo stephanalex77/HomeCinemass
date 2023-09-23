@@ -1,9 +1,10 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const { name } = require("ejs");
-const Product = require('../models/productModel')
+const Product = require("../models/productModel");
 const nodemailer = require("nodemailer");
-const randomString= require("randomstring");
+const randomString = require("randomstring");
+const orders = require("../models/orderModel");
 
 const securePassword = async (password) => {
   try {
@@ -47,9 +48,6 @@ const sendVerifyMail = async (name, email, otp) => {
   }
 };
 
-
-
-
 const loadRegister = async (req, res) => {
   try {
     res.render("registeration");
@@ -74,31 +72,28 @@ const insertUser = async (req, res) => {
       mobile: req.body.mno,
       password: spassword,
       is_admin: 0,
-      otp:0,
+      otp: 0,
     });
-
-    
 
     if (req.body.name.trim() === "" || !req.body.name) {
       return res.status(400).json({ error: "must enter name" });
     }
 
     const userData = await user.save();
-    req.session.email= req.body.email
+    req.session.email = req.body.email;
     if (userData) {
-      const  otp = randomString.generate({length:4,charset:"numeric"})
-      userData.otp=otp
-      await userData.save()
+      const otp = randomString.generate({ length: 4, charset: "numeric" });
+      userData.otp = otp;
+      await userData.save();
 
-      
       sendVerifyMail(req.body.name, req.body.email, otp);
-      req.session.otp= otp
+      req.session.otp = otp;
 
       res.render("otp", {
         message: "your registration is successfull",
       });
     } else {
-      res.render("registeration", { message: "your registration is failed", });
+      res.render("registeration", { message: "your registration is failed" });
     }
   } catch (error) {
     console.log(error.massage);
@@ -119,7 +114,6 @@ const verifyMail = async (req, res) => {
   }
 };
 
-
 // login user methods startedconst otp
 const loginLoad = async (req, res) => {
   try {
@@ -130,21 +124,17 @@ const loginLoad = async (req, res) => {
   }
 };
 
-const verifyOtp = async(req, res) =>{
-  try{
-    
-    
+const verifyOtp = async (req, res) => {
+  try {
     const otp = req.body.otp;
-     const storedotp = req.session.otp
-    
-    const userData = await User.findOne({email: req.session.email})
-    if(userData){
-      if (otp===storedotp) {
-        
+    const storedotp = req.session.otp;
+
+    const userData = await User.findOne({ email: req.session.email });
+    if (userData) {
+      if (otp === storedotp) {
         userData.is_varified = 1;
-        await userData.save()
-        res.redirect("/")
-    
+        await userData.save();
+        res.redirect("/");
       } else {
         res.render("otp", { message: "OTP incorrect" });
       }
@@ -154,7 +144,7 @@ const verifyOtp = async(req, res) =>{
   } catch (error) {
     console.log(error.message);
   }
-}
+};
 
 const verifyLogin = async (req, res) => {
   try {
@@ -165,13 +155,18 @@ const verifyLogin = async (req, res) => {
     const userData = await User.findOne({ email: email });
 
     if (userData) {
+      if (userData.is_block) {
+        res.render("login", { message: "Your account is blocked." });
+        return; // Exit the function to prevent further execution
+      }
+
       const passwordMatch = await bcrypt.compare(password, userData.password);
       if (passwordMatch) {
         if (userData.is_varified === 0) {
-          const products = await Product.find()
-          res.render("login", { message: "Please verify your mail" ,products});
+          const products = await Product.find();
+          res.render("login", { message: "Please verify your mail", products });
         } else {
-          console.log("otp verified    :",userData.is_varified);
+          console.log("otp verified    :", userData.is_varified);
           req.session.user_id = userData._id;
           res.redirect("/home");
         }
@@ -188,9 +183,9 @@ const verifyLogin = async (req, res) => {
 
 const loadHome = async (req, res) => {
   try {
-    const products= await Product.find()
-    const userData = await User.findById({_id:req.session.user_id})
-    res.render("home", {user: userData,products});
+    const products = await Product.find();
+    const userData = await User.findById({ _id: req.session.user_id });
+    res.render("home", { user: userData, products });
   } catch (error) {
     console.log(error.message);
   }
@@ -198,8 +193,8 @@ const loadHome = async (req, res) => {
 
 const homeLoad = async (req, res) => {
   try {
-    const products= await Product.find()
-    res.render("home",{products});
+    const products = await Product.find();
+    res.render("home", { products });
   } catch (error) {
     console.log(error.message);
   }
@@ -281,15 +276,14 @@ const generateOtp = async (req, res) => {
   }
 };
 
-
 // const sendOtp= async (req, res) => {
 //   console.log(req.body)
 //   try {
-//     // userData._id=req.session.user_id 
+//     // userData._id=req.session.user_id
 //     // console.log(userData._id)
- 
+
 //     const userData= await User.findOne({email:req.body.email})
- 
+
 //     const  otp = randomString.generate({length:4,charset:"numeric"})
 
 //   //  console.log(otp);
@@ -300,35 +294,30 @@ const generateOtp = async (req, res) => {
 //   }
 // };
 
-
-// 
-
+//
 
 const goToProfile = async (req, res) => {
   try {
     if (req.session && req.session.user_id) {
       const userId = req.session.user_id; // Adjust the key based on what you set in your session
       const user = await User.findOne({ _id: userId });
-
+      const ord = await orders.find({ userId: user }).populate("user");
       if (user) {
         console.log(user); // Check user data in the console
-        res.render('users/userProfile', { user, addresses: user.address, orders: user.orders });
+        res.render("userProfile", { user, addresses: user.address, ord: ord });
       } else {
-        console.log('User not found');
-        res.status(404).send('User not found');
+        console.log("User not found");
+        res.status(404).send("User not found");
       }
     } else {
-      console.log('User session not found');
-      res.status(401).redirect('/login');
+      console.log("User session not found");
+      res.status(401).redirect("/login");
     }
   } catch (error) {
     console.error(error.message);
-    res.status(500).send('Internal Server Error');
+    res.status(500).send("Internal Server Error");
   }
 };
-
-
-
 
 module.exports = {
   loadRegister,
@@ -342,6 +331,5 @@ module.exports = {
   updateProfile,
   generateOtp,
   verifyMail,
-  goToProfile
-  
+  goToProfile,
 };

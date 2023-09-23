@@ -1,29 +1,92 @@
 <%- include('../layouts/homeLayout/header')%>
-
+<div class="page-heading bg-light">
+  <div class="container">
+    <div class="row align-items-end text-center">
+      <div class="col-lg-7 mx-auto">
+        <h1>Details</h1>  
+        <p class="mb-4"><a href="/home">Home</a> / <strong>Details</strong></p>        
+      </div>
+    </div>
+  </div>
+</div>
 <div class="untree_co-section">
   <div class="container">
     <div class="product-details">
-      <div class="product-image">
-        <!-- Replace with the actual product image URL -->
-        <img src="/public/uploadProduct/<%= product.image[0] %>" alt="<%= product.product_name %>">
-      </div>
-      <div class="product-info">
-        <!-- Replace with the actual product name, prices, and description -->
-        <h1><%= product.product_name %></h1>
-        <div class="product-price">
-          <del>₹<%= product.product_price %></del>
-          <span>₹<%= product.product_sales_price %></span>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="product-image">
+            <!-- Image slider container -->
+            <div class="image-slider">
+           
+  <% if (product.image && Array.isArray(product.image)) { %>
+
+    <% product.image.forEach((image, index) => { %>
+      <img
+        src="/public/uploadProduct/<%= image %>"
+        alt="<%= product.product_name %>"
+        class="slider-image <%= index === 0 ? 'active' : '' %>"
+        
+      >
+    <% }); %>
+  <% } else { %>
+    <!-- Provide a fallback or error message if product.image is missing or not an array -->
+    <p>No images available</p>
+  <% } %>
+</div>
+
+          
+            <!-- Previous and Next buttons for image navigation -->
+            <button class="slider-button prev-button">&#10094;</button>
+            <button class="slider-button next-button">&#10095;</button>
+          </div>
+          
         </div>
-        <p class="product-description"><%= product.product_description %></p>
-        <!-- Add to Cart button with data-product-id attribute for identification -->
-        <button class="btn btn-primary add-to-cart" data-product-id="<%= product._id %>">Add to Cart</button>
-        <!-- Buy Now button with a link to the checkout page -->
-        <a href="/checkout?product=<%= product._id %>" class="btn btn-success buy-now">Buy Now</a>
+        <div class="col-md-6">
+          <div class="product-info">
+            <!-- Replace with the actual product name, prices, and description -->
+            <h1><%= product.product_name %></h1>
+            <div class="product-price">
+              <del>₹<%= product.product_price %></del>
+              <span>₹<%= product.product_sales_price %></span>
+            </div>
+            <p class="product-description"><%= product.product_description %></p>
+          
+            <!-- Add to Cart button with data-product-id attribute for identification -->
+            <button class="btn btn-primary add-to-cart" data-product-id="<%= product._id %>">Add to Cart</button>
+            
+            <!-- Buy Now button with a link to the checkout page -->
+            <a href="/checkout?product=<%= product._id %>" class="btn btn-success buy-now">Buy Now</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 
+<!-- Add jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<!-- JavaScript for image slider -->
+<script>
+  $(document).ready(function() {
+    let currentIndex = 0;
+    const images = $(".slider-image");
+
+    function showImage(index) {
+      images.removeClass("active");
+      images.eq(index).addClass("active");
+    }
+
+    $(".next-button").click(function() {
+      currentIndex = (currentIndex + 1) % images.length;
+      showImage(currentIndex);
+    });
+
+    $(".prev-button").click(function() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      showImage(currentIndex);
+    });
+  });
+</script>
 <%- include('../layouts/homeLayout/footer')%>
