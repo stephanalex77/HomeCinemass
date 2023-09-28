@@ -276,25 +276,7 @@ const generateOtp = async (req, res) => {
   }
 };
 
-// const sendOtp= async (req, res) => {
-//   console.log(req.body)
-//   try {
-//     // userData._id=req.session.user_id
-//     // console.log(userData._id)
 
-//     const userData= await User.findOne({email:req.body.email})
-
-//     const  otp = randomString.generate({length:4,charset:"numeric"})
-
-//   //  console.log(otp);
-//     sendVerifyMail( userData['name'],req.body.email,otp);
-//     res.render("otp");
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// };
-
-//
 
 const goToProfile = async (req, res) => {
   try {
@@ -303,7 +285,7 @@ const goToProfile = async (req, res) => {
       const user = await User.findOne({ _id: userId });
       const ord = await orders.find({ userId: user }).populate("user");
       if (user) {
-        console.log(user); // Check user data in the console
+        // console.log(user); // Check user data in the console
         res.render("userProfile", { user, addresses: user.address, ord: ord });
       } else {
         console.log("User not found");
@@ -316,6 +298,86 @@ const goToProfile = async (req, res) => {
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
+  }
+};
+
+
+// ADD ADDRESS TO USER PROFILE
+const addAddressToProfile = async (req, res) => {
+  try {
+    const userId = req.session.user_id;
+    const user = await User.findOne({ _id: userId });
+    // console.log(user);
+
+    const { address1, address2, pincode, state, city, country } = req.body;
+    console.log(address1);
+    const newAddress = {
+      address1,
+      address2,
+      pincode,
+      state,
+      city,
+      country,
+    };
+    // console.log(newAddress);
+    user.address.push(newAddress);
+
+    // user.markModified('address');
+
+    await user.save();
+
+    res.json({ success: true, message: 'Address added successfully' });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ success: false, message: 'An error occurred while adding the address' });
+  }
+};
+
+
+const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    const user = await User.findById(req.session.user_id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const passwordMatch = await bcrypt.compare(currentPassword, user.password);
+
+    if (!passwordMatch) {
+      return res.status(400).json({ message: 'Current password is incorrect' });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ message: 'New password and confirmation do not match' });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+    
+    return res.status(200).json({ message: 'Password changed successfully' });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+const deleteAddress =(req, res) => {
+  const index = req.params.index;
+  
+  if (index >= 0 && index < addresses.length) {
+    addresses.splice(index, 1);
+    res.json({ message: 'Address deleted successfully' });
+  } else {
+    res.status(404).json({ message: 'Address not found' });
   }
 };
 
@@ -332,4 +394,7 @@ module.exports = {
   generateOtp,
   verifyMail,
   goToProfile,
+  addAddressToProfile,
+  changePassword,
+  deleteAddress
 };

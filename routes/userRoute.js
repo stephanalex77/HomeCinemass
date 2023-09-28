@@ -81,14 +81,22 @@ user_route.delete('/removeFromCart/:productId', auth.isLogin, cartController.rem
 
 user_route.get('/checkoutpage', auth.isLogin, cartController.getCheckOutPage)
 
+// user_route.post('/update-quantity/:productId', auth.isLogin,cartController.updateQuantity)
+user_route.post('/update-quantity/:operation', auth.isLogin,cartController.updateQuantity)
+
+
 // product details 
 
 user_route.get('/productDetails/:productId',productController.getProductDetails)
 
-user_route.get('/profile',auth.isLogin,userController.goToProfile);
-
 user_route.get('/singleProduct/:productId',productController.showProductDetails)
 
+//USER PROFILE
+user_route.get('/profile',auth.isLogin,userController.goToProfile);
+
+user_route.post('/add-address', auth.isLogin, userController.addAddressToProfile)
+
+user_route.post('/change-password', auth.isLogin, userController.changePassword)
 
 
 module.exports = user_route

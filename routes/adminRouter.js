@@ -43,29 +43,48 @@ admin_route.get('/users',auth.isLogin,adminController.adminDashboard);
 
 // admin_route.post('/users',adminController.user_toggle)
 
-admin_route.get('/block', adminController.blockUser)
-admin_route.get('/unblock', adminController.unblockuser)
+admin_route.get('/block',auth.isLogin, adminController.blockUser)
+admin_route.get('/unblock',auth.isLogin, adminController.unblockuser)
 
 
 // category get and post
-admin_route.get('/category', categoryController.getCategory)
+admin_route.get('/category',auth.isLogin, categoryController.getCategory)
 
-admin_route.post('/category', categoryController.addCategory)
+admin_route.post('/category',auth.isLogin, categoryController.addCategory)
 
-// admin_route.post('/category/list/:_id', categoryController.listCategory);
 
-// admin_route.post('/category/unlist/:_id', categoryController.unListCategory);
+
+admin_route.post('/category/list/:_id',auth.isLogin, categoryController.listCategory);
+
+admin_route.post('/category/unlist/:_id',auth.isLogin, categoryController.unListCategory);
+
+// admin_route.get('/category/list/:_id',auth.isLogin, categoryController.listCategory);
+
+// admin_route.get('/category/unlist/:_id',auth.isLogin, categoryController.unListCategory);
+
+admin_route.get('/categories/delete-category',auth.isLogin,categoryController.deleteCategory);
+
+// Route to list a category
+admin_route.get('/admin/categories/list/:categoryId',auth.isLogin, categoryController.listCategory);
+
+// Route to unlist a category
+admin_route.get('/admin/categories/unlist/:categoryId',auth.isLogin, categoryController.unListCategory);
+
 
 
 
 
 // product management
 
-admin_route.get('/products', productController.getProduct)
+admin_route.get('/products',auth.isLogin, productController.getProduct);
 
-admin_route.post('/products',uploadProduct.array('images',4), productController.addProduct)
+admin_route.post('/products',auth.isLogin, uploadProduct.array('images',4), productController.addProduct)
  
-admin_route.get('/productlist',productController.listProduct)
+admin_route.get('/productlist',auth.isLogin, productController.listProduct)
+
+admin_route.get('/editProduct/:id',auth.isLogin, productController.editproductLoad)
+
+admin_route.post('/editProduct/:id',auth.isLogin, uploadProduct.array('images',4),productController.editProduct)
 
 
 admin_route.get('*',function(req,res){
@@ -74,6 +93,6 @@ admin_route.get('*',function(req,res){
 
 // Assuming you have fetched the 'users' data and stored it in a variable called 'users'
 
-admin_route.get('/productList',adminController.editUserLoad);
+admin_route.get('/productList',auth.isLogin, adminController.editUserLoad);
 
 module.exports = admin_route;

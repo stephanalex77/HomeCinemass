@@ -250,6 +250,7 @@
                         <th>Image</th>
                         <th>Product Name</th>
                         <th>Product Price</th>
+                        <th>Offer Price</th>
                         <th>Quantity</th>
                         <th>Description</th>
                         <th>Action</th>
@@ -265,10 +266,11 @@
                           </td>
                           <td><%= product.product_name %></td>
                           <td><%= product.product_price %></td>
+                          <td><%= product.product_sales_price %></td>
                           <td><%= product.quantity %></td>
-                          <td><%= product.description %></td>
+                          <td><textarea rows="4" cols="50" readonly><%= product.description %></textarea></td>
                           <td>
-                            <a href="/admin/editProduct?id=<%= product._id %>">
+                            <a href="/admin/editProduct/<%= product._id %>">
                               <button class="btn btn-md rounded font-sm hover-up">Edit</button>
                             </a>
                           </td>

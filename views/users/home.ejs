@@ -123,7 +123,11 @@
 													<% if (product.quantity <= 0) { %>
 															<span class="out-of-stock alert-danger">Out of Stock</span>
 													<% } else { %>
+														<% if(typeof user !== 'undefined'){%>
 															<button class="btn btn-primary add-to-cart mb-2" onclick="addtocart('<%= product._id %>')" data-product-id="<%= product._id %>">Add to Cart</button>
+															<%} else { %>
+															<button href="/login" class="btn btn-primary add-to-cart mb-2" >Login its yours</button>
+															<%}%> 
 													<% } %>
 											</div>
 									</div>

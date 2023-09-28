@@ -3,12 +3,13 @@
   <div class="container">
     <div class="row align-items-end text-center">
       <div class="col-lg-7 mx-auto">
-        <h1>Details</h1>  
-        <p class="mb-4"><a href="/home">Home</a> / <strong>Details</strong></p>        
+        <h1>Details</h1>
+        <p class="mb-4"><a href="/home">Home</a> / <strong>Details</strong></p>
       </div>
     </div>
   </div>
 </div>
+
 <div class="untree_co-section">
   <div class="container">
     <div class="product-details">
@@ -16,44 +17,44 @@
         <div class="col-md-6">
           <div class="product-image">
             <!-- Image slider container -->
-            <div class="image-slider">
-           
-  <% if (product.image && Array.isArray(product.image)) { %>
-
-    <% product.image.forEach((image, index) => { %>
-      <img
-        src="/public/uploadProduct/<%= image %>"
-        alt="<%= product.product_name %>"
-        class="slider-image <%= index === 0 ? 'active' : '' %>"
-        
-      >
-    <% }); %>
-  <% } else { %>
-    <!-- Provide a fallback or error message if product.image is missing or not an array -->
-    <p>No images available</p>
-  <% } %>
-</div>
-
-          
-            <!-- Previous and Next buttons for image navigation -->
-            <button class="slider-button prev-button">&#10094;</button>
-            <button class="slider-button next-button">&#10095;</button>
+            <div id="image-slider" class="carousel slide" data-ride="carousel">
+              <div class="carousel-inner">
+                <% if (product.image && Array.isArray(product.image)) { %>
+                  <% product.image.forEach((image, index) => { %>
+                    <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                      <img src="/public/uploadProduct/<%= image %>" alt="<%= product.product_name %>" class="d-block w-100">
+                    </div>
+                  <% }); %>
+                <% } else { %>
+                  <!-- Provide a fallback or error message if product.image is missing or not an array -->
+                  <p>No images available</p>
+                <% } %>
+              </div>
+              <!-- Previous and Next buttons for image navigation -->
+              <a class="carousel-control-prev " href="#image-slider" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only ">Previous</span>
+              </a>
+              <a class="carousel-control-next" href="#image-slider" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
+            </div>
           </div>
-          
         </div>
         <div class="col-md-6">
           <div class="product-info">
             <!-- Replace with the actual product name, prices, and description -->
             <h1><%= product.product_name %></h1>
             <div class="product-price">
-              <del>₹<%= product.product_price %></del>
-              <span>₹<%= product.product_sales_price %></span>
+              <del class="h4">₹<%= product.product_price %></del>
+              <span class="h2">₹<%= product.product_sales_price %></span>
             </div>
-            <p class="product-description"><%= product.product_description %></p>
-          
+            <p class="product-description"><%= product.description %></p>
+
             <!-- Add to Cart button with data-product-id attribute for identification -->
-            <button class="btn btn-primary add-to-cart" data-product-id="<%= product._id %>">Add to Cart</button>
-            
+            <button class="btn btn-primary add-to-cart" onclick="addtocart('<%= product._id %>')" data-product-id="<%= product._id %>">Add to Cart</button>
+           
             <!-- Buy Now button with a link to the checkout page -->
             <a href="/checkout?product=<%= product._id %>" class="btn btn-success buy-now">Buy Now</a>
           </div>
@@ -63,10 +64,11 @@
   </div>
 </div>
 
-
 <!-- Add jQuery library -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <!-- JavaScript for image slider -->
 <script>
   $(document).ready(function() {
@@ -87,6 +89,101 @@
       currentIndex = (currentIndex - 1 + images.length) % images.length;
       showImage(currentIndex);
     });
+    $(document).ready(function () {
+    $('#image-slider').carousel();
   });
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Get the button element by its ID
+    const addToCartButton = document.getElementById("addtocart");
+
+    // Add a click event listener to the button
+    addToCartButton.addEventListener("click", function () {
+      // Display a SweetAlert confirmation dialog
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Added to cart successfully',
+        showConfirmButton: false,
+        timer: 1500
+      });
+    });
+  });
+</script>
+
+<script>
+  
+
+  function addtocart(productId){
+      console.log(productId);
+    fetch("/add-item-to-cart", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ productId }),
+    })
+
+  .then((response) => {
+    if (response.ok) {
+      return response.json();
+    }else{
+      throw new Error("Network response was not ok")
+    }
+  })
+        .then((data) => {
+            console.log(data);
+            const updatedCartQuantity = data.cartQuantity;
+            const itemInCartElement = document.getElementById("item-in-cart");
+              if (itemInCartElement) {
+                itemInCartElement.textContent = updatedCartQuantity.toString();
+              }
+              // Display a toast message or perform any other actions as needed
+              showToast("Added to cart successfully");
+        })
+        .catch((error) =>{
+
+    console.log(error);
+    })
+  }
+
+
+function showToast(message) {
+const toastContainer = document.getElementById("toast-container");
+const toastMessage = document.getElementById("toast-message");
+
+// Set the message text
+toastMessage.textContent = message;
+
+// Show the toast message
+toastMessage.style.opacity = 1;
+toastMessage.style.display = "block";
+
+// Automatically hide the toast after a few seconds (e.g., 3 seconds)
+setTimeout(() => {
+  toastMessage.style.opacity = 0;
+  setTimeout(() => {
+    toastMessage.style.display = "none";
+  }, 300);
+}, 3000); // Adjust the time as needed (in milliseconds)
+}
+
+
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const cartButton = document.getElementById('addtocart'); // Select the button by its ID
+  cartButton.addEventListener('click', function(event) {
+    event.preventDefault();
+    console.log('Button clicked');
+    window.location.href = '/cartt'; // Redirect to the cart page
+  });
+});
 </script>
 <%- include('../layouts/homeLayout/footer')%>

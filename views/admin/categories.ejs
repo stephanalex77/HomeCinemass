@@ -215,9 +215,9 @@
                     <input type="text" placeholder="Search Categories" class="form-control bg-white">
                 </div>
             </div>
-            <div class="card">
+            <div class="card ">
                 <div class="card-body">
-                    <div class="row">
+                    <div class="row ">
                         <form action="/admin/category" method="post">
                         <div class="col-md-3">
                                 
@@ -225,10 +225,10 @@
                                     <label for="product_name" class="form-label">Name</label>
                                     <input type="text" placeholder="Type here" class="form-control" name="categoryname" id="product_name" />
                                 </div>
-                                <div class="mb-4">
+                                <!-- <div class="mb-4">
                                     <label for="product_name" class="form-label">category id</label>
                                     <input type="text" placeholder="Type here" class="form-control" name="category_id" id="product_id" />
-                                </div>
+                                </div> -->
                                 <!-- <div class="mb-4">
                                     <label for="product_slug" class="form-label">Slug</label>
                                     <input type="text" placeholder="Type here" class="form-control" id="product_slug" />
@@ -241,10 +241,10 @@
                                     </select>
                                 </div> -->
                                 
-                                <div class="mb-4">
+                                <!-- <div class="mb-4">
                                     <label class="form-label">Description</label>
                                     <textarea placeholder="Type here" name="description" class="form-control"></textarea>
-                                </div>
+                                </div> -->
                                 <div class="d-grid">
                                     <button type="submit" class="btn btn-primary">Create category</button>
                                 </div>
@@ -260,58 +260,42 @@
                                                     <input class="form-check-input" type="checkbox" value="" />
                                                 </div>
                                             </th>
-                                            <!-- <th>ID</th> -->
                                             <th>Name</th>
-                                            <th>Description</th>
                                             <th>Listed</th>
-                                            <!-- <th>Order</th> -->
-                                            <th class="">Action</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <% categories.forEach(category =>{ %>
                                     <tbody>
-                                        
-                                        <tr>
-                                            <td class="text-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" />
-                                                </div>
-                                            </td>
-                                            <!-- <td><%= category._id %></td> -->
-                                            <td><b><%= category.categoryname %></b></td>
-                                            <td><%= category.description %></td>
-
-                                            <% if (category.isListed) { %>
-                                                <td>
-                                                    <a class="btn text-primary text-center">Listed</a>
-                                                </td>
-                                                <% } else { %>
-                                                <td>
-                                                    <a class="btn text-danger text-center">Not Listed</a>
-                                                </td>
-                                                <% } %>
-                                          
-                                            
-                                           
-
-                                            <!-- <td>1</td> -->
-                                            <td class="">
-                                                <div class="dropdown">
-                                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
-                                                        <a class="dropdown-item" href="#">Edit info</a>
-                                                        
+                                        <% categories.forEach(category => { %>
+                                            <tr>
+                                                <td class="text-center">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="" />
                                                     </div>
-                                                </div> <!-- dropdown //end -->
-                                            </td>
-                                        </tr>
-                                       
+                                                </td>
+                                                <td><b><%= category.categoryname %></b></td>
+                                                <td>
+                                                    <% if (category.isListed) { %>
+                                                        <a href="/admin/categories/unlist/<%= category._id %>" class="btn btn-md rounded font-sm hover-up">Unlist</a>
+                                                    <% } else { %>
+                                                        <a href="/admin/categories/list/<%= category._id %>" class="btn btn-md rounded font-sm hover-up">List</a>
+                                                    <% } %>
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <!-- Dropdown items can go here -->
+                                                        <a href="/admin/categories/delete-category?id=<%= category._id %>" class="btn btn-md rounded font-sm hover-up">Delete</a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                        
+                                        
                                     </tbody>
-                                    <% }); %>
                                 </table>
                             </div>
                         </div> <!-- .col// -->
+                        
                         </form>
                     </div> <!-- .row // -->
                 </div> <!-- card body .// -->
@@ -332,6 +316,9 @@
             </div>
         </footer>
     </main>
+
+
+    
     <script src="/assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/vendors/select2.min.js"></script>

@@ -28,7 +28,7 @@ const verifyLogin = async (req, res) => {
         if (userData.is_admin === false) {
           res.render("login", { message: "Email and password is incorrect" });
         } else {
-          req.session.user_id = userData._id;
+          req.session.admin_id = userData._id;
           res.redirect("/admin/home");
         }
       }
@@ -43,7 +43,7 @@ const verifyLogin = async (req, res) => {
 
 const loadDashboard = async (req, res) => {
   try {
-    const userData = await User.findById({ _id: req.session.user_id });
+    const userData = await User.findById({ _id: req.session.admin_id });
     res.set("cache-Control", "no-store");
     res.render("home", { admin: userData });
   } catch (error) {
@@ -53,7 +53,7 @@ const loadDashboard = async (req, res) => {
 const logout = async (req, res) => {
   try {
     req.session.destroy();
-    res.redirect("admin");
+    res.redirect("/admin");
   } catch (error) {
     console.log(error.message);
   }
@@ -189,6 +189,9 @@ const updateUsers = async (req, res) => {
   }
 };
 
+
+
+
 module.exports = {
   loadLogin,
   verifyLogin,
@@ -200,4 +203,5 @@ module.exports = {
   adminDashboard,
   editUserLoad,
   updateUsers,
+
 };

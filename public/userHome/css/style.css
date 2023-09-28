@@ -11,6 +11,8 @@ body {
   overflow-x: hidden;
   font-size: 16px;
   color: #333; }
+
+  
   body:before {
     content: "";
     position: fixed;
@@ -68,7 +70,7 @@ a.text-primary {
 
 h1, .h1, h2, .h2, h3, .h3, h4, .h4, h6, .h6 {
   font-family: "Playfair Display", serif;
-  color: #black; }
+  color: black; }
 
 .btn {
   padding-top: 15px;
@@ -1597,3 +1599,5 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h6, .h6 {
       bottom: 0;
       position: absolute;
       background: #000000; }
+
+
