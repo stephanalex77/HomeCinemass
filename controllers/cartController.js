@@ -105,7 +105,8 @@ const addToCart = async (req, res) => {
     await product.save();
 
     await cart.save();
-    res.status(200).json({ success: true });
+
+    res.status(200).json({ success: true, message:"item added to cart" });
   } catch (error) {
     console.error(error);
     res.status(500).send("An error occurred while adding the product to cart");
@@ -114,13 +115,34 @@ const addToCart = async (req, res) => {
 
 
 //REMOVE FROM CART
+const removeFromCart = async(req, res)=>{
+  const userId = req.session.user_id;
+  const productId = req.params.productId;
+  try {
+    let cart = await Cart.findOne({ user: userId});
+    if(!cart){
+      return res.status(404).json({success: false, message: 'Cart not found'})
 
+    }
 
+    const productIndex = cart.products.findIndex((item)=>
 
+    item.product.equals(productId)
+    );
 
+    if(productId === -1){
+      return res.status(404).json({ success: false, message: 'Product not found in the cart'});
+    }
 
+    cart.products.splice(productIndex, 1);
 
-
+    await cart.save();
+    res.status(200).json({success: true});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'An error occurred while removing the product from the cart' });
+  }
+}
 
 
 
@@ -184,34 +206,6 @@ const getCheckOutPage = async (req, res) => {
 };
 
 
-const removeFromCart = async(req, res)=>{
-    const userId = req.session.user_id;
-    const productId = req.params.productId;
-    try {
-      let cart = await Cart.findOne({ user: userId});
-      if(!cart){
-        return res.status(404).json({success: false, message: 'Cart not found'})
-
-      }
-
-      const productIndex = cart.products.findIndex((item)=>
-
-      item.product.equals(productId)
-      );
-
-      if(productId === -1){
-        return res.status(404).json({ success: false, message: 'Product not found in the cart'});
-      }
-
-      cart.products.splice(productIndex, 1);
-
-      await cart.save();
-      res.status(200).json({success: true});
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, message: 'An error occurred while removing the product from the cart' });
-    }
-  }
 
 
 

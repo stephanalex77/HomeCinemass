@@ -276,8 +276,6 @@ const generateOtp = async (req, res) => {
   }
 };
 
-
-
 const goToProfile = async (req, res) => {
   try {
     if (req.session && req.session.user_id) {
@@ -300,7 +298,6 @@ const goToProfile = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-
 
 // ADD ADDRESS TO USER PROFILE
 const addAddressToProfile = async (req, res) => {
@@ -326,58 +323,92 @@ const addAddressToProfile = async (req, res) => {
 
     await user.save();
 
-    res.json({ success: true, message: 'Address added successfully' });
+    res.json({ success: true, message: "Address added successfully" });
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({ success: false, message: 'An error occurred while adding the address' });
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while adding the address",
+    });
   }
 };
-
 
 const changePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword, confirmPassword } = req.body;
 
     if (!currentPassword || !newPassword || !confirmPassword) {
-      return res.status(400).json({ message: 'All fields are required' });
+      return res.status(400).json({ message: "All fields are required" });
     }
 
     const user = await User.findById(req.session.user_id);
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     const passwordMatch = await bcrypt.compare(currentPassword, user.password);
 
     if (!passwordMatch) {
-      return res.status(400).json({ message: 'Current password is incorrect' });
+      return res.status(400).json({ message: "Current password is incorrect" });
     }
 
     if (newPassword !== confirmPassword) {
-      return res.status(400).json({ message: 'New password and confirmation do not match' });
+      return res
+        .status(400)
+        .json({ message: "New password and confirmation do not match" });
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
     await user.save();
-    
-    return res.status(200).json({ message: 'Password changed successfully' });
 
+    return res.status(200).json({ message: "Password changed successfully" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-const deleteAddress =(req, res) => {
-  const index = req.params.index;
-  
-  if (index >= 0 && index < addresses.length) {
-    addresses.splice(index, 1);
-    res.json({ message: 'Address deleted successfully' });
-  } else {
-    res.status(404).json({ message: 'Address not found' });
+const deleteAddress = async (req, res) => {
+  const userId = req.params.userId;
+  const addressId = req.params.addressId;
+  console.log(userId);
+  console.log(addressId);
+  try {
+    // Find the user by their ID
+    const user = await User.findById(userId);
+
+    if (!user || !user.address) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    // Find the index of the address to delete in the user's address array
+    const addressIndex = user.address.findIndex(
+      (address) => address._id.toString() === addressId
+    );
+
+    if (addressIndex === -1) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Address not found" });
+    }
+
+    // Remove the address from the user's address array
+    user.address.splice(addressIndex, 1);
+
+    // Save the updated user
+    await user.save();
+
+    res.json({ success: true, message: "Address deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while deleting the address",
+    });
   }
 };
 
@@ -396,5 +427,5 @@ module.exports = {
   goToProfile,
   addAddressToProfile,
   changePassword,
-  deleteAddress
+  deleteAddress,
 };

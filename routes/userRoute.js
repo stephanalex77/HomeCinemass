@@ -98,5 +98,6 @@ user_route.post('/add-address', auth.isLogin, userController.addAddressToProfile
 
 user_route.post('/change-password', auth.isLogin, userController.changePassword)
 
+user_route.delete('/delete-address/:userId/:addressId',auth.isLogin, userController.deleteAddress)
 
 module.exports = user_route

@@ -1,259 +1,375 @@
 <%- include('../layouts/homeLayout/header')%>
- <!-- Page Header Start -->
- <div class="container-fluid bg-secondary mb-5">
-  <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
-      <h1 class="font-weight-semi-bold text-uppercase mb-3">Who am I?</h1>
-      <div class="d-inline-flex">
-          <p class="m-0"><a href="#">Home</a></p>
-          <p class="m-0 px-2">/</p>
-          <p class="m-0">Profile</p>
-      </div>
+<!-- Page Header Start -->
+<div class="container-fluid bg-secondary mb-5">
+  <div
+    class="d-flex flex-column align-items-center justify-content-center"
+    style="min-height: 300px"
+  >
+    <h1 class="font-weight-semi-bold text-uppercase mb-3">Who am I?</h1>
+    <div class="d-inline-flex">
+      <p class="m-0"><a href="#">Home</a></p>
+      <p class="m-0 px-2">/</p>
+      <p class="m-0">Profile</p>
+    </div>
   </div>
 </div>
 <!-- Page Header End -->
 
 <div class="container">
   <div class="row">
-      <!-- Sidebar Menu (e.g., Profile, Addresses, Orders, etc.) -->
-      <div class="col-md-4">
-          <ul class="list-group">
-              <li class="list-group-item active">Profile</li>
-              <li class="list-group-item">Addresses</li>
-              <li class="list-group-item">Orders</li>
-              <li class="list-group-item">Change Password</li>
-              <li class="list-group-item">Logout</li>
-          </ul>
+    <!-- Sidebar Menu (e.g., Profile, Addresses, Orders, etc.) -->
+    <div class="col-md-4">
+      <ul class="list-group">
+        <li class="list-group-item active">Profile</li>
+        <li class="list-group-item">Addresses</li>
+        <li class="list-group-item">Orders</li>
+        <li class="list-group-item">Change Password</li>
+        <li class="list-group-item">Logout</li>
+      </ul>
+    </div>
+
+    <!-- Main Content Area (User Details, Addresses, Orders, etc.) -->
+    <div class="col-md-8">
+      <!-- User Details -->
+      <div id="profile">
+        <h2>User Profile</h2>
+        <p>Name: <%= user.name %></p>
+        <p>Email: <%= user.email %></p>
+        <p>Phone: <%= user.mobile %></p>
       </div>
 
-      <!-- Main Content Area (User Details, Addresses, Orders, etc.) -->
-      <div class="col-md-8">
-          <!-- User Details -->
-          <div id="profile">
-              <h2>User Profile</h2>
-              <p>Name: <%= user.name %></p>
-              <p>Email: <%= user.email %></p>
-              <p>Phone: <%= user.mobile %></p>
-          </div>
+      <!-- Addresses -->
 
-          <!-- Addresses -->
-          
-          <div id="addresses">
-            <h2>Addresses</h2>
-            <!-- List of Addresses Here -->
-            <% addresses.forEach(address => { %>
-              <div class="address">
-                <p><%= address.address1 %>, <br> <%= address.address2 %>,<br> <%= address.city %>,<br><%= address.state %>,<br> <%= address.country %>,<br> <%= address.pincode %> </p>
-                <button class="btn btn-primary">Edit</button>
-                <button class="btn btn-danger">Delete</button>
-              </div>
-            <% }); %>
-            <button class="btn btn-success" id="addAddressButton">Add New Address</button>
-          
-            <!-- Hidden form for adding a new address -->
-            <form id="newAddressForm" style="display: none;">
-              <!-- Form fields for entering the new address -->
-              <!-- Example: -->
-              <!-- <input type="text" id="newAddressLine1" placeholder="Address Line 1">
+      <div id="addresses">
+        <h2>Addresses</h2>
+        <!-- List of Addresses Here -->
+        <% addresses.forEach(address => { %>
+        <div class="address">
+          <p>
+            <%= address.address1 %>, <br />
+            <%= address.address2 %>,<br />
+            <%= address.city %>,<br /><%= address.state %>,<br />
+            <%= address.country %>,<br />
+            <%= address.pincode %>
+          </p>
+          <button class="btn btn-primary">Edit</button>
+          <!-- <button class="btn btn-danger">Delete</button> -->
+          <!-- Add a data attribute to the "Delete" button to store the address ID -->
+          <button
+            class="btn btn-danger"
+            onclick="deleteAddress('<%= address._id %>')"
+          >
+            Delete
+          </button>
+        </div>
+        <% }); %>
+
+        <button class="btn btn-success" id="addAddressButton">
+          Add New Address
+        </button>
+
+        <!-- Hidden form for adding a new address -->
+        <form id="newAddressForm" style="display: none">
+          <!-- Form fields for entering the new address -->
+          <!-- Example: -->
+          <!-- <input type="text" id="newAddressLine1" placeholder="Address Line 1">
               <input type="text" id="newAddressLine2" placeholder="Address Line 2">
               <input type="text" id="newPincode" placeholder="Pincode">
               <input type="text" id="newCity" placeholder="City">
               <input type="text" id="newCountry" placeholder="Country"> -->
-              <div class="form-group row">
-                <div class="col-md-12">
-                  <label for="c_address" class="text-black">Address <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" id="newAddressLine1" name="c_address" placeholder="Address Line 1">
-                </div>
-              </div>
-    
-              <div class="form-group">
-                <input type="text" class="form-control" id="newAddressLine2" placeholder="Address Line 2">
-              </div>
-    
-              <div class="form-group row">
-                <div class="col-md-6">
-                  <label for="c_state_country" class="text-black">city<span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" id="newCity" name="c_state_country">
-                </div>
-                <div class="col-md-6">
-                  <label for="c_postal_zip" class="text-black">Pincode<span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" id="newPincode" name="c_postal_zip">
-                </div>
-              </div>
-    
-              <div class="form-group row mb-5">
-               
-                <div class="col-md-6">
-                  <label for="c_phone" class="text-black">State <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" id="newState" name="c_phone" >
-                </div>
-                <div class="col-md-6">
-                  <label for="c_phone" class="text-black">Country <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" id="newCountry" name="c_phone" >
-                </div>
-              </div>
-              <!-- Add more fields as needed -->
-          
-              <!-- Submit button to add the new address -->
-              <button class="btn btn-primary" id="submitNewAddressButton">Add Address</button>
-            </form>
-          </div>
-          
-          
-          
-          <!-- Orders -->
-          <div id="orders">
-              <h2>Orders</h2>
-              <!-- List of Orders Here -->
-              <% ord.forEach(order => { %>
-                  <div class="order">
-                      <p>Order #<%= order.orderNumber %>: Date: <%= order.orderDate %>, Total: $<%= order.totalAmount %></p>
-                      <button class="btn btn-danger">Cancel Order</button>
-                  </div>
-              <% }); %>
+          <div class="form-group row">
+            <div class="col-md-12">
+              <label for="c_address" class="text-black"
+                >Address <span class="text-danger">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="newAddressLine1"
+                name="c_address"
+                placeholder="Address Line 1"
+              />
+            </div>
           </div>
 
-          <!-- Change Password Form -->
-          
-          <div id="change-password">
-            <h2>Change Password</h2>
-            <% if (typeof message !== 'undefined') { %>
-              <h6><%= message %></h6>
-              <% } %>
-            <form action="/change-password" method="post" onsubmit="return validateForm()">
-                <div class="form-group">
-                    <label for="current-password">Current Password</label>
-                    <input type="password" class="form-control" id="current-password" name="currentPassword">
-                    <div id="current-password-error" class="text-danger"></div>
-                </div>
-                <div class="form-group">
-                    <label for="new-password">New Password</label>
-                    <input type="password" class="form-control" id="new-password" name="newPassword">
-                    <div id="new-password-error" class="text-danger"></div>
-                </div>
-                <div class="form-group">
-                    <label for="confirm-password">Confirm New Password</label>
-                    <input type="password" class="form-control" id="confirm-password" name="confirmPassword">
-                    <div id="confirm-password-error" class="text-danger"></div>
-                </div>
-                <button type="submit" class="btn btn-primary">Change Password</button>
-            </form>
-        </div>
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              id="newAddressLine2"
+              placeholder="Address Line 2"
+            />
+          </div>
+
+          <div class="form-group row">
+            <div class="col-md-6">
+              <label for="c_state_country" class="text-black"
+                >city<span class="text-danger">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="newCity"
+                name="c_state_country"
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="c_postal_zip" class="text-black"
+                >Pincode<span class="text-danger">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="newPincode"
+                name="c_postal_zip"
+              />
+            </div>
+          </div>
+
+          <div class="form-group row mb-5">
+            <div class="col-md-6">
+              <label for="c_phone" class="text-black"
+                >State <span class="text-danger">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="newState"
+                name="c_phone"
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="c_phone" class="text-black"
+                >Country <span class="text-danger">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="newCountry"
+                name="c_phone"
+              />
+            </div>
+          </div>
+          <!-- Add more fields as needed -->
+
+          <!-- Submit button to add the new address -->
+          <button class="btn btn-primary" id="submitNewAddressButton">
+            Add Address
+          </button>
+        </form>
       </div>
+
+      <!-- Orders -->
+      <div id="orders">
+        <h2>Orders</h2>
+        <!-- List of Orders Here -->
+        <% ord.forEach(order => { %>
+        <div class="order">
+          <p>
+            Order #<%= order.orderNumber %>: Date: <%= order.orderDate %>,
+            Total: $<%= order.totalAmount %>
+          </p>
+          <button class="btn btn-danger">Cancel Order</button>
+        </div>
+        <% }); %>
+      </div>
+
+      <!-- Change Password Form -->
+
+      <div id="change-password">
+        <h2>Change Password</h2>
+        <% if (typeof message !== 'undefined') { %>
+        <h6><%= message %></h6>
+        <% } %>
+        <form
+          action="/change-password"
+          method="post"
+          onsubmit="return validateForm()"
+        >
+          <div class="form-group">
+            <label for="current-password">Current Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="current-password"
+              name="currentPassword"
+            />
+            <div id="current-password-error" class="text-danger"></div>
+          </div>
+          <div class="form-group">
+            <label for="new-password">New Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="new-password"
+              name="newPassword"
+            />
+            <div id="new-password-error" class="text-danger"></div>
+          </div>
+          <div class="form-group">
+            <label for="confirm-password">Confirm New Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="confirm-password"
+              name="confirmPassword"
+            />
+            <div id="confirm-password-error" class="text-danger"></div>
+          </div>
+          <button type="submit" class="btn btn-primary">Change Password</button>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
 
-
-
 <script>
-    // Get references to the button and form
-    const addAddressButton = document.getElementById('addAddressButton');
-    const newAddressForm = document.getElementById('newAddressForm');
-    const submitNewAddressButton = document.getElementById('submitNewAddressButton');
-  
-    // Handle the "Add New Address" button click
-    addAddressButton.addEventListener('click', () => {
-      newAddressForm.style.display = 'block'; // Show the form
-    });
-  
-    // Handle form submission
-    submitNewAddressButton.addEventListener('click', async (event) => {
-      event.preventDefault(); // Prevent the form from submitting normally
-  
-      // Gather the form data
-      const newAddressLine1 = document.getElementById('newAddressLine1').value;
-      const newAddressLine2 = document.getElementById('newAddressLine2').value;
-      const newPincode = document.getElementById('newPincode').value;
-      const newCity = document.getElementById('newCity').value;
-      const newState = document.getElementById('newState').value;
-      const newCountry = document.getElementById('newCountry').value;
-      // Add more fields as needed
-  console.log(newAddressLine1);
-      // Create an object with the form data
-      const newAddressData = {
-        address1: newAddressLine1,
-        address2: newAddressLine2,
-        pincode: newPincode,
-        city: newCity,
-        state:newState,
-        country: newCountry,
-        // Add more properties as needed
-      };
-  
-      // Send the data to the server using Fetch
-      try {
-        const response = await fetch('/add-address', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newAddressData),
-        });
-  
-        if (response.ok) {
-          // Handle a successful response, e.g., add the new address to the list
-          const newAddress = document.createElement('div');
-          newAddress.classList.add('address');
-          newAddress.innerHTML = `<p>${newAddressData.address1},<br> ${newAddressData.address2},<br>${newAddressData.pincode},<br> ${newAddressData.city},<br> ${newAddressData.state},<br> ${newAddressData.country}</p>
+  // Get references to the button and form
+  const addAddressButton = document.getElementById("addAddressButton");
+  const newAddressForm = document.getElementById("newAddressForm");
+  const submitNewAddressButton = document.getElementById(
+    "submitNewAddressButton"
+  );
+
+  // Handle the "Add New Address" button click
+  addAddressButton.addEventListener("click", () => {
+    newAddressForm.style.display = "block"; // Show the form
+  });
+
+  // Handle form submission
+  submitNewAddressButton.addEventListener("click", async (event) => {
+    event.preventDefault(); // Prevent the form from submitting normally
+
+    // Gather the form data
+    const newAddressLine1 = document.getElementById("newAddressLine1").value;
+    const newAddressLine2 = document.getElementById("newAddressLine2").value;
+    const newPincode = document.getElementById("newPincode").value;
+    const newCity = document.getElementById("newCity").value;
+    const newState = document.getElementById("newState").value;
+    const newCountry = document.getElementById("newCountry").value;
+    // Add more fields as needed
+    // Create an object with the form data
+    const newAddressData = {
+      address1: newAddressLine1,
+      address2: newAddressLine2,
+      pincode: newPincode,
+      city: newCity,
+      state: newState,
+      country: newCountry,
+      // Add more properties as needed
+    };
+
+    // Send the data to the server using Fetch
+    try {
+      const response = await fetch("/add-address", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newAddressData),
+      });
+
+      if (response.ok) {
+        // Handle a successful response, e.g., add the new address to the list
+        const newAddress = document.createElement("div");
+        newAddress.classList.add("address");
+        newAddress.innerHTML = `<p>${newAddressData.address1}, ${newAddressData.address2},${newAddressData.pincode}, ${newAddressData.city}, ${newAddressData.state}, ${newAddressData.country}</p>
                                   <button class="btn btn-primary">Edit</button>
                                   <button class="btn btn-danger">Delete</button>`;
-          document.getElementById('addresses').appendChild(newAddress);
-  
-          // Clear the form fields
-          document.getElementById('newAddressLine1').value = '';
-          document.getElementById('newAddressLine2').value = '';
-          document.getElementById('newPincode').value = '';
-          document.getElementById('newCity').value = '';
-          document.getElementById('newState').value = '';
-          document.getElementById('newCountry').value = '';
-  
-          // Hide the form
-          newAddressForm.style.display = 'none';
-        } else {
-          console.error('Server error:', response.status, response.statusText);
-        }
-      } catch (error) {
-        console.error('Error:', error);
+        document.getElementById("addresses").appendChild(newAddress);
+
+        // Clear the form fields
+        document.getElementById("newAddressLine1").value = "";
+        document.getElementById("newAddressLine2").value = "";
+        document.getElementById("newPincode").value = "";
+        document.getElementById("newCity").value = "";
+        document.getElementById("newState").value = "";
+        document.getElementById("newCountry").value = "";
+
+        // Hide the form
+        newAddressForm.style.display = "none";
+
+        window.location.reload();
+      } else {
+        console.error("Server error:", response.status, response.statusText);
       }
-    });
-  </script>
-  
-  <script>
-    function validateForm() {
-        const currentPassword = document.getElementById('current-password').value;
-        const newPassword = document.getElementById('new-password').value;
-        const confirmPassword = document.getElementById('confirm-password').value;
-        let isValid = true;
-
-        // Reset error messages
-        document.getElementById('current-password-error').textContent = '';
-        document.getElementById('new-password-error').textContent = '';
-        document.getElementById('confirm-password-error').textContent = '';
-
-        // Validate current password
-        if (currentPassword === '') {
-            document.getElementById('current-password-error').textContent = 'Current password is required.';
-            isValid = false;
-        }
-
-        // Validate new password
-        if (newPassword === '') {
-            document.getElementById('new-password-error').textContent = 'New password is required.';
-            isValid = false;
-        } else if (newPassword.length < 8) {
-            document.getElementById('new-password-error').textContent = 'New password must be at least 8 characters.';
-            isValid = false;
-        }
-
-        // Validate confirm password
-        if (confirmPassword === '') {
-            document.getElementById('confirm-password-error').textContent = 'Confirm password is required.';
-            isValid = false;
-        } else if (confirmPassword !== newPassword) {
-            document.getElementById('confirm-password-error').textContent = 'Passwords do not match.';
-            isValid = false;
-        }
-
-        return isValid;
+    } catch (error) {
+      console.error("Error:", error);
     }
+  });
+</script>
+
+<script>
+  function validateForm() {
+    const currentPassword = document.getElementById("current-password").value;
+    const newPassword = document.getElementById("new-password").value;
+    const confirmPassword = document.getElementById("confirm-password").value;
+    let isValid = true;
+
+    // Reset error messages
+    document.getElementById("current-password-error").textContent = "";
+    document.getElementById("new-password-error").textContent = "";
+    document.getElementById("confirm-password-error").textContent = "";
+
+    // Validate current password
+    if (currentPassword === "") {
+      document.getElementById("current-password-error").textContent =
+        "Current password is required.";
+      isValid = false;
+    }
+
+    // Validate new password
+    if (newPassword === "") {
+      document.getElementById("new-password-error").textContent =
+        "New password is required.";
+      isValid = false;
+    } else if (newPassword.length < 8) {
+      document.getElementById("new-password-error").textContent =
+        "New password must be at least 8 characters.";
+      isValid = false;
+    }
+
+    // Validate confirm password
+    if (confirmPassword === "") {
+      document.getElementById("confirm-password-error").textContent =
+        "Confirm password is required.";
+      isValid = false;
+    } else if (confirmPassword !== newPassword) {
+      document.getElementById("confirm-password-error").textContent =
+        "Passwords do not match.";
+      isValid = false;
+    }
+
+    return isValid;
+  }
+</script>
+
+<script>
+  function deleteAddress(addressId) {
+    // Send a DELETE request to the server
+    const userId = "<%= user._id %>";
+    fetch(`/delete-address/${userId}/${addressId}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (response.ok) {
+          // Handle a successful response, e.g., remove the deleted address from the UI
+          const deletedAddress = document.querySelector(
+            `[data-address-id="${addressId}"]`
+          );
+          if (deletedAddress) {
+            deletedAddress.remove();
+          }
+
+          // Refresh the page
+          window.location.reload();
+        } else {
+          console.error("Server error:", response.status, response.statusText);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
 </script>
 <%- include('../layouts/homeLayout/footer')%>
