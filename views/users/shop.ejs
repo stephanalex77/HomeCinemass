@@ -1,76 +1,401 @@
-<div class="untree_co-section">
-  <div class="container  d-flex justify-content-center">
-    <div class="row col-12">
-      <!-- <div class="col-md-6 mb-5 mb-md-0"> -->
-        <div class="p-3 p-lg-5 border">
-          <h2 class="h3 mb-3 text-black">Billing Details</h2>
-          <div class="form-group">
-            <label for="c_country" class="text-black">Country <span class="text-danger">*</span></label>
-            <select id="c_country" class="form-control">
-              <option value="1">Select a country</option>    
-              <option value="2">bangladesh</option>    
-              <option value="3">Algeria</option>    
-              <option value="4">Afghanistan</option>    
-              <option value="5">Ghana</option>    
-              <option value="6">Albania</option>    
-              <option value="7">Bahrain</option>    
-              <option value="8">Colombia</option>    
-              <option value="9">Dominican Republic</option>    
+<%- include('../layouts/homeLayout/header')%>
+<div class="page-heading bg-light">
+  <div class="container">
+    <div class="row align-items-end text-center">
+      <div class="col-lg-7 mx-auto">
+        <h1>Shop</h1>  
+        <p class="mb-4"><a href="index.html">Home</a> / <strong>Shop</strong></p>        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="untree_co-section pt-3">
+  <div class="container">
+
+    <div class="row align-items-center mb-5">
+      <div class="col-lg-8">
+        <h2 class="mb-3 mb-lg-0">Products</h2>
+      </div>
+      <div class="col-lg-4">
+
+        <div class="d-flex sort align-items-center justify-content-lg-end">
+          <strong class="mr-3">Sort by:</strong>
+          <form action="/shop" method="GET">
+            <select class="" required>
+              <option value="">Newest Items</option>
+              <option value="minPrice">Low to High</option>
+              <option value="maxPrice">High to Low</option>
+              <option value="asc">Price: Ascending</option>
+              <option value="desc">Price: Descending</option>
+              <!-- <option value="3">Rating(High to Low)</option> -->
             </select>
-          </div>
-          <div class="form-group row">
-            <div class="col-md-6">
-              <label for="c_fname" class="text-black">First Name <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="c_fname" name="c_fname">
-            </div>
-            <div class="col-md-6">
-              <label for="c_lname" class="text-black">Last Name <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="c_lname" name="c_lname">
-            </div>
-          </div>
+          </form>
+        </div>
+      </div>
+    </div>
 
-          <div class="form-group row">
-            <div class="col-md-12">
-              <label for="c_companyname" class="text-black">Company Name </label>
-              <input type="text" class="form-control" id="c_companyname" name="c_companyname">
+    <div class="row">
+      <div class="col-md-3">
+        <ul class="list-unstyled categories" id="categoryList">
+          <li><a href="#" data-category-id="all">All Categories</a></li>
+            <% for (let i = 0; i < categories.length; i++) { %>
+              <li><a href="#" data-category-id="<%= categories[i]._id %>"><%= categories[i].categoryname.charAt(0).toUpperCase() + categories[i].categoryname.slice(1) %> <span><%= categories[i].quantity %></span></a></li>
+            <% } %>
+        </ul>
+      </div>
+      <div class="col-md-9">
+        <div class="container mt-5">
+          <div class="row">
+            <% products.forEach(product => { %>
+              <div class="col-md-6 mb-4" data-category="<%= product.category_id %>">
+                <div class="card border-dark rounded-0">
+                    <a class="btn add-to-wishlist d-flex justify-content-end " onclick="addToWishlist('<%= product._id %>')" >
+                      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="m12 20.703.343.667a.748.748 0 0 1-.686 0l-.003-.002-.007-.003-.025-.013a31.138 31.138 0 0 1-5.233-3.576C3.8 15.573 1 12.332 1 8.514v-.001C1 5.053 3.829 2.5 6.736 2.5 9.03 2.5 10.881 3.726 12 5.605 13.12 3.726 14.97 2.5 17.264 2.5 20.17 2.5 23 5.052 23 8.514c0 3.818-2.801 7.06-5.389 9.262a31.148 31.148 0 0 1-5.233 3.576l-.025.013-.007.003-.002.001ZM6.736 4C4.657 4 2.5 5.88 2.5 8.514c0 3.107 2.324 5.96 4.861 8.12a29.655 29.655 0 0 0 4.566 3.175l.073.041.073-.04c.271-.153.661-.38 1.13-.674.94-.588 2.19-1.441 3.436-2.502 2.537-2.16 4.861-5.013 4.861-8.12C21.5 5.88 19.343 4 17.264 4c-2.106 0-3.801 1.389-4.553 3.643a.751.751 0 0 1-1.422 0C10.537 5.389 8.841 4 6.736 4Z">
+                        </path>
+                      </svg>
+                    </a>
+                  <div class="row g-0">
+                    <div class="col-md-4">
+                      <a href="/singleProduct/<%= product.id %>" class="product-img">
+                      <img src="/public/uploadProduct/<%= product.image[0] %>" alt="<%= product.product_name %>" class="img-fluid mt-3 m-3" style="max-height: 100px;">
+                      </a>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="card-body p-3">
+                        <h5 class="card-title"><%= product.product_name %></h5>
+                        <p class="card-text">Price: ₹<%= product.product_price.toFixed(2) %></p>
+                        <p class="card-text">Sales Price: ₹<%= product.product_sales_price.toFixed(2) %></p>
+                        <button class="btn btn-dark btn-sm"  onclick="addtocart('<%= product._id %>')" data-product-id="<%= product._id %>">Add to Cart</button>
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+        
+        <!-- // SCRIPT FOR SHOW PRODUCTS ACCORDING TO ITS CATEGORY -->
+        <script>
+          document.addEventListener("DOMContentLoaded", function () {
+            const categoryList = document.getElementById("categoryList");
+            const products = document.querySelectorAll(".col-md-6");
+        
+            categoryList.addEventListener("click", function (event) {
+              if (event.target.tagName === "A") {
+                const categoryId = event.target.getAttribute("data-category-id");
+        
+                products.forEach((product) => {
+                  const productCategory = product.getAttribute("data-category");
+        
+                  if (categoryId === "all" || categoryId === productCategory) {
+                    product.style.display = "block";
+                  } else {
+                    product.style.display = "none";
+                  }
+                });
+              }
+            });
+          });
+        </script>
+        
+          
+
+        <div class="row mt-5 pb-5">
+          <div class="col-lg-12">
+            <div class="custom-pagination">
+              <ul class="list-unstyled">
+                <li>
+                  <a href="#">
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M5.854 4.646a.5.5 0 0 1 0 .708L3.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"/>
+                      <path fill-rule="evenodd" d="M2.5 8a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                    </svg>                      
+                  </a>
+                </li>
+                <li class="active"><span>1</span></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li>
+                  <a href="#">
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M10.146 4.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 8l-2.647-2.646a.5.5 0 0 1 0-.708z"/>
+                      <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8z"/>
+                    </svg>
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
+        </div>
 
-          <div class="form-group row">
-            <div class="col-md-12">
-              <label for="c_address" class="text-black">Address <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="c_address" name="c_address" placeholder="Street address">
+
+      </div>
+    </div>
+  </div> <!-- /.untree_co-section -->
+
+ 
+
+  <div class="untree_co-section bg-light">
+    <div class="container">
+      <div class="row align-items-stretch">
+        <div class="col-12 col-sm-6 col-md-4 mb-3 mb-md-0">
+          <div class="feature h-100">
+            <div class="icon mb-4">
+              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-truck" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5v7h-1v-7a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .5.5v1A1.5 1.5 0 0 1 0 10.5v-7zM4.5 11h6v1h-6v-1z"/>
+                <path fill-rule="evenodd" d="M11 5h2.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5h-1v-1h1a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4.5h-1V5zm-8 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 1a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+                <path fill-rule="evenodd" d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 1a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+              </svg>
             </div>
+            <h3>Worldwide Delivery</h3>
+            <p>Far far away, behind the word mountains, far from the countries.</p>
           </div>
-
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Apartment, suite, unit etc. (optional)">
+        </div>
+        <div class="col-12 col-sm-6 col-md-4 mb-3 mb-md-0">
+          <div class="feature h-100">
+            <div class="icon mb-4">
+              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-shield-lock" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M5.443 1.991a60.17 60.17 0 0 0-2.725.802.454.454 0 0 0-.315.366C1.87 7.056 3.1 9.9 4.567 11.773c.736.94 1.533 1.636 2.197 2.093.333.228.626.394.857.5.116.053.21.089.282.11A.73.73 0 0 0 8 14.5c.007-.001.038-.005.097-.023.072-.022.166-.058.282-.111.23-.106.525-.272.857-.5a10.197 10.197 0 0 0 2.197-2.093C12.9 9.9 14.13 7.056 13.597 3.159a.454.454 0 0 0-.315-.366c-.626-.2-1.682-.526-2.725-.802C9.491 1.71 8.51 1.5 8 1.5c-.51 0-1.49.21-2.557.491zm-.256-.966C6.23.749 7.337.5 8 .5c.662 0 1.77.249 2.813.525a61.09 61.09 0 0 1 2.772.815c.528.168.926.623 1.003 1.184.573 4.197-.756 7.307-2.367 9.365a11.191 11.191 0 0 1-2.418 2.3 6.942 6.942 0 0 1-1.007.586c-.27.124-.558.225-.796.225s-.526-.101-.796-.225a6.908 6.908 0 0 1-1.007-.586 11.192 11.192 0 0 1-2.417-2.3C2.167 10.331.839 7.221 1.412 3.024A1.454 1.454 0 0 1 2.415 1.84a61.11 61.11 0 0 1 2.772-.815z"/>
+                <path d="M9.5 6.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                <path d="M7.411 8.034a.5.5 0 0 1 .493-.417h.156a.5.5 0 0 1 .492.414l.347 2a.5.5 0 0 1-.493.585h-.835a.5.5 0 0 1-.493-.582l.333-2z"/>
+              </svg>
+            </div>
+            <h3>Secure Payments</h3>
+            <p>Far far away, behind the word mountains, far from the countries.</p>
           </div>
-
-          <div class="form-group row">
-            <div class="col-md-6">
-              <label for="c_state_country" class="text-black">State / Country <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="c_state_country" name="c_state_country">
+        </div>
+        <div class="col-12 col-sm-6 col-md-4 mb-3 mb-md-0">
+          <div class="feature h-100">
+            <div class="icon mb-4">
+              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-counterclockwise" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M12.83 6.706a5 5 0 0 0-7.103-3.16.5.5 0 1 1-.454-.892A6 6 0 1 1 2.545 5.5a.5.5 0 1 1 .91.417 5 5 0 1 0 9.375.789z"/>
+                <path fill-rule="evenodd" d="M7.854.146a.5.5 0 0 0-.708 0l-2.5 2.5a.5.5 0 0 0 0 .708l2.5 2.5a.5.5 0 1 0 .708-.708L5.707 3 7.854.854a.5.5 0 0 0 0-.708z"/>
+              </svg>
             </div>
-            <div class="col-md-6">
-              <label for="c_postal_zip" class="text-black">Posta / Zip <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="c_postal_zip" name="c_postal_zip">
-            </div>
-          </div>
-
-          <div class="form-group row mb-5">
-            <div class="col-md-6">
-              <label for="c_email_address" class="text-black">Email Address <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="c_email_address" name="c_email_address">
-            </div>
-            <div class="col-md-6">
-              <label for="c_phone" class="text-black">Phone <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="c_phone" name="c_phone" placeholder="Phone Number">
-            </div>
+            <h3>Simple Returns</h3>
+            <p>Far far away, behind the word mountains, far from the countries.</p>
           </div>
         </div>
       </div>
     </div>
-    <!-- </form> -->
+  </div> <!-- /.untree_co-section -->
+
+  <div class="site-footer">
+
+
+    <div class="container">
+      <div class="row justify-content-between">
+        <div class="col-lg-5">
+          <div class="widget mb-4">
+            <h3 class="mb-2">About UntreeStore</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate modi cumque rem recusandae quaerat at asperiores beatae saepe repudiandae quam rerum aspernatur dolores et ipsa obcaecati voluptates libero</p>
+          </div>
+          <div class="widget">
+            <h3>Join our mailing list and receive exclusives</h3>
+            <form action="#" class="subscribe">
+              <div class="d-flex">
+                <input type="email" class="form-control" placeholder="Email address">
+                <input type="submit" class="btn btn-black" value="Subscribe">
+              </div>
+            </form>
+
+
+          </div>
+        </div>
+        <div class="col-lg-2">
+          <div class="widget">
+            <h3>Help</h3> 
+            <ul class="list-unstyled">
+              <li><a href="#">Contact us</a></li>
+              <li><a href="#">Account</a></li>
+              <li><a href="#">Shipping</a></li>
+              <li><a href="#">Returns</a></li>
+              <li><a href="#">FAQ</a></li>   
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-2">
+          <div class="widget">
+            <h3>About</h3>
+            <ul class="list-unstyled">
+              <li><a href="#">About us</a></li>
+              <li><a href="#">Press</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Team</a></li>
+              <li><a href="#">FAQ</a></li>   
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-2">
+          <div class="widget">
+            <h3>Shop</h3>
+            <ul class="list-unstyled">
+              <li><a href="#">Store</a></li>
+              <li><a href="#">Gift Cards</a></li>
+              <li><a href="#">Student Discount</a></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="row mt-5">
+        <div class="col-12 text-center">
+          <ul class="list-unstyled social">
+            <li><a href="#"><span class="icon-facebook"></span></a></li>
+            <li><a href="#"><span class="icon-instagram"></span></a></li>
+            <li><a href="#"><span class="icon-linkedin"></span></a></li>
+            <li><a href="#"><span class="icon-twitter"></span></a></li>
+          </ul>
+        </div>
+        <div class="col-12 text-center copyright">
+          <p>Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash; Designed with love by <a href="https://untree.co">Untree.co</a> <!-- License information: https://untree.co/license/ -->
+          </p>
+
+        </div>
+      </div>
+    </div> <!-- /.container -->
+  </div> <!-- /.site-footer -->
+
+  <div id="overlayer"></div>
+  <div class="loader">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
   </div>
-</div>
+
+
+
+
+
+  <script src="/famm/js/jquery/jquery-2.2.4.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			// Get the button element by its ID
+			const addToCartButton = document.getElementById("addtocart");
+	
+			// Add a click event listener to the button
+			addToCartButton.addEventListener("click", function () {
+				// Display a SweetAlert confirmation dialog
+				Swal.fire({
+					position: 'center',
+					icon: 'success',
+					title: 'Added to cart successfully',
+					showConfirmButton: false,
+					timer: 1500
+				});
+			});
+		});
+	</script>
+
+<script>
+		
+
+		function addtocart(productId){
+				console.log(productId);
+			fetch("/add-item-to-cart", {
+					method: "POST",
+					headers: {
+							"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ productId }),
+			})
+
+		.then((response) => {
+			if (response.ok) {
+				return response.json();
+			}else{
+				throw new Error("Network response was not ok")
+			}
+		})
+					.then((data) => {
+							console.log(data);
+							const updatedCartQuantity = data.cartQuantity;
+							const itemInCartElement = document.getElementById("item-in-cart");
+								if (itemInCartElement) {
+									itemInCartElement.textContent = updatedCartQuantity.toString();
+								}
+								// Display a toast message or perform any other actions as needed
+								showToast("Added to cart successfully");
+					})
+					.catch((error) =>{
+
+			console.log(error);
+			})
+		}
+	
+// 	const cartButton = document.getElementById("addtocart");
+// 		 console.log("Script loaded"); // Add this line
+// 		 cartButton.addEventListener("click", function (e) {
+// 			const productId = cartButton.getAttribute("data-product-id");
+// 		 console.log("clicked");
+// 	fetch("/add-item-to-cart", {
+// 			method: "POST",
+// 			headers: {
+// 					"Content-Type": "application/json",
+// 			},
+// 			body: JSON.stringify({ productId }),
+// 	})
+
+// .then((response) => {
+// 	if (response.ok) {
+// 		return response.json();
+// 	}else{
+// 		throw new Error("Network response was not ok")
+// 	}
+// })
+// 			.then((data) => {
+// 					console.log(data);
+// 			})
+// 			.catch((error) =>{
+
+// 	 console.log(error);
+// 	})
+// });
+function showToast(message) {
+  const toastContainer = document.getElementById("toast-container");
+  const toastMessage = document.getElementById("toast-message");
+
+  // Set the message text
+  toastMessage.textContent = message;
+
+  // Show the toast message
+  toastMessage.style.opacity = 1;
+  toastMessage.style.display = "block";
+
+  // Automatically hide the toast after a few seconds (e.g., 3 seconds)
+  setTimeout(() => {
+    toastMessage.style.opacity = 0;
+    setTimeout(() => {
+      toastMessage.style.display = "none";
+    }, 300);
+  }, 3000); // Adjust the time as needed (in milliseconds)
+}
+
+</script>
+
+
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const cartButton = document.getElementById('addtocart'); // Select the button by its ID
+		cartButton.addEventListener('click', function(event) {
+			event.preventDefault();
+			console.log('Button clicked');
+			window.location.href = '/cartt'; // Redirect to the cart page
+		});
+	});
+</script>
+
+
+
+<%- include('../layouts/homeLayout/footer')%>

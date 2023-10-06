@@ -13,19 +13,41 @@ const getCategory = async (req, res) => {
 // add category
 const addCategory = async (req, res) => {
   try {
-    // const { categoryname} = req.body;
+    const { categoryname} = req.body;
     
   
-    const category = new Category({
-      categoryname: req.body.categoryname,
-    });
-    
-   await category.save();
-   const categories = await Category.find();
+    // const category = new Category({
+    //   categoryname: req.body.categoryname,
+    // });
 
-    res.render("categories",{ categories });
+    if (!categoryname) {
+      res.send("Category name cannot be empty");
+      return;
+    }
+    if (categoryname.length < 3) {
+      alert("Category name must be at least 3 characters long");
+      return false;
+    }
+
+    const existingCategory = await Category.findOne({
+      categoryname: { $regex: '^' + categoryname + '$', $options: 'i' }
+    });
+    // const categories = await Category.find();
+    if(existingCategory){
+      res.send("Category already exists");
+    }else{
+      const newCategory = new Category({
+        categoryname: req.body.categoryname,
+      });
+      await newCategory.save();
+      if(newCategory){
+        
+        res.redirect("/admin/category");
+      }
+    }
+
   } catch (error) {
-    console.log(error);
+    res.status(500).json({ error: 'Failed to add category' });
   }
 };
 

@@ -64,15 +64,23 @@ const userSchema = new mongoose.Schema({
         state:{
           type:String
         },
-        
-       
         city:{
           type:String
         },
          country:{
           type:String
-        }    
-      }]
+        },
+        is_default:{
+          type:Boolean,
+          default:true
+        }
+      }],
+      referral_code:{
+        type:String
+    },
+    referredBy:{
+        type:String
+    }
    
 });
 

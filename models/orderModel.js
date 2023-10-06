@@ -20,10 +20,7 @@ const orderSchema = new mongoose.Schema({
           type: Number
         }
       }
-    ]
-      
-    ,
-
+    ],
     productPrice: {  
       type: Number,
      

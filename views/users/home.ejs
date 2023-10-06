@@ -30,7 +30,7 @@
 						<div class="col-lg-5">
 
 							<h6 class="mb-4 heading" data-aos="fade-up" data-aos-delay="100">CINEMA 40
-								Premium 9.4 Channel | 125-Watts-Per-Channel AV RECEIVER <a href="https://untree.co">Avtalkies.co</a></h6>
+								Premium 9.4 Channel | 125-Watts-Per-Channel AV RECEIVER <a href="">Avtalkies.co</a></h6>
 							<div class="mb-5 text-white desc mx-auto" data-aos="fade-up" data-aos-delay="200">
 							</div>
 
@@ -110,8 +110,16 @@
 		</div> <!-- /.heading -->
 		<div class="owl-3-slider owl-carousel">
 					<% products.forEach(product => { %>
-							<div class="item">
-									<div class="product-item">
+						<div class="item">
+							<div class="product-item " >
+										<div class="d-flex justify-content-end p-4 button" >
+											<a class="btn add-to-wishlist" onclick="addToWishlist('<%= product._id %>')" >
+												<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+													<path d="m12 20.703.343.667a.748.748 0 0 1-.686 0l-.003-.002-.007-.003-.025-.013a31.138 31.138 0 0 1-5.233-3.576C3.8 15.573 1 12.332 1 8.514v-.001C1 5.053 3.829 2.5 6.736 2.5 9.03 2.5 10.881 3.726 12 5.605 13.12 3.726 14.97 2.5 17.264 2.5 20.17 2.5 23 5.052 23 8.514c0 3.818-2.801 7.06-5.389 9.262a31.148 31.148 0 0 1-5.233 3.576l-.025.013-.007.003-.002.001ZM6.736 4C4.657 4 2.5 5.88 2.5 8.514c0 3.107 2.324 5.96 4.861 8.12a29.655 29.655 0 0 0 4.566 3.175l.073.041.073-.04c.271-.153.661-.38 1.13-.674.94-.588 2.19-1.441 3.436-2.502 2.537-2.16 4.861-5.013 4.861-8.12C21.5 5.88 19.343 4 17.264 4c-2.106 0-3.801 1.389-4.553 3.643a.751.751 0 0 1-1.422 0C10.537 5.389 8.841 4 6.736 4Z">
+													</path>
+												</svg>
+											</a>
+										</div>
 											<a href="/singleProduct/<%= product.id %>" class="product-img">
 													<img src="/public/uploadProduct/<%= product.image[0] %>" alt="<%= product.product_name %>" class="img-fluid" style="width: 100%; height: 200px; object-fit: contain;">
 											</a>
@@ -119,6 +127,9 @@
 											<div class="price">
 													<del>₹<%= product.product_price %></del> &mdash; <span>₹<%= product.product_sales_price %></span>
 											</div>
+											<!-- Inside your product page -->
+											<!-- <button class="btn btn-primary add-to-wishlist" onclick="addToWishlist('<%= product._id %>')">Add to Wishlist</button> -->
+
 											<div class="buttons d-flex flex-column">
 													<% if (product.quantity <= 0) { %>
 															<span class="out-of-stock alert-danger">Out of Stock</span>
@@ -394,8 +405,9 @@ function showToast(message) {
   }, 3000); // Adjust the time as needed (in milliseconds)
 }
 
-
 </script>
+
+
 
 <script>
 	document.addEventListener('DOMContentLoaded', () => {
@@ -408,6 +420,89 @@ function showToast(message) {
 	});
 </script>
 
+
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		// Get the button element by its ID
+		const addToWishListButton = document.getElementById("addtowishlist");
+
+		// Add a click event listener to the button
+		addToWishListButton.addEventListener("click", function () {
+			// Display a SweetAlert confirmation dialog
+			Swal.fire({
+				position: 'center',
+				icon: 'success',
+				title: 'Added to wishlist successfully',
+				showConfirmButton: false,
+				timer: 1500
+			});
+		});
+	});
+</script>
+
+<script>
+  async function addToWishlist(productId) {
+    try {
+      const response = await fetch("/add-item-to-wishlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ productId }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          // Product added to wishlist successfully, show a success message
+          showToast("Added to wishlist successfully");
+        } else {
+          // Handle error response here if needed
+          console.error(data.message);
+        }
+      } else {
+        // Handle network error here if needed
+        console.error("Network response was not ok");
+      }
+    } catch (error) {
+      // Handle other errors here if needed
+      console.error(error);
+    }
+  }
+
+  function showToast(message) {
+    const toastContainer = document.getElementById("toast-container");
+    const toastMessage = document.getElementById("toast-message");
+
+    // Set the message text
+    toastMessage.textContent = message;
+
+    // Show the toast message
+    toastMessage.style.opacity = 1;
+    toastMessage.style.display = "block";
+
+    // Automatically hide the toast after a few seconds (e.g., 3 seconds)
+    setTimeout(() => {
+      toastMessage.style.opacity = 0;
+      setTimeout(() => {
+        toastMessage.style.display = "none";
+      }, 300);
+    }, 3000); // Adjust the time as needed (in milliseconds)
+  }
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+	const wishlistButton = document.getElementById('addtowishlist'); // Select the button by its ID
+	wishlistButton.addEventListener('click', function(event) {
+		event.preventDefault();
+		console.log('Button clicked');
+		window.location.href = '/wishlist'; // Redirect to the cart page
+	});
+});
+</script>
 
 
 

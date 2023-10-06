@@ -282,6 +282,8 @@ const goToProfile = async (req, res) => {
       const userId = req.session.user_id; // Adjust the key based on what you set in your session
       const user = await User.findOne({ _id: userId });
       const ord = await orders.find({ userId: user }).populate("user");
+      
+      console.log(user.address);
       if (user) {
         // console.log(user); // Check user data in the console
         res.render("userProfile", { user, addresses: user.address, ord: ord });
@@ -304,10 +306,9 @@ const addAddressToProfile = async (req, res) => {
   try {
     const userId = req.session.user_id;
     const user = await User.findOne({ _id: userId });
-    // console.log(user);
 
     const { address1, address2, pincode, state, city, country } = req.body;
-    console.log(address1);
+    
     const newAddress = {
       address1,
       address2,
@@ -316,11 +317,13 @@ const addAddressToProfile = async (req, res) => {
       city,
       country,
     };
-    // console.log(newAddress);
+
+    // Check if it's the first address or if you want to make it default
+    if (user.address.length === 0 || req.body.makeDefault) {
+      user.defaultAddressIndex = user.address.length;
+    }
+
     user.address.push(newAddress);
-
-    // user.markModified('address');
-
     await user.save();
 
     res.json({ success: true, message: "Address added successfully" });
@@ -361,9 +364,10 @@ const changePassword = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
+    
     await user.save();
-
     return res.status(200).json({ message: "Password changed successfully" });
+
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });
@@ -373,8 +377,8 @@ const changePassword = async (req, res) => {
 const deleteAddress = async (req, res) => {
   const userId = req.params.userId;
   const addressId = req.params.addressId;
-  console.log(userId);
-  console.log(addressId);
+  // console.log(userId);
+  // console.log(addressId);
   try {
     // Find the user by their ID
     const user = await User.findById(userId);
@@ -412,6 +416,45 @@ const deleteAddress = async (req, res) => {
   }
 };
 
+const loadDefaultAddress = async (req, res) => {
+  try {
+      const userId = req.session.user._id
+      const user = await User.findById(userId)
+      res.render('defaultAddress', { user })
+  } catch (error) {
+      res.status(500).send("Address Not availble");
+  }
+}
+
+
+const makeDefaultAddress = async (req, res) => {
+  // const id = req.query.addressId
+  // console.log("========",id);
+
+  try {
+    console.log("response from backend")
+      const userId = req.session.user_id;
+      console.log("sdfghjk",userId);
+      const addressIdToSetDefault = req.query.addressId;
+      console.log(addressIdToSetDefault);
+
+      await User.updateOne(
+          { _id: userId, 'address.is_default': true },
+          { $set: { 'address.$.is_default': false } }
+      );
+
+
+      await User.updateOne(
+          { _id: userId, 'address._id': addressIdToSetDefault },
+          { $set: { 'address.$.is_default': true } }
+      );
+
+      res.json({ message: "Default address set successfully" });
+  } catch (error) {
+      console.error('Error setting default address:', error);
+      res.status(500).send("An error occurred while setting the default address");
+  }
+}
 module.exports = {
   loadRegister,
   insertUser,
@@ -428,4 +471,7 @@ module.exports = {
   addAddressToProfile,
   changePassword,
   deleteAddress,
+  loadDefaultAddress,
+  makeDefaultAddress
+
 };

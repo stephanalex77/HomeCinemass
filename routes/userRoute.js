@@ -7,7 +7,7 @@ const config = require("../config/config");
 
 
 user_route.use(session({secret:config.sessionSecret,
-resave:true,
+resave:false,
 saveUninitialized:false
 }))
 
@@ -49,6 +49,9 @@ const upload = multer({storage:storage});
 const userController = require("../controllers/userController");
 const cartController = require("../controllers/cartController")
 const productController = require("../controllers/productController")
+const orderController = require("../controllers/orderController")
+const couponController = require("../controllers/couponController")
+const wishListController = require("../controllers/wishListController")
 
 user_route.get('/register',auth.isLogout,userController.loadRegister);
 
@@ -81,6 +84,8 @@ user_route.delete('/removeFromCart/:productId', auth.isLogin, cartController.rem
 
 user_route.get('/checkoutpage', auth.isLogin, cartController.getCheckOutPage)
 
+user_route.get('/shipping-address-save', cartController.saveAddress)
+
 // user_route.post('/update-quantity/:productId', auth.isLogin,cartController.updateQuantity)
 user_route.post('/update-quantity/:operation', auth.isLogin,cartController.updateQuantity)
 
@@ -99,5 +104,33 @@ user_route.post('/add-address', auth.isLogin, userController.addAddressToProfile
 user_route.post('/change-password', auth.isLogin, userController.changePassword)
 
 user_route.delete('/delete-address/:userId/:addressId',auth.isLogin, userController.deleteAddress)
+
+user_route.get('/getDeaultAddress', auth.isLogin, userController.loadDefaultAddress)
+
+user_route.get('/makeDefault', auth.isLogin, userController.makeDefaultAddress)
+
+
+//ORDER MANAGEMENT
+
+user_route.get('/orderreview', auth.isLogin,orderController.getOrderReview)
+user_route.post('/orderreview', auth.isLogin,orderController.getOrderReview)
+
+
+
+// user_route.get('applycoupon', auth.isLogin, couponController.applyCoupon)
+user_route.post('/applycoupon', auth.isLogin, couponController.applyCoupon)
+
+// SHOP PRODUCT & FILTER PRODUCT & SHOW CATEGORY WISE PRODUCT
+
+user_route.get('/shop', auth.isLogin, productController.getShopProduct)
+
+user_route.get('/products/category/:categoryId', auth.isLogin, productController.getProductInsideCategory )
+
+// WISH LIST MANAGEMENT
+user_route.get('/wishlist', auth.isLogin, wishListController.getWishList)
+
+user_route.post('/add-item-to-wishlist',auth.isLogin, wishListController.addToWishList)
+
+user_route.delete('/removeFromWishList/:productId', auth.isLogin, wishListController.removeFromWishList)
 
 module.exports = user_route

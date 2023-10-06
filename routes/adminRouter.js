@@ -3,6 +3,9 @@ const admin_route = express();
 const uploadProduct = require('../multer/productMulter')
 const session = require("express-session")
 const config = require("../config/config");
+
+
+
 admin_route.use(session({secret:config.sessionSecret,
     resave:true,
     saveUninitialized:false
@@ -10,9 +13,15 @@ admin_route.use(session({secret:config.sessionSecret,
 
 
 admin_route.use("/public", express.static("public"));
-const bodyParser = require("body-parser");
-admin_route.use(bodyParser.json());
-admin_route.use(bodyParser.urlencoded({extended:true}));
+// const bodyParser = require("body-parser");
+// admin_route.use(bodyParser.json());
+// admin_route.use(bodyParser.urlencoded({extended:true}));
+
+admin_route.use(express.json());
+admin_route.use(express.urlencoded({extended:true}))
+
+
+
 
 admin_route.set('view engine','ejs');
 admin_route.set('views','./views/admin');
@@ -25,7 +34,7 @@ const categoryController= require("../controllers/categoryController")
 
 const productController= require("../controllers/productController")
 
-
+const couponController = require("../controllers/couponController")
 // user side
 
 admin_route.get('/',auth.isLogout,adminController.loadLogin)
@@ -87,12 +96,23 @@ admin_route.get('/editProduct/:id',auth.isLogin, productController.editproductLo
 admin_route.post('/editProduct/:id',auth.isLogin, uploadProduct.array('images',4),productController.editProduct)
 
 
-admin_route.get('*',function(req,res){
-    res.redirect('/admin');
-})
+
 
 // Assuming you have fetched the 'users' data and stored it in a variable called 'users'
 
 admin_route.get('/productList',auth.isLogin, adminController.editUserLoad);
+
+//COUPON MANAGEMENT
+admin_route.get('/coupon',auth.isLogin, couponController.getCoupon);
+admin_route.use(express.urlencoded({ extended: true }));
+
+admin_route.post('/coupon',auth.isLogin, couponController.addCoupon)
+
+
+admin_route.get('/coupons/delete-coupon',auth.isLogin, couponController.deleteCoupon)
+
+admin_route.get('*',function(req,res){
+    res.status(404).send('Page Not Found');
+})
 
 module.exports = admin_route;

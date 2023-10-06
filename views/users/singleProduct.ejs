@@ -16,24 +16,21 @@
       <div class="row">
         <div class="col-md-6">
           <div class="product-image">
-            <!-- Image slider container -->
             <div id="image-slider" class="carousel slide" data-ride="carousel">
               <div class="carousel-inner">
                 <% if (product.image && Array.isArray(product.image)) { %>
                   <% product.image.forEach((image, index) => { %>
                     <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-                      <img src="/public/uploadProduct/<%= image %>" alt="<%= product.product_name %>" class="d-block w-100">
+                      <img src="/public/uploadProduct/<%= image %>" alt="<%= product.product_name %>" class="img-fluid">
                     </div>
                   <% }); %>
                 <% } else { %>
-                  <!-- Provide a fallback or error message if product.image is missing or not an array -->
                   <p>No images available</p>
                 <% } %>
               </div>
-              <!-- Previous and Next buttons for image navigation -->
-              <a class="carousel-control-prev " href="#image-slider" role="button" data-slide="prev">
+              <a class="carousel-control-prev" href="#image-slider" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only ">Previous</span>
+                <span class="sr-only">Previous</span>
               </a>
               <a class="carousel-control-next" href="#image-slider" role="button" data-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
@@ -44,25 +41,30 @@
         </div>
         <div class="col-md-6">
           <div class="product-info">
-            <!-- Replace with the actual product name, prices, and description -->
-            <h1><%= product.product_name %></h1>
+            <h1 class="product-title"><%= product.product_name %></h1>
             <div class="product-price">
-              <del class="h4">₹<%= product.product_price %></del>
-              <span class="h2">₹<%= product.product_sales_price %></span>
+              <del class="old-price">₹<%= product.product_price %></del>
+              <span class="new-price">₹<%= product.product_sales_price %></span>
             </div>
             <p class="product-description"><%= product.description %></p>
 
-            <!-- Add to Cart button with data-product-id attribute for identification -->
             <button class="btn btn-primary add-to-cart" onclick="addtocart('<%= product._id %>')" data-product-id="<%= product._id %>">Add to Cart</button>
            
-            <!-- Buy Now button with a link to the checkout page -->
             <a href="/checkout?product=<%= product._id %>" class="btn btn-success buy-now">Buy Now</a>
+            <a class="btn btn-outline-black" onclick="addtocart('<%= product._id %>')" data-product-id="<%= product._id %>">
+              <svg class=""  viewBox="0 0 24 24" width="15" height="15" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="m12 20.703.343.667a.748.748 0 0 1-.686 0l-.003-.002-.007-.003-.025-.013a31.138 31.138 0 0 1-5.233-3.576C3.8 15.573 1 12.332 1 8.514v-.001C1 5.053 3.829 2.5 6.736 2.5 9.03 2.5 10.881 3.726 12 5.605 13.12 3.726 14.97 2.5 17.264 2.5 20.17 2.5 23 5.052 23 8.514c0 3.818-2.801 7.06-5.389 9.262a31.148 31.148 0 0 1-5.233 3.576l-.025.013-.007.003-.002.001ZM6.736 4C4.657 4 2.5 5.88 2.5 8.514c0 3.107 2.324 5.96 4.861 8.12a29.655 29.655 0 0 0 4.566 3.175l.073.041.073-.04c.271-.153.661-.38 1.13-.674.94-.588 2.19-1.441 3.436-2.502 2.537-2.16 4.861-5.013 4.861-8.12C21.5 5.88 19.343 4 17.264 4c-2.106 0-3.801 1.389-4.553 3.643a.751.751 0 0 1-1.422 0C10.537 5.389 8.841 4 6.736 4Z">
+                </path>
+              </svg>
+            </a>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+
 
 <!-- Add jQuery library -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -186,4 +188,92 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+
+
+
+//WISH LIST
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		// Get the button element by its ID
+		const addToWishListButton = document.getElementById("addtowishlist");
+
+		// Add a click event listener to the button
+		addToWishListButton.addEventListener("click", function () {
+			// Display a SweetAlert confirmation dialog
+			Swal.fire({
+				position: 'center',
+				icon: 'success',
+				title: 'Added to wishlist successfully',
+				showConfirmButton: false,
+				timer: 1500
+			});
+		});
+	});
+</script>
+
+<script>
+  async function addToWishlist(productId) {
+    try {
+      const response = await fetch("/add-item-to-wishlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ productId }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          // Product added to wishlist successfully, show a success message
+          showToast("Added to wishlist successfully");
+        } else {
+          // Handle error response here if needed
+          console.error(data.message);
+        }
+      } else {
+        // Handle network error here if needed
+        console.error("Network response was not ok");
+      }
+    } catch (error) {
+      // Handle other errors here if needed
+      console.error(error);
+    }
+  }
+
+  function showToast(message) {
+    const toastContainer = document.getElementById("toast-container");
+    const toastMessage = document.getElementById("toast-message");
+
+    // Set the message text
+    toastMessage.textContent = message;
+
+    // Show the toast message
+    toastMessage.style.opacity = 1;
+    toastMessage.style.display = "block";
+
+    // Automatically hide the toast after a few seconds (e.g., 3 seconds)
+    setTimeout(() => {
+      toastMessage.style.opacity = 0;
+      setTimeout(() => {
+        toastMessage.style.display = "none";
+      }, 300);
+    }, 3000); // Adjust the time as needed (in milliseconds)
+  }
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+	const wishlistButton = document.getElementById('addtowishlist'); // Select the button by its ID
+	wishlistButton.addEventListener('click', function(event) {
+		event.preventDefault();
+		console.log('Button clicked');
+		window.location.href = '/wishlist'; // Redirect to the cart page
+	});
+});
+</script>
+
+
+
 <%- include('../layouts/homeLayout/footer')%>

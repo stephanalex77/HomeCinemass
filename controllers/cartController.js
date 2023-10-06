@@ -27,7 +27,7 @@ const getCart = async (req, res) => {
     const userId = req.session.user_id;
     const user = await User.findById({ _id: userId });
     
-    console.log(user)
+    // console.log(user)
     // Find the user's cart and populate it with product details
     console.log(userId);
     const cart = await Cart.findOne({ user: userId }).populate(
@@ -54,7 +54,7 @@ const getCart = async (req, res) => {
         calculateTotalPrice += product.product_sales_price * cartQuantity;
       }
       console.log("this is my cart items")
-      console.log(cart)
+      // console.log(cart)
 
       res.render("cart", {user, cart, category, products, calculateTotalPrice });
     }
@@ -90,7 +90,7 @@ const addToCart = async (req, res) => {
     const existingProduct = cart.products.find((item) =>
       item.product.equals(product_id)
     );
-    console.log(existingProduct);
+    // console.log(existingProduct);
 
     if (existingProduct) {
       existingProduct.quantity += Number(quantity)
@@ -99,9 +99,9 @@ const addToCart = async (req, res) => {
     } else {
       cart.products.push({ product: product_id, quantity });
     }
-    console.log("kittuo???????????");
+    // console.log("kittuo???????????");
     product.quantity-=Number(quantity)
-    console.log("==========kittiyo");
+    // console.log("==========kittiyo");
     await product.save();
 
     await cart.save();
@@ -176,14 +176,14 @@ const getCheckOutPage = async (req, res) => {
   // const userId = req.session.user_id;
   const user = await User.findById({ _id: userId })
 
-  console.log("======================================================================");
-  console.log(user)
-  console.log("======================================================================");
+  // console.log("======================================================================");
+  // console.log(user)
+  // console.log("======================================================================");
   try {
     const cart = await Cart.findOne({ user: userId }).populate('products.product');
     
     // Debugging statement
-    console.log('Cart:', cart);
+    // console.log('Cart:', cart);
     
     if (cart && cart.products && cart.products.length > 0) {
       // Iterate over products
@@ -205,7 +205,12 @@ const getCheckOutPage = async (req, res) => {
   }
 };
 
-
+const saveAddress=(req,res)=>{
+  
+  req.session.userAddress =req.query.address
+  res.json({message:'address saved'})
+  
+}
 
 
 
@@ -217,9 +222,9 @@ const  updateQuantity = async (req, res) => {
     const userId = req.session.user_id;
     const productId = req.body.productId;
     const operation = req.params.operation; // "increment" or "decrement"
-    console.log("Operation===========:", operation);
-    console.log("product id====== ", productId);
-    console.log(userId);
+    // console.log("Operation===========:", operation);
+    // console.log("product id====== ", productId);
+    // console.log(userId);
     const cart = await Cart.findOne({ user: userId }).populate(
       "products.product"
     );
@@ -228,7 +233,7 @@ const  updateQuantity = async (req, res) => {
       item._id.equals(productId)
       );
 
-    console.log(product);
+    // console.log(product);
     // cart.products.findOne({"_id" :productId})
     // const product = cart.products.find({"_id" :productId})
     // console.log("this isi product");
@@ -264,7 +269,6 @@ const  updateQuantity = async (req, res) => {
 
 
 
-
 module.exports = {
   getCart,
   addToCart,
@@ -272,5 +276,7 @@ module.exports = {
   updateCart,
   removeFromCart,
   getCheckOutPage,
-  updateQuantity
+  saveAddress,
+  updateQuantity,
+ 
 };

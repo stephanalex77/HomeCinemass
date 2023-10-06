@@ -83,6 +83,7 @@
           .then(response => response.json())
           .then(data => {
               console.log(data);
+              location.reload();
           })
           
           .catch(error => {
@@ -121,8 +122,8 @@
 
 
     <div class="row">
-      <div class="col-md-6">
-        <div class="row mb-5">
+      <div class="col-md-6 " style="margin-top: 50px;">
+        <div class="row mb-5 ">
           <div class="col-md-6 mb-3 mb-md-0">
             <button class="btn btn-black btn-sm btn-block">Update Cart</button>
           </div>
@@ -130,24 +131,24 @@
             <button class="btn btn-outline-black btn-sm btn-block">Continue Shopping</button>
           </div>
         </div>
-        <div class="row mb-5">
+        <!-- <div class="row mb-5">
           <div class="col-md-12">
             <h2 class="h3 mb-3 text-black">Coupon Code</h2>
             <div class="p-3 p-lg-5 border">
 
               <label for="c_code" class="text-black mb-3">Enter your coupon code if you have one</label>
               <div class="input-group w-75">
-                <input type="text" class="form-control" id="c_code" placeholder="Coupon Code" aria-label="Coupon Code" aria-describedby="button-addon2">
+                <input type="text" class="form-control" name="couponCode" placeholder="Coupon Code" aria-label="Coupon Code" aria-describedby="button-addon2">
                 <div class="input-group-append">
-                  <button class="btn btn-black btn-sm" type="button" id="button-addon2">Apply</button>
+                  <button onclick="apply" class="btn btn-black btn-sm" type="button" id="button-addon2">Apply</button>
                 </div>
               </div>
 
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
-      <div class="col-md-6 pl-5">
+      <div class="col-md-6 pl-5 justify-content-end" style="margin-top: 50px;">
         <div class="row justify-content-end">
           <div class="col-md-10 ">
             <div class="row">
