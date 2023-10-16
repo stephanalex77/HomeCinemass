@@ -21,16 +21,12 @@ const orderSchema = new mongoose.Schema({
         }
       }
     ],
-    productPrice: {  
-      type: Number,
-     
-   },
     shippingAddress: {
         type:String
     },
     status: {
       type: String,
-      enum: ['placed', 'shipped', 'delivered'],
+      enum: ['placed', 'shipped', 'Delivered', 'Cancelled', 'Returned'],
       default: 'placed'
     },
     paymentMethod: {
@@ -41,7 +37,9 @@ const orderSchema = new mongoose.Schema({
     total_amount:{
         type:Number
     },
-
+  createdAt:{
+    type:Date
+  }
   }, { timestamps: true });
   
 module.exports = mongoose.model('Order', orderSchema);

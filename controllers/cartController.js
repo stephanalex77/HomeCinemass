@@ -67,11 +67,11 @@ const getCart = async (req, res) => {
 // add to cart
 const addToCart = async (req, res) => {
   const userId = req.session.user_id;
-  const { productId:product_id } = req.body;
+  const productId = req.body.productId;
   const quantity= req.body.quantity || 1
-
+  console.log(req.body);
   try {
-    const product = await Products.findById(product_id);
+    const product = await Products.findById(productId);
     if (!product) {
       return res
         .status(404)
@@ -84,11 +84,11 @@ const addToCart = async (req, res) => {
 
     let cart = await Cart.findOne({ user: userId });
     if (!cart) {
-      cart = new Cart({ user: userId, products: [] });
+      await Cart.create({ user: userId, products: [{product:productId, quantity}] });
     }
     // Check if the user already has this product in their cart
     const existingProduct = cart.products.find((item) =>
-      item.product.equals(product_id)
+      item.product.equals(productId)
     );
     // console.log(existingProduct);
 
@@ -97,7 +97,7 @@ const addToCart = async (req, res) => {
       existingProduct.price = existingProduct.product.product_sales_price * existingProduct.quantity
       // await existingProduct.save()
     } else {
-      cart.products.push({ product: product_id, quantity });
+      cart.products.push({ product: productId, quantity });
     }
     // console.log("kittuo???????????");
     product.quantity-=Number(quantity)
@@ -176,17 +176,11 @@ const getCheckOutPage = async (req, res) => {
   // const userId = req.session.user_id;
   const user = await User.findById({ _id: userId })
 
-  // console.log("======================================================================");
-  // console.log(user)
-  // console.log("======================================================================");
   try {
     const cart = await Cart.findOne({ user: userId }).populate('products.product');
     
-    // Debugging statement
-    // console.log('Cart:', cart);
     
     if (cart && cart.products && cart.products.length > 0) {
-      // Iterate over products
       const totalSubtotal = cart.products.reduce((total, product) => {
         const subtotal = product.product.product_sales_price * product.quantity;
         return total + subtotal;
@@ -195,12 +189,10 @@ const getCheckOutPage = async (req, res) => {
      res.render('checkoutpage', { user, cart, totalSubtotal });
 
     } else {
-      // Handle empty cart
       res.render('checkoutpage', {user, cart: null, totalSubtotal: 0 });
     }
   } catch (error) {
     console.log(error);
-    // Handle the error gracefully
     res.status(500).send('Internal Server Error');
   }
 };

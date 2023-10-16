@@ -203,7 +203,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h6, .h6 {
   color: black; }
 
 /*PRELOADING------------ */
-#overlayer {
+/* #overlayer {
   width: 100%;
   height: 100%;
   position: fixed;
@@ -221,7 +221,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h6, .h6 {
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%); }
+  transform: translate(-50%, -50%); } */
 
 .top-bar a {
   color: #000000; }

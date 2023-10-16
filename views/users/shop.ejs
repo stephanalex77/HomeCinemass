@@ -4,7 +4,7 @@
     <div class="row align-items-end text-center">
       <div class="col-lg-7 mx-auto">
         <h1>Shop</h1>  
-        <p class="mb-4"><a href="index.html">Home</a> / <strong>Shop</strong></p>        
+        <p class="mb-4"><a href="index.html">HOME</a> / <strong>SHOP</strong></p>        
       </div>
     </div>
   </div>
@@ -22,10 +22,10 @@
         <div class="d-flex sort align-items-center justify-content-lg-end">
           <strong class="mr-3">Sort by:</strong>
           <form action="/shop" method="GET">
-            <select class="" required>
+            <select class="" required name="sortOrder">
               <option value="">Newest Items</option>
-              <option value="minPrice">Low to High</option>
-              <option value="maxPrice">High to Low</option>
+              <!-- <option value="minPrice">Low to High</option>
+              <option value="maxPrice">High to Low</option> -->
               <option value="asc">Price: Ascending</option>
               <option value="desc">Price: Descending</option>
               <!-- <option value="3">Rating(High to Low)</option> -->
@@ -45,96 +45,73 @@
         </ul>
       </div>
       <div class="col-md-9">
-        <div class="container mt-5">
-          <div class="row">
-            <% products.forEach(product => { %>
-              <div class="col-md-6 mb-4" data-category="<%= product.category_id %>">
-                <div class="card border-dark rounded-0">
-                    <a class="btn add-to-wishlist d-flex justify-content-end " onclick="addToWishlist('<%= product._id %>')" >
-                      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path d="m12 20.703.343.667a.748.748 0 0 1-.686 0l-.003-.002-.007-.003-.025-.013a31.138 31.138 0 0 1-5.233-3.576C3.8 15.573 1 12.332 1 8.514v-.001C1 5.053 3.829 2.5 6.736 2.5 9.03 2.5 10.881 3.726 12 5.605 13.12 3.726 14.97 2.5 17.264 2.5 20.17 2.5 23 5.052 23 8.514c0 3.818-2.801 7.06-5.389 9.262a31.148 31.148 0 0 1-5.233 3.576l-.025.013-.007.003-.002.001ZM6.736 4C4.657 4 2.5 5.88 2.5 8.514c0 3.107 2.324 5.96 4.861 8.12a29.655 29.655 0 0 0 4.566 3.175l.073.041.073-.04c.271-.153.661-.38 1.13-.674.94-.588 2.19-1.441 3.436-2.502 2.537-2.16 4.861-5.013 4.861-8.12C21.5 5.88 19.343 4 17.264 4c-2.106 0-3.801 1.389-4.553 3.643a.751.751 0 0 1-1.422 0C10.537 5.389 8.841 4 6.736 4Z">
-                        </path>
-                      </svg>
-                    </a>
-                  <div class="row g-0">
-                    <div class="col-md-4">
-                      <a href="/singleProduct/<%= product.id %>" class="product-img">
-                      <img src="/public/uploadProduct/<%= product.image[0] %>" alt="<%= product.product_name %>" class="img-fluid mt-3 m-3" style="max-height: 100px;">
-                      </a>
+        <div class="row align-items-center latest_product_inner">
+          <% products.forEach(product => { %>
+            <div class="col-lg-4 col-sm-6">
+                <div class="single_product_item">
+                  <a href="/singleProduct/<%= product.id %>" class="product-img">
+                    <img src="/public/uploadProduct/<%= product.image[0] %>" alt="<%= product.product_name %>" style="width: 75%; height: 150px; object-fit: contain;">
+                  </a>
+                    <div class="single_product_text">
+                        <h4><%= product.product_name %></h4>
+                        <h3>Price: ₹<%= product.product_price.toFixed(2) %></h3>
+                        <h4>Sales Price: ₹<%= product.product_sales_price.toFixed(2) %></h4>
+                        <% if (product.quantity <= 0) { %>
+                          <a href="#" class="add_cart">out of stock <i class="ti-heart" onclick="addToWishlist('<%= product._id %>')"></i></a>
+                        <% } else { %>
+                        <% if(typeof user !== 'undefined'){%>
+                        <a href="#" class="add_cart" onclick="addtocart('<%= product._id %>')" data-product-id="<%= product._id %>">+ add to cart<i class="ti-heart" onclick="addToWishlist('<%= product._id %>')"></i></a>
+                        <%} else { %>
+                          <a href="/login" class="add_cart">Login its yours</a>
+                          <%}%>
+                      <% } %>
                     </div>
-                    <div class="col-md-8">
-                      <div class="card-body p-3">
-                        <h5 class="card-title"><%= product.product_name %></h5>
-                        <p class="card-text">Price: ₹<%= product.product_price.toFixed(2) %></p>
-                        <p class="card-text">Sales Price: ₹<%= product.product_sales_price.toFixed(2) %></p>
-                        <button class="btn btn-dark btn-sm"  onclick="addtocart('<%= product._id %>')" data-product-id="<%= product._id %>">Add to Cart</button>
-                        
-                      </div>
-                    </div>
-                  </div>
                 </div>
-              </div>
-            <% }) %>
-          </div>
-        </div>
-        
+            </div>
+          <% }) %>
+        </div>  
+
+
+
         <!-- // SCRIPT FOR SHOW PRODUCTS ACCORDING TO ITS CATEGORY -->
-        <script>
-          document.addEventListener("DOMContentLoaded", function () {
-            const categoryList = document.getElementById("categoryList");
-            const products = document.querySelectorAll(".col-md-6");
         
-            categoryList.addEventListener("click", function (event) {
-              if (event.target.tagName === "A") {
-                const categoryId = event.target.getAttribute("data-category-id");
-        
-                products.forEach((product) => {
-                  const productCategory = product.getAttribute("data-category");
-        
-                  if (categoryId === "all" || categoryId === productCategory) {
-                    product.style.display = "block";
-                  } else {
-                    product.style.display = "none";
-                  }
-                });
-              }
-            });
-          });
-        </script>
         
           
 
         <div class="row mt-5 pb-5">
           <div class="col-lg-12">
             <div class="custom-pagination">
-              <ul class="list-unstyled">
-                <li>
-                  <a href="#">
-                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd" d="M5.854 4.646a.5.5 0 0 1 0 .708L3.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"/>
-                      <path fill-rule="evenodd" d="M2.5 8a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
-                    </svg>                      
-                  </a>
-                </li>
-                <li class="active"><span>1</span></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li>
-                  <a href="#">
-                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd" d="M10.146 4.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 8l-2.647-2.646a.5.5 0 0 1 0-.708z"/>
-                      <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8z"/>
-                    </svg>
-                  </a>
-                </li>
-              </ul>
+              <% if (totalpages) { %>
+                <ul class="list-unstyled">
+                  <% if (currentpage > totalpages) { %>
+
+                    <li>
+                      <a href="?page=<%= currentpage - 1 %>">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" d="M5.854 4.646a.5.5 0 0 1 0 .708L3.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"/>
+                          <path fill-rule="evenodd" d="M2.5 8a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                        </svg>                      
+                      </a>
+                    </li>
+                 <% } %>
+                  <% pages.forEach(page => { %>
+                    <li class="active"><span><a href="?page=<%= page %>"><%= page %></a></span></li>
+                  <% }); %>
+                  <% if (currentpage > 1) { %>
+                    <li>
+                      <a href="?page=<%= currentpage + 1 %>">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" d="M10.146 4.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 8l-2.647-2.646a.5.5 0 0 1 0-.708z"/>
+                          <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8z"/>
+                        </svg>
+                      </a>
+                    </li>
+                  <% } %>
+               </ul>
+              <% } %>
             </div>
           </div>
         </div>
-
-
       </div>
     </div>
   </div> <!-- /.untree_co-section -->
@@ -272,130 +249,105 @@
   </div>
 
 
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const categoryList = document.getElementById("categoryList");
+      const products = document.querySelectorAll(".col-md-6");
+  
+      categoryList.addEventListener("click", function (event) {
+        if (event.target.tagName === "A") {
+          const categoryId = event.target.getAttribute("data-category-id");
+  
+          products.forEach((product) => {
+            const productCategory = product.getAttribute("data-category");
+  
+            if (categoryId === "all" || categoryId === productCategory) {
+              product.style.display = "block";
+            } else {
+              product.style.display = "none";
+            }
+          });
+        }
+      });
+    });
+  </script>
 
 
-
-  <script src="/famm/js/jquery/jquery-2.2.4.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+		function addtocart(productId) {
+			console.log(productId);
+			fetch("/add-item-to-cart", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ productId }),
+			})
+				.then((response) => {
+					if (response.ok) {
+						return response.json();
+					} else {
+						throw new Error("Network response was not ok");
+					}
+				})
+				.then((data) => {
+					console.log(data);
+					const updatedCartQuantity = data.cartQuantity;
+					const itemInCartElement = document.getElementById("item-in-cart");
+					if (itemInCartElement) {
+						itemInCartElement.textContent = updatedCartQuantity.toString();
+					}
+					// Display a SweetAlert2 notification for "Added to cart"
+					Swal.fire({
+						position: 'center',
+						icon: 'success',
+						title: 'Added to cart',
+						showConfirmButton: false,
+						timer: 1000
+					});
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		}
+	</script>
+	
 
 	<script>
-		document.addEventListener("DOMContentLoaded", function () {
-			// Get the button element by its ID
-			const addToCartButton = document.getElementById("addtocart");
-	
-			// Add a click event listener to the button
-			addToCartButton.addEventListener("click", function () {
-				// Display a SweetAlert confirmation dialog
-				Swal.fire({
-					position: 'center',
-					icon: 'success',
-					title: 'Added to cart successfully',
-					showConfirmButton: false,
-					timer: 1500
-				});
-			});
-		});
-	</script>
-
-<script>
-		
-
-		function addtocart(productId){
-				console.log(productId);
-			fetch("/add-item-to-cart", {
+		async function addToWishlist(productId) {
+			try {
+				const response = await fetch("/add-item-to-wishlist", {
 					method: "POST",
 					headers: {
-							"Content-Type": "application/json",
+						"Content-Type": "application/json",
 					},
 					body: JSON.stringify({ productId }),
-			})
-
-		.then((response) => {
-			if (response.ok) {
-				return response.json();
-			}else{
-				throw new Error("Network response was not ok")
-			}
-		})
-					.then((data) => {
-							console.log(data);
-							const updatedCartQuantity = data.cartQuantity;
-							const itemInCartElement = document.getElementById("item-in-cart");
-								if (itemInCartElement) {
-									itemInCartElement.textContent = updatedCartQuantity.toString();
-								}
-								// Display a toast message or perform any other actions as needed
-								showToast("Added to cart successfully");
-					})
-					.catch((error) =>{
-
-			console.log(error);
-			})
-		}
+				});
 	
-// 	const cartButton = document.getElementById("addtocart");
-// 		 console.log("Script loaded"); // Add this line
-// 		 cartButton.addEventListener("click", function (e) {
-// 			const productId = cartButton.getAttribute("data-product-id");
-// 		 console.log("clicked");
-// 	fetch("/add-item-to-cart", {
-// 			method: "POST",
-// 			headers: {
-// 					"Content-Type": "application/json",
-// 			},
-// 			body: JSON.stringify({ productId }),
-// 	})
-
-// .then((response) => {
-// 	if (response.ok) {
-// 		return response.json();
-// 	}else{
-// 		throw new Error("Network response was not ok")
-// 	}
-// })
-// 			.then((data) => {
-// 					console.log(data);
-// 			})
-// 			.catch((error) =>{
-
-// 	 console.log(error);
-// 	})
-// });
-function showToast(message) {
-  const toastContainer = document.getElementById("toast-container");
-  const toastMessage = document.getElementById("toast-message");
-
-  // Set the message text
-  toastMessage.textContent = message;
-
-  // Show the toast message
-  toastMessage.style.opacity = 1;
-  toastMessage.style.display = "block";
-
-  // Automatically hide the toast after a few seconds (e.g., 3 seconds)
-  setTimeout(() => {
-    toastMessage.style.opacity = 0;
-    setTimeout(() => {
-      toastMessage.style.display = "none";
-    }, 300);
-  }, 3000); // Adjust the time as needed (in milliseconds)
-}
-
-</script>
-
-
-
-<script>
-	document.addEventListener('DOMContentLoaded', () => {
-		const cartButton = document.getElementById('addtocart'); // Select the button by its ID
-		cartButton.addEventListener('click', function(event) {
-			event.preventDefault();
-			console.log('Button clicked');
-			window.location.href = '/cartt'; // Redirect to the cart page
-		});
-	});
-</script>
-
-
+				if (response.ok) {
+					const data = await response.json();
+					if (data.success) {
+						// Product added to wishlist successfully, show a SweetAlert2 success notification
+						Swal.fire({
+							position: 'center',
+							icon: 'success',
+							title: 'Added to wishlist successfully',
+							showConfirmButton: false,
+							timer: 1000
+						});
+					} else {
+						// Handle error response here if needed
+						console.error(data.message);
+					}
+				} else {
+					// Handle network error here if needed
+					console.error("Network response was not ok");
+				}
+			} catch (error) {
+				// Handle other errors here if needed
+				console.error(error);
+			}
+		}
+	</script>
 
 <%- include('../layouts/homeLayout/footer')%>

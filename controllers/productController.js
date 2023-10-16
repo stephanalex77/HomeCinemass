@@ -66,10 +66,8 @@ const getProductDetails = async (req, res) => {
     // console.log("=============================================");
     const product = getProductDetails(productId);
     if (!product) {
-      // Handle the case where the product is not found (e.g., send an error response)
       return res.status(404).send("Product not found");
     }
-    // Render the product details page and pass the product data to the template
     res.render("users/productDetails", { product });
     // const products = await Product.find();
     // res.render("productDetails", { product });
@@ -87,15 +85,13 @@ const showProductDetails = async (req, res) => {
     const product = await Product.findOne({_id:productId});
     const userId = req.session.user_id;
     const user = await User.findById({ _id: userId });
+    const category = await Category.findById(product.category_id);
     // console.log("++++++++++++++++++");
     if (!product) {
    
       return res.status(404).send("Product not found");
     }
-    // const images = req.files.map((file) => file.filename);
-    // await cropImage.crop(req);
-    // Render the product details page and pass the product data to the template
-    res.render("singleProduct", {user, product });
+    res.render("singleProduct", {user, product, categoryName: category.categoryname  });
     // const products = await Product.find();
     // res.render("singleProduct", { product });
   } catch (error) {
@@ -110,12 +106,9 @@ const editproductLoad = async (req, res) => {
   try {
     const productId = req.params.id;
     const product = await Product.findById( productId );
-    
-      const categories = await Category.find();
+    const categories = await Category.find();
       // console.log(categories);
       // res.render("categories", { categories });
-
-
     if(product){
       res.render('editProduct', { product, categories });
     }else{
@@ -130,23 +123,21 @@ const editproductLoad = async (req, res) => {
 //LIST PRODUCT AT ADMIN SIDE
 const listProduct = async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find().populate('category_id');
     const categories = await Category.find();
 
-    
-    res.render("productList", {  products, categories  });
+    res.render("productList", { products, categories });
     await cropImage.crop(req);
   } catch (error) {
     console.log(error.message);
-    
   }
 };
+
 
 // EDIT PRODUCT
 const editProduct = async (req, res) => {
   try {
     const productId = req.params.id;
-
     const {
       product_id,
       product_name,
@@ -185,14 +176,25 @@ const editProduct = async (req, res) => {
 
 const getShopProduct = async(req, res)=>{
   try {
-    const userId = req.session.user_id; // Adjust the key based on what you set in your session
+     // Fetch orders in descending order of createdOn
+    //  const orders = await Order.find({}).sort({ createdOn: -1 });
+
+    //  const products = await Product.find();
+    const products = await Product.find({}).sort({ createdOn: -1 });
+    const userId = req.session.user_id; 
     const user = await User.findOne({ _id: userId });
-
-    const products = await Product.find();
     const categories = await Category.find();
+     const itemsPerPage = 6;
+     const currentpage = parseInt(req.query.page) || 1;
+     const startIndex = (currentpage - 1) * itemsPerPage;
+     const endIndex = startIndex + itemsPerPage;
+     const totalpages = Math.ceil(products.length / itemsPerPage);
+     const pages = Array.from({ length: totalpages }, (_, i) => i + 1); // Create an array of page numbers
+     const currentproduct = products.slice(startIndex, endIndex);
+     
+    //  console.log(orders,"ods");
 
-    
-    res.render("shop", { user, products, categories  });
+    res.render("shop", { user, products:currentproduct, categories,pages,currentpage, totalpages  });
     await cropImage.crop(req);
   } catch (error) {
     console.log(error.message);
@@ -204,23 +206,48 @@ const getProductInsideCategory = async(req, res)=>{
   try {
     const categoryId = req.params.categoryId;
     console.log(categoryId);
-    // If the category is "all," retrieve all products
+    
     if (categoryId === 'all') {
       const products = await Product.find();
       res.json(products);
       console.log('Filtered products 1:', products);
     } else {
-      // Otherwise, filter products by the specified category ID
       const products = await Product.find({ category_id: categoryId });
       res.json(products);
       console.log('Filtered products 2:', products);
     }
-    // console.log('Filtered products:', products);
   } catch (error) {
     console.error('Error fetching products by category:', error);
     res.status(500).json({ error: 'An error occurred while fetching products' });
   }
 }
+
+const searchProduct = async (req, res) => {
+  try {
+    const { keyword, category, } = req.query;
+    let query = {};
+
+    if (keyword) {
+      query.product_name = { $regex: new RegExp(keyword, 'i') };
+    }
+
+    if (category) {
+      query.category_id = category; 
+    }
+
+    
+    const products = await Product.find(query).populate('category_id');
+    const categories = await Category.find();
+    
+    res.render('shop', { products, categories });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+
+
 
 
 module.exports = {
@@ -232,5 +259,6 @@ module.exports = {
   editProduct,
   editproductLoad,
   getShopProduct,
-  getProductInsideCategory
+  getProductInsideCategory,
+  searchProduct
 };

@@ -22,7 +22,7 @@ const getWishList = async (req, res) => {
     );
 
  
-      console.log("this is my wishlist items")
+      console.log("this is my wishlist items",wishList )
 
       res.render("wishList", {user, wishList, category, products });
     

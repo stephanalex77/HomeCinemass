@@ -15,6 +15,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300;0,400;0,700;1,700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
 
+	<link rel="stylesheet" href="/userHome/css/css/singlepage.css">
 	<link rel="stylesheet" href="/userHome/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/userHome/css/animate.min.css">
 	<link rel="stylesheet" href="/userHome/css/owl.carousel.min.css">
@@ -25,207 +26,40 @@
 	<link rel="stylesheet" href="/userHome/css/aos.css">
 	<link rel="stylesheet" href="/userHome/css/style.css">
 
+	<!-- ! aditional styles -->
+	<link rel="stylesheet" href="/userHome/css/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="/userHome/css/css/lightslider.min.css">
+  <link rel="stylesheet" href="/userHome/css/css/all.css">
+  <link rel="stylesheet" href="/userHome/css/css/themify-icons.css">
+  <link rel="stylesheet" href="/userHome/css/css/style.css">
+  <link rel="stylesheet" href="/userHome/css/css/magnific-popup.css">
+
+	
+
+	<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css"> -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 	<title>AV store</title>
 </head>
 
 <body>
-<!-- if it is loged in the header it will show logout -->
-<!-- 
-<% if(typeof user !== 'undefined'){%>
-
-
-  <div class="search-form" id="search-form">
-		<form action="">
-			<input type="search" class="form-control" placeholder="Enter keyword to search...">
-			<button class="button">
-				<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-					<path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
-					<path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
-				</svg>
-			</button>
-			<button class="button">
-				<div class="close-search">
-					<span class="icofont-close js-close-search"></span>
-				</div>
-			</button>
-
-		</form>
-	</div>
-
-
-	<nav class="site-nav mb-5">
-		<div class="sticky-nav js-sticky-header">
-
-			<div class="container position-relative">
-				<div class="site-navigation text-center dark">
-					<a href="/home" class="logo menu-absolute m-0">AV TALKIES <%= user.name %> <span class="text-primary">.</span></a>
-
-					<ul class="js-clone-nav pl-0 d-none d-lg-inline-block site-menu">
-						<li class="active"><a href="/home">Home</a></li>
-				
-						
-						<li><a href="shop.html">Shop</a></li>
-						<li><a href="shop.html">Categories</a></li>
-						<li><a href="shop.html">AV Receivers</a></li>
-						<li><a href="shop.html">Speakers</a></li>
-						<li><a href="shop.html">Subwoofers</a></li>
-						<li><a href="shop.html">Projectors</a></li>
-						 
-						
-					</ul>
-
-
-
-
-					<div class="menu-icons">
-
-						<a href="#" class="btn-custom-search" id="btn-search">
-							<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-								<path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
-								<path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
-							</svg>
-						</a>
-
-						<ul class="js-clone-nav pl-0 d-none d-lg-inline-block site-menu">
-							<li class="has-children">
-							<a href="#" class="user-profile">
-								<svg width="2.1em" height="2.1em" viewBox="0 0 16 16" class="bi bi-person" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-									<path fill-rule="evenodd" d="M13 14s1 0 1-1-1-4-6-4-6 3-6 4 1 1 1 1h10zm-9.995-.944v-.002.002zM3.022 13h9.956a.274.274 0 0 0 .014-.002l.008-.002c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664a1.05 1.05 0 0 0 .022.004zm9.974.056v-.002.002zM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-								</svg>
-							</a>
-								<ul class="dropdown">
-									<li><a href="/profile" >Profile</a></li>
-									<li><a href="/logout" >Logout</a></li>
-					
-	
-								</ul>
-							</li>
-						</ul>
-
-						<a href="/cartt" class="cart">
-							<span class="item-in-cart" id="item-in-cart">0</span>
-							<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-cart" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-								<path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
-							</svg>
-						</a>
-
-					</div>
-
-					<a href="#" class="burger ml-auto float-right site-menu-toggle js-menu-toggle d-inline-block d-lg-none" data-toggle="collapse" data-target="#main-navbar">
-						<span></span>
-					</a>
-
-				</div>
-			</div>
-		</div>
-	</nav>
-
-<%} else { %>
-
-
-  <div class="search-form" id="search-form">
-		<form action="">
-			<input type="search" class="form-control" placeholder="Enter keyword to search...">
-			<button class="button">
-				<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-					<path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
-					<path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
-				</svg>
-			</button>
-			<button class="button">
-				<div class="close-search">
-					<span class="icofont-close js-close-search"></span>
-				</div>
-			</button>
-
-		</form>
-	</div>
-
-
-	<nav class="site-nav mb-5">
-		<div class="sticky-nav js-sticky-header">
-
-			<div class="container position-relative">
-				<div class="site-navigation text-center dark">
-					<a href="/home" class="logo menu-absolute m-0">AV TALKIES<span class="text-primary">.</span></a>
-
-					<ul class="js-clone-nav pl-0 d-none d-lg-inline-block site-menu">
-						<li class="active"><a href="/">Home</a></li>
-				
-						
-						<li><a href="shop.html">Shop</a></li>
-						<li><a href="shop.html">Categories</a></li>
-						<li><a href="shop.html">AV Receivers</a></li>
-						<li><a href="shop.html">Speakers</a></li>
-						<li><a href="shop.html">Subwoofers</a></li>
-						<li><a href="shop.html">Projectors</a></li>
-						
-						
-					</ul>
-
-
-
-
-					<div class="menu-icons">
-
-						<a href="#" class="btn-custom-search" id="btn-search">
-							<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-								<path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
-								<path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
-							</svg>
-						</a>
-
-						<ul class="js-clone-nav pl-0 d-none d-lg-inline-block site-menu">
-							<li class="has-children">
-							<a href="#" class="user-profile">
-								<svg width="2.1em" height="2.1em" viewBox="0 0 16 16" class="bi bi-person" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-									<path fill-rule="evenodd" d="M13 14s1 0 1-1-1-4-6-4-6 3-6 4 1 1 1 1h10zm-9.995-.944v-.002.002zM3.022 13h9.956a.274.274 0 0 0 .014-.002l.008-.002c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664a1.05 1.05 0 0 0 .022.004zm9.974.056v-.002.002zM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-								</svg>
-							</a>
-								<ul class="dropdown">
-									
-									<li><a href="/login" >Login</a></li>
-								</ul>
-							</li>
-						</ul>
-
-						<a href="/login" class="cart">
-							<span class="item-in-cart">2</span>
-							<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-cart" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-								<path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
-							</svg>
-						</a>
-
-					</div>
-
-					<a href="#" class="burger ml-auto float-right site-menu-toggle js-menu-toggle d-inline-block d-lg-none" data-toggle="collapse" data-target="#main-navbar">
-						<span></span>
-					</a>
-
-				</div>
-			</div>
-		</div>
-	</nav>
-<%}%> -->
-
 
 <div class="search-form" id="search-form">
-	<form action="">
-		<input type="search" class="form-control" placeholder="Enter keyword to search...">
-		<button class="button">
-			<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-				<path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
-				<path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
-			</svg>
-		</button>
-		<button class="button">
-			<div class="close-search">
-				<span class="icofont-close js-close-search"></span>
-			</div>
-		</button>
-
-	</form>
+  <form action="/search" method="GET"> <!-- Set the action to your search route -->
+    <input type="search" class="form-control" name="keyword" placeholder="Enter keyword to search...">
+    <!-- Add input fields for category and price if needed -->
+    <button class="button">
+      <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <!-- Your search icon -->
+      </svg>
+    </button>
+    <button class="button">
+      <div class="close-search">
+        <span class="icofont-close js-close-search"></span>
+      </div>
+    </button>
+  </form>
 </div>
+
 
 
 
@@ -239,61 +73,84 @@
 				<%}%></span></a>
 
 				<ul class="js-clone-nav pl-0 d-none d-lg-inline-block site-menu">
-					<li class="active"><a href="/home">Home</a></li>
-			
-					
-					<li><a href="/shop">Shop</a></li>
-				
-					<li class="has-children"><a href="shop.html">Categories</a>
+					<li id="home"><a href="/home">Home</a></li>
+					<li id="shop"><a href="/shop">Shop</a></li>
+					<li class="has-children" id="categories"><a>Categories</a>
 						<ul class="dropdown">
-							<li><a href="elements.html">Elements</a></li>
 							<li><a href="about.html">About</a></li>
 							<li><a href="contact.html">Contact</a></li>
-							<li><a href="cart.html">Cart</a></li>
-							<li><a href="checkout.html">Checkout</a></li>
+							<li id="cart"><a href="/cartt">Cart</a></li>
+							<li id="checkout"><a href="/checkoutpage">Checkout</a></li>
 						</ul>	
 					</li>
-					<!-- <li><a href="shop.html">AV Receivers</a></li>
-					<li><a href="shop.html">Speakers</a></li>
-					<li><a href="shop.html">Subwoofers</a></li>
-					<li><a href="shop.html">Projectors</a></li> -->
-					 
-					
 				</ul>
-
-
-
-
-				<div class="menu-icons">
-
-					<a href="#" class="btn-custom-search" id="btn-search">
-						<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-							<path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
-							<path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
-						</svg>
-					</a>
-
-					<a href="/profile" class="user-profile">
-						<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-							<path fill-rule="evenodd" d="M13 14s1 0 1-1-1-4-6-4-6 3-6 4 1 1 1 1h10zm-9.995-.944v-.002.002zM3.022 13h9.956a.274.274 0 0 0 .014-.002l.008-.002c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664a1.05 1.05 0 0 0 .022.004zm9.974.056v-.002.002zM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-						</svg>
-					</a>
 				
-					<a href="/wishlist" class="wishlist" style="margin-right: 10px;">
-						<svg  viewBox="0 0 24 24" width="20" height="20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path d="m12 20.703.343.667a.748.748 0 0 1-.686 0l-.003-.002-.007-.003-.025-.013a31.138 31.138 0 0 1-5.233-3.576C3.8 15.573 1 12.332 1 8.514v-.001C1 5.053 3.829 2.5 6.736 2.5 9.03 2.5 10.881 3.726 12 5.605 13.12 3.726 14.97 2.5 17.264 2.5 20.17 2.5 23 5.052 23 8.514c0 3.818-2.801 7.06-5.389 9.262a31.148 31.148 0 0 1-5.233 3.576l-.025.013-.007.003-.002.001ZM6.736 4C4.657 4 2.5 5.88 2.5 8.514c0 3.107 2.324 5.96 4.861 8.12a29.655 29.655 0 0 0 4.566 3.175l.073.041.073-.04c.271-.153.661-.38 1.13-.674.94-.588 2.19-1.441 3.436-2.502 2.537-2.16 4.861-5.013 4.861-8.12C21.5 5.88 19.343 4 17.264 4c-2.106 0-3.801 1.389-4.553 3.643a.751.751 0 0 1-1.422 0C10.537 5.389 8.841 4 6.736 4Z">
-							</path>
-            </svg>
-					</a>
-					
-					<a href="/cartt" class="cart">
-						<span class="item-in-cart" id="cart-count">0</span>
-						<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-cart" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-							<path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
-						</svg>
-					</a>
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+  const menuItems = document.querySelectorAll('.js-clone-nav li');
+  // Retrieve the active item from localStorage
+  const activeItemID = localStorage.getItem('activeMenuItem');
+  if (activeItemID) {
+    // Remove the "active" class from all list items
+    menuItems.forEach((menuItem) => {
+      menuItem.classList.remove('active');
+    });
+    // Add the "active" class to the previously active item
+    const activeItem = document.getElementById(activeItemID);
+    if (activeItem) {
+      activeItem.classList.add('active');
+    }
+  }
+  // Add a click event listener to each list item
+  menuItems.forEach((item) => {
+    item.addEventListener('click', () => {
+      // Store the active item in localStorage
+      localStorage.setItem('activeMenuItem', item.id);
+      // Remove the "active" class from all list items
+      menuItems.forEach((menuItem) => {
+        menuItem.classList.remove('active');
+      });
+      // Add the "active" class to the clicked item
+      item.classList.add('active');
+    });
+  });
+});
+				
+</script>
 
-				</div>
+
+
+
+<div class="menu-icons">
+
+	<a href="/search" class="btn-custom-search" id="btn-search">
+		<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+			<path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+			<path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+		</svg>
+	</a>
+
+	<a href="/profile" class="user-profile">
+		<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+			<path fill-rule="evenodd" d="M13 14s1 0 1-1-1-4-6-4-6 3-6 4 1 1 1 1h10zm-9.995-.944v-.002.002zM3.022 13h9.956a.274.274 0 0 0 .014-.002l.008-.002c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664a1.05 1.05 0 0 0 .022.004zm9.974.056v-.002.002zM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+		</svg>
+	</a>
+
+	<a href="/wishlist" class="wishlist" style="margin-right: 10px;">
+		<svg  viewBox="0 0 24 24" width="20" height="20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+			<path d="m12 20.703.343.667a.748.748 0 0 1-.686 0l-.003-.002-.007-.003-.025-.013a31.138 31.138 0 0 1-5.233-3.576C3.8 15.573 1 12.332 1 8.514v-.001C1 5.053 3.829 2.5 6.736 2.5 9.03 2.5 10.881 3.726 12 5.605 13.12 3.726 14.97 2.5 17.264 2.5 20.17 2.5 23 5.052 23 8.514c0 3.818-2.801 7.06-5.389 9.262a31.148 31.148 0 0 1-5.233 3.576l-.025.013-.007.003-.002.001ZM6.736 4C4.657 4 2.5 5.88 2.5 8.514c0 3.107 2.324 5.96 4.861 8.12a29.655 29.655 0 0 0 4.566 3.175l.073.041.073-.04c.271-.153.661-.38 1.13-.674.94-.588 2.19-1.441 3.436-2.502 2.537-2.16 4.861-5.013 4.861-8.12C21.5 5.88 19.343 4 17.264 4c-2.106 0-3.801 1.389-4.553 3.643a.751.751 0 0 1-1.422 0C10.537 5.389 8.841 4 6.736 4Z">
+			</path>
+		</svg>
+	</a>
+	
+	<a href="/cartt" class="cart">
+		<!-- <span class="item-in-cart" id="cart-count">0</span> -->
+		<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-cart" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+			<path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+		</svg>
+	</a>
+
+</div>
 
 				<a href="#" class="burger ml-auto float-right site-menu-toggle js-menu-toggle d-inline-block d-lg-none" data-toggle="collapse" data-target="#main-navbar">
 					<span></span>

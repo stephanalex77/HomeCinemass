@@ -3,6 +3,28 @@ const Category = require("../models/categoryModel");
 const Products = require("../models/productModel");
 const User = require("../models/userModel");
 const Coupon = require("../models/couponModel")
+const mongoose = require("mongoose");
+
+
+const couponList = async (req, res) => {
+  try {
+      console.log('couponlist function')
+      const coupons = await Coupon.find()
+    res.render("admin/addCoupon",{coupons});
+  } catch (error) {
+    res.render('/error')
+  }
+}
+
+const coupons = async (req, res) => {
+  try {
+      console.log('couponlist function')
+      const coupons = await Coupon.find()
+    res.render("listCoupons",{coupons});
+  } catch (error) {
+    res.render('/error')
+  }
+}
 
 
 const getCoupon = async (req, res) => {
@@ -17,41 +39,45 @@ const getCoupon = async (req, res) => {
 }
 
 const addCoupon = async (req, res) => {
-  try {
-    // Extract coupon_name, discount, and expiry from req.body
-    const { coupon_name, discount, expiry } = req.body;
-
-    // Check if these fields are provided in the request body
-    if (!coupon_name || !discount || !expiry) {
-      return res.status(400).send('Please provide coupon_name, discount, and expiry');
-    }
-
-    // Create a new Coupon instance
-    const coupons = new Coupon({
-      coupon_name: coupon_name,
-      discount: discount,
-      expiry: expiry,
+  try {  
+    const { couponCode, description, discount, maxDiscount, minAmount, expirationDate } = req.body;
+    console.log(req.body);
+    const newCoupon = new Coupon({
+        couponCode,
+        description,
+        discount,
+        maxDiscount,
+        minAmount,
+        expirationDate,
+        isListed: true
     });
+    await newCoupon.save();
 
-    // Save the new coupon to the database
-    const newCoupon = await coupons.save();
+    console.log("newCoupn",newCoupon);
 
-    // Fetch all coupons from the database
-    const allCoupons = await Coupon.find();
+    res.json({ message: 'Coupon added successfully' });
+} catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal server error' });
+}
 
-    // Render the view with the updated list of coupons
-    if (coupons) {
-      return res.render("coupons", { coupon: allCoupons, message: "Coupon added successfully" });
-    }
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send('Internal Server Error');
-  }
 }
 
 
+const editCouponPage = async(req, res)=>{
+  try {
+    console.log('params id',req.params.id)
+    const coupon = await Coupon.findById(req.params.id);
 
-
+    if (!coupon) {
+      return res.status(404).render('error', { message: 'Coupon not found' });
+    }
+    res.render('editCoupon', { coupon });
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('error', { message: 'Internal Server Error' });
+  }
+}
 
 const deleteCoupon = async (req, res) => {
   try {
@@ -70,54 +96,110 @@ const deleteCoupon = async (req, res) => {
 
 
 
-//APPLY COUPON FOR USER
-const applyCoupon = async (req, res) => {
-  try {
-    const couponCode = req.body.couponCode;
 
-    // Check if the coupon code is valid and calculate the discount
-    const isValidCoupon = await checkCouponValidity(couponCode);
-    if (isValidCoupon) {
-      // Calculate the discount based on your coupon logic
-      
-      const discountAmount = calculateDiscountAmount(totalSubtotal, couponCode);
 
-      // Calculate the new grand total
-      const grandTotal = totalSubtotal - discountAmount;
+const editCoupon =async(req, res)=>{
+  try{
+    const couponId = req.params.id;
+    const updates = req.body;
 
-      // Respond with the discount amount and the new grand total
-      res.json({ success: true, discountAmount, grandTotal });
-    } else {
-      // Respond with an error message for an invalid coupon
-      res.json({ success: false, error: 'Invalid coupon code' });
+    const updatedCoupon = await Coupon.findByIdAndUpdate(couponId,updates)
+ 
+    if(updatedCoupon){
+      return res.json({success: true})
+    }else{
+      return res.status(400).json('error',{message: 'Coupon not found'})
     }
+  }catch(error){
+    console.error(err);
+    return res.status(500).json({error: "internal server error"})
+  }
+}
+
+const listCoupon = async (req, res) => {
+  try {
+    const couponId = req.body.couponId;
+    const validCouponId = new mongoose.Types.ObjectId(couponId);
+    const coupons = await Coupon.findByIdAndUpdate(validCouponId, { isListed: true });
+    console.log('Coupon updated', coupons);
+
+    res.redirect('/admin/coupons');
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, error: 'Internal Server Error' });
+    console.error(error.message);
+    res.status(500).send('Internal Server Error');
   }
 };
 
-// Example function to check coupon validity (replace with your own logic)
-const checkCouponValidity = async (coupon) => {
-  // Implement your coupon code validation logic here (e.g., check against a database)
-  // Return true if the coupon is valid, false otherwise
-  return true; // Replace with your validation logic
+const unListCoupon = async (req, res) => {
+  try {
+    const couponId = req.body.couponId;
+    const validCouponId = new mongoose.Types.ObjectId(couponId);
+    const coupons = await Coupon.findByIdAndUpdate(validCouponId, { isListed: false });
+    console.log('Coupon updated', coupons);
+
+    res.redirect('/admin/coupons');
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Internal Server Error');
+  }
 };
 
-// Example function to calculate discount (replace with your own logic)
-const calculateDiscountAmount = (cartTotal, coupon) => {
-  // Implement your coupon code calculation logic here
-  // Return the discount amount based on the coupon and cart total
-  // For example, you can calculate a percentage discount
-  return 0; // Replace with your calculation logic
+//APPLY COUPON FOR USER
+// const couponGet = async (req, res) => {
+//   try {
+
+//       const calculateTotalPrice = req.session.calculateTotalPrice;
+//       const currentDate = new Date();
+//       const coupons = await Coupon.find({
+//           isListed: true,
+//           expirationDate: { $gte: currentDate }
+//       });
+//       res.render('couponPage', { coupons, calculateTotalPrice })
+//   } catch (error) {
+//       res.render('/error')
+//   }
+// }
+
+
+
+
+const applyCoupon = async (req, res) => {
+  try {
+    if (req.session.user_id) {
+      const { couponCode } = req.body;
+      const cart = await Cart.find();
+      console.log("Is this my cart::::", cart);
+      const coupon = await Coupon.findOne({ couponCode: couponCode });
+      console.log('Coupon::::::', coupon);
+      if (coupon) {
+        res.json({ success: true, couponCode: coupon.couponCode, cart });
+      } else {
+        res.status(404).json({ success: false, error: 'Coupon not found' });
+      }
+    } else {
+      res.status(401).json({ success: false, error: 'User not logged in' });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
 };
+
 
 module.exports = { applyCoupon };
 
 
 module.exports ={
+  coupons,
+  couponList,
   getCoupon,
   addCoupon,
   deleteCoupon,
-  applyCoupon
+  editCouponPage,
+  editCoupon,
+  listCoupon,
+  unListCoupon,
+  applyCoupon,
+
+
 }

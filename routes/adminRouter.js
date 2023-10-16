@@ -17,6 +17,7 @@ admin_route.use("/public", express.static("public"));
 // admin_route.use(bodyParser.json());
 // admin_route.use(bodyParser.urlencoded({extended:true}));
 
+admin_route.use('/public/uploadProduct', express.static('public/uploadProduct'));
 admin_route.use(express.json());
 admin_route.use(express.urlencoded({extended:true}))
 
@@ -36,7 +37,6 @@ const productController= require("../controllers/productController")
 
 const couponController = require("../controllers/couponController")
 // user side
-
 admin_route.get('/',auth.isLogout,adminController.loadLogin)
 
 admin_route.post('/', adminController.verifyLogin)
@@ -104,12 +104,16 @@ admin_route.get('/productList',auth.isLogin, adminController.editUserLoad);
 
 //COUPON MANAGEMENT
 admin_route.get('/coupon',auth.isLogin, couponController.getCoupon);
-admin_route.use(express.urlencoded({ extended: true }));
+admin_route.get('/couponlist',auth.isLogin,couponController.couponList)
+admin_route.get('/coupons', auth.isLogin, couponController.coupons)
+admin_route.post('/addCoupon',auth.isLogin, couponController.addCoupon)
+admin_route.get('/edit-coupon/:id',auth.isLogin,couponController.editCouponPage)
+admin_route.put('/editcoupon/:id',auth.isLogin,couponController.editCoupon)
+admin_route.post('/unListCoupon', couponController.unListCoupon);
+admin_route.post('/listCoupon', couponController.listCoupon);
 
-admin_route.post('/coupon',auth.isLogin, couponController.addCoupon)
 
-
-admin_route.get('/coupons/delete-coupon',auth.isLogin, couponController.deleteCoupon)
+// admin_route.get('/coupons/delete-coupon',auth.isLogin, couponController.deleteCoupon)
 
 admin_route.get('*',function(req,res){
     res.status(404).send('Page Not Found');

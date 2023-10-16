@@ -5,7 +5,7 @@
     <div class="row align-items-end text-center">
       <div class="col-lg-7 mx-auto">
         <h1>Checkout</h1>  
-        <p class="mb-4"><a href="index.html">Home</a> / <strong>Checkout</strong></p>        
+        <p class="mb-4"><a href="index.html">HOME</a> / <strong>CHECKOUT</strong></p>        
       </div>
     </div>
   </div>
@@ -28,20 +28,7 @@
       <div class="col-md-6 mb-5 mb-md-0">
         <h2 class="h3 mb-3 text-black">Billing Details</h2>
         <div class="p-3 p-lg-5 border">
-          <!-- <div class="form-group">
-            <label for="c_country" class="text-black">Country <span class="text-danger">*</span></label>
-            <select id="c_country" class="form-control">
-              <option value="1">Select a country</option>    
-              <option value="2">bangladesh</option>    
-              <option value="3">Algeria</option>    
-              <option value="4">Afghanistan</option>    
-              <option value="5">Ghana</option>    
-              <option value="6">Albania</option>    
-              <option value="7">Bahrain</option>    
-              <option value="8">Colombia</option>    
-              <option value="9">Dominican Republic</option>    
-            </select>
-          </div> -->
+        
           <% user.address.forEach(function(address, index) { %>
             <div class="form-check border border-dark my-2">
               <div class="p-2">
@@ -80,22 +67,6 @@
             <div class="collapse" id="ship_different_address">
               <div class="py-2">
                 <form action="" id="newAddressForm">
-                <!-- <div class="form-group">
-                  <label for="c_diff_country" class="text-black">Country <span class="text-danger">*</span></label>
-                  <select id="c_diff_country" class="form-control">
-                    <option value="1">Select a country</option>    
-                    <option value="2">bangladesh</option>    
-                    <option value="3">Algeria</option>    
-                    <option value="4">Afghanistan</option>    
-                    <option value="5">Ghana</option>    
-                    <option value="6">Albania</option>    
-                    <option value="7">Bahrain</option>    
-                    <option value="8">Colombia</option>    
-                    <option value="9">Dominican Republic</option>    
-                  </select>
-                </div> -->
-
-
                 <!-- <div class="form-group row">
                   <div class="col-md-6">
                     <label for="c_diff_fname" class="text-black">First Name <span class="text-danger">*</span></label>
@@ -146,16 +117,12 @@
                 Add Address
               </button>
             </form>
-            </div>
           </div>
-
-          <!-- <div class="form-group">
-            <label for="c_order_notes" class="text-black">Order Notes</label>
-            <textarea name="c_order_notes" id="c_order_notes" cols="30" rows="5" class="form-control" placeholder="Write your notes here..."></textarea>
-          </div> -->
-
         </div>
       </div>
+    </div>
+  </form>
+
       <div class="col-md-6">
 
         <!-- <div class="row mb-5">
@@ -214,8 +181,7 @@
       </div>
 
 
-    </form>
-
+      
     </div>
     <!-- </form> -->
   </div>
