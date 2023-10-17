@@ -23,80 +23,75 @@
     <div class="screen-overlay"></div>
     <aside class="navbar-aside" id="offcanvas_aside">
         <div class="aside-top">
-          <a href="index.html" class="brand-wrap logo menu-absolute m-0 h6">
-            AV TALKIES
-            <span class="text-primary ">.</span>
-        </a>
+            <a href="index.html" class="brand-wrap logo menu-absolute m-0 h6">
+                <!-- <img src="/assets/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard"> -->
+                AV TALKIES 
+                <span class="text-primary ">.</span>
+            </a>
             <div>
                 <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
             </div>
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item">
+                <li class="menu-item ">
                     <a class="menu-link" href="index.html"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li class="menu-item active">
-                    <a class="menu-link " href="/admin/products"> <i class="icon material-icons md-add_box"></i>
+                <li class="menu-item has-submenu active">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Product Manage</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="/admin/products">Add Product</a>
+                        <a href="/admin/productlist">List Product </a>
+                        <!-- <a href="page-products-grid-2.html">Product grid 2</a> -->
+                        <a href="/admin/category">Categories</a>
+                    </div>
+                </li>
+                <!-- <li class="menu-item ">
+                    <a class="menu-link active" href="/admin/products"> <i class="icon material-icons  md-add_box"></i>
                         <span class="text">Add Products</span>
                     </a>
-                    <!-- <div class="submenu">
+                    <div class="submenu">
                         <a href="page-products-list.html">Product List</a>
                         <a href="page-products-grid.html">Product grid</a>
                         <a href="page-products-grid-2.html">Product grid 2</a>
                         <a href="page-categories.html">Categories</a>
-                    </div> -->
+                    </div>
+                </li> -->
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Order Manage</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="page-orders-1.html">Order list 1</a>
+                        <a href="page-orders-2.html">Order list 2</a>
+                        <a href="page-orders-detail.html">Order detail</a>
+                    </div>
                 </li>
-                <li class="menu-item">
-                  <a class="menu-link" href="/admin/category"> <i class="icon material-icons md-shopping_cart"></i>
-                      <span class="text">Category</span>
-                  </a>
-                 
-              </li>
-                <li class="menu-item ">
+                
+                <li class="menu-item has-submenu">
                     <a class="menu-link" href="/admin/users"> <i class="icon material-icons md-store"></i>
                         <span class="text">User Manage</span>
                     </a>
-                    <!-- <div class="submenu">
-                        <a href="page-sellers-cards.html">Sellers cards</a>
-                        <a href="page-sellers-list.html" class="active">Sellers list</a>
+                    <div class="submenu">
+                        <a href="/admin/users">List Users</a>
+                        <a href="page-sellers-list.html">Sellers list</a>
                         <a href="page-seller-detail.html">Seller profile</a>
-                    </div> -->
+                    </div>
                 </li>
-                <li class="menu-item  ">
-                    <a class="menu-link" href="/admin/productlist"> <i class="icon material-icons  md-shopping_bag"></i>
-                        <span class="text">List Products</span>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href=""> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Coupon Manage</span>
                     </a>
-                    <!-- <div class="submenu">
-                        <a href="page-form-product-1.html" class="active">Add product 1</a>
-                        <a href="page-form-product-2.html">Add product 2</a>
-                        <a href="page-form-product-3.html">Add product 3</a>
-                        <a href="page-form-product-4.html">Add product 4</a>
-                    </div> -->
-                </li>
-                <li class="menu-item ">
-                    <a class="menu-link" href="/admin/coupon"> <i class="icon material-icons md-shopping_bag"></i>
-                        <span class="text">Add Coupon</span>
-                    </a>
-                    <!-- <div class="submenu">
-                        <a href="page-form-product-1.html">Add product 1</a>
-                        <a href="page-form-product-2.html">Add product 2</a>
-                        <a href="page-form-product-3.html">Add product 3</a>
-                        <a href="page-form-product-4.html">Add product 4</a>
-                    </div> -->
-                </li>
-                <li class="menu-item ">
-                    <a class="menu-link" href="/admin/coupons"> <i class="icon material-icons md-shopping_bag"></i>
-                        <span class="text">List Coupons</span>
-                    </a>
-                    <!-- <div class="submenu">
-                        <a href="page-form-product-1.html">Add product 1</a>
-                        <a href="page-form-product-2.html">Add product 2</a>
-                        <a href="page-form-product-3.html">Add product 3</a>
-                        <a href="page-form-product-4.html">Add product 4</a>
-                    </div> -->
+                    <div class="submenu">
+                        <a href="/admin/coupon">Add Coupon</a>
+                        <a href="/admin/coupons">List Coupon</a>
+                        <!-- <a href="page-form-product-3.html">Add product 3</a> -->
+                        <!-- <a href="page-form-product-4.html">Add product 4</a> -->
+                    </div>
                 </li>
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="page-transactions-1.html"> <i class="icon material-icons md-monetization_on"></i>
@@ -117,15 +112,15 @@
                         <a href="page-error-404.html">Error 404</a>
                     </div>
                 </li> -->
-                <li class="menu-item">
+                <!-- <li class="menu-item">
                     <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
                         <span class="text">Reviews</span>
                     </a>
-                </li>
-                <li class="menu-item">
+                </li> -->
+                <!-- <li class="menu-item">
                     <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
                         <span class="text">Brands</span> </a>
-                </li>
+                </li> -->
                 <!-- <li class="menu-item">
                     <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
                         <span class="text">Statistics</span>
@@ -224,20 +219,36 @@
                 <div class="col-lg-6">
                     <div class="card mb-4">
                         <div class="card-header">
-                            <h4>Basic</h4>
-                            <br>
+                            
                             <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
                                 <!-- <label class="form-label">Category name</label> -->
-                                <select class="form-select">
+                                <!-- <select class="form-select" name="category_id">
                                     <option selected>Select category</option>
-                                    <% if (categories.length>0) { %>
-                                        <% for (let i=0; i < categories.length; i++) { %>
-                                          <option value="<%= categories[i]._id %>" name="categoryId"><%= categories[i].categoryname %></option>
-                                          <% } %>
-                                          <% } else { %>
-                                            <option disabled>Category is not found!!!</option>
+                                    <% if (categories.length > 0) { %>
+                                        <% for (let i = 0; i < categories.length; i++) { %>
+                                            <option value="<%= categories[i]._id %>"><%= categories[i].categoryname %></option>
                                         <% } %>
-                                </select>
+                                    <% } else { %>
+                                        <option disabled>Category is not found!!!</option>
+                                    <% } %>
+                                </select> -->
+                                
+                                <div class="form-group">
+                                    <label for="category_id">Category</label>
+                                    <select class="form-control" name="category_id" id="category_id">
+                                    <option selected>Select category</option>
+
+                                        <% categories.forEach(function(category) { %>
+                                            <option value="<%= category._id %>" 
+                                                <% if (product.category_id.toString() === category._id.toString()) { %>
+                                                    selected
+                                                <% } %>
+                                            >
+                                                <%= category.categoryname %>
+                                            </option>
+                                        <% }); %>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                        
@@ -289,12 +300,18 @@
                             <div class="card-header">
                                 <h4>Media</h4>
                             </div>
-                                <div class="card-body">
-                                    <div class="input-upload">
-                                        <img src="/assets/imgs/theme/upload.svg" alt="">
-                                        <input  class="form-control" type="file" name="images" multiple value="<%= product.image%>">
-                                    </div>
+                            <div class="card-body">
+                                <div class="input-upload">
+                                    <% product.image.forEach(function(image) { %>
+                                        <div class="image-container">
+                                            <img src="/public/uploadProduct/<%= image %>" alt="<%= product.product_name %>">
+                                            <p><%= image %></p>
+                                        </div>
+                                    <% }); %>
+                                    <input class="form-control" type="file" name="images" multiple value="<%= product.image[0] %>">
                                 </div>
+                            </div>
+                            
                             </div> 
                           </div>
                         </div> 
@@ -313,6 +330,31 @@
             </div> -->
         </footer>
     </main>
+    <script>
+        // Function to update the image preview
+        function updateImagePreview() {
+          const imageInput = document.getElementById('image-input');
+          const imagePreview = document.getElementById('image-preview');
+      
+          // Check if any files were selected
+          if (imageInput.files && imageInput.files[0]) {
+            const reader = new FileReader();
+      
+            reader.onload = function (e) {
+              imagePreview.src = e.target.result; // Display the selected image as a preview
+            };
+      
+            reader.readAsDataURL(imageInput.files[0]);
+          } else {
+            // If no file is selected or if the selection is cleared, reset to the default image
+            imagePreview.src = '/assets/imgs/theme/upload.svg';
+          }
+        }
+      
+        // Add an event listener to the file input to trigger the image preview function
+        const imageInput = document.getElementById('image-input');
+        imageInput.addEventListener('change', updateImagePreview);
+      </script>
     <script src="/assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/vendors/select2.min.js"></script>

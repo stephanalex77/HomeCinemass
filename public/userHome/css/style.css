@@ -261,8 +261,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h6, .h6 {
       top: -2px;
       border-radius: 50%;
       background: #000000; }
-    .menu-icons .cart:hover {
-      color: #ffffff; }
+    
 
 .btn-custom-search {
   color: #000000; }

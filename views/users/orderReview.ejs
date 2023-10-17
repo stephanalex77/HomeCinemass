@@ -35,9 +35,10 @@
               <div class="form-group row">
                 <div class="col-md-6">
                   <div class="address-details">
+                    <% if(defaultAddress){%>
                     <label class="text-black">Address: </label>
                     <span class="text-black"><%= defaultAddress.address1 %>, <%= defaultAddress.address2 %></span><br>
-            
+            <input type="hidden" value="<%= defaultAddress._id %>" name="addressId">
                     <label class="text-black">City: </label>
                     <span class="text-black"><%= defaultAddress.city %></span><br>
             
@@ -49,6 +50,7 @@
             
                     <label class="text-black">Postal Code: </label>
                     <span class="text-black"><%= defaultAddress.pincode %></span>
+                   <%}%> 
                   </div>
                 </div>
               </div>
@@ -171,25 +173,284 @@
               <!-- Payment Options -->
               <!-- <form action="/makeorder" method="POST"> -->
                 <div class="border p-2 mb-2">
-                  <div class="custom-control custom-radio custom-control-inline text-center">
-                    <input type="radio" id="razorpayRadio" name="payment" class="custom-control-input custom-control-input-sm" value="online">
-                    <label class="custom-control-label" for="razorpayRadio">RAZORPAY</label>
-                  </div>
-                </div>
-                <div class="border p-2 mb-2">
-                  <div class="custom-control custom-radio custom-control-inline text-center">
-                    <input type="radio" id="codRadio" name="payment" class="custom-control-input custom-control-input-sm" value="COD">
-                    <label class="custom-control-label" for="codRadio">COD</label>
-                  </div>
+                  <div class="payment-method">
+                    <h4>Payment Method</h4>
+                    <div class="form-group form-check">
+                      <input form="paymentForm" type="radio" name="paymentMethod" id="f-option4" value="wallet">
+                      <label class="form-check-label" for="f-option4">Wallet Only</label>
+                    </div>
+                    <div class="form-group form-check">
+                      <input form="paymentForm" type="radio" name="paymentMethod" id="f-option5" value="cod">
+                      <label class="form-check-label" for="f-option5">Cash on Delivery</label>
+                    </div>
+                    <div class="form-group form-check">
+                      <input form="paymentForm" type="radio" name="paymentMethod" id="f-option6" value="online">
+                      <label class="form-check-label" for="f-option6">Online Payment</label>
+                    </div>
+                  </div><!-- End .payment-method -->
                 </div>
                 <div class="form-group">
-                  <button  class="btn btn-black btn-lg py-3 btn-block" onclick="address()">Place Order</button>
+                  <button class="btn btn-black btn-lg py-3 btn-block" onclick="makePurchase('<%= totalSubtotal.toFixed(2) %>')">Place Order</button>
+
+
                 </div>
               <!-- </form> -->
               
               <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+              <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-              <script>
+<script>
+ function makePurchase(grandTotal) {
+  let addressId = $("input[name='addressId']:checked").val();
+  let selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+  
+ 
+
+  let payment = selectedPaymentMethod.value;
+
+  $.ajax({
+    url: '/makeorder',
+    method: 'POST',
+    data: {
+      addressId: addressId,
+      payment_option: payment,
+      GrandTotal: grandTotal
+    },
+    success: function(response) {
+   
+      console.log('Received response:', response);
+
+      if (response.method === 'wallet') {
+        showWalletSuccessMessage(response); // Pass the response object here
+      } else if (response.method === 'cod') {
+        
+        Swal.fire({
+					title: "Order success",
+					text: "order placed successfully",
+					icon: "success",
+					showCancelButton: true,
+					confirmButtonText: "view orders",
+					cancelButtonText: "continue shopping",
+					reverseButtons: true
+				}).then(function (result) {
+					if (result.value) {
+						location.href = '/orders'
+						
+					} else if (result.dismiss === "cancel") {
+						location.href = '/shop'
+					}
+				});
+       
+      } else if (response.method === 'online') {
+        const options = {
+          key: "rzp_test_qMTQYr3dAvrkB2",
+          amount: response.generateOrder.amount_due,
+          currency: "INR",
+          name: "Future Furniture",
+          description: "Test Transaction",
+          image: "https://example.com/your_logo",
+          order_id: response.generateOrder.id,
+          handler: function (status) {
+            verifyPayment(response, status);
+          },
+          prefill: {
+            name: "Gaurav Kumar",
+            email: "gaurav.kumar@example.com",
+            contact: "9000090000"
+          },
+          notes: {
+            address: "Razorpay Corporate Office"
+          },
+          theme: {
+            color: "#3399cc"
+          }
+        };
+
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+      } else {
+        Swal.fire({
+          title: 'Error Occurred',
+          text: "Can't process order, an error occurred",
+          icon: 'error',
+          timer: 5000
+        });
+      }
+    },
+    error: function(err) {
+      alert(err);
+    }
+  });
+}
+function verifyPayment(order,payment){
+	console.log('verify payemennn')
+	$.ajax({
+		url:'/verifyPayment',
+		method:'POST',
+		data:{
+			order,
+			payment
+		},
+		success:(response)=>{
+			if(response.status){                        
+				location.href='/orders'
+			} else{
+				alert("Payment failed!" + response.errMsg)
+			}
+		}
+	})
+}
+
+</script>
+              <!-- <script>
+
+                function makePurchase(GrandTotal) { 
+                
+                  let addressId = $("input[name='addressId']:checked").val();
+                const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+               
+                    let walletbutton = document.getElementById("f-option4")
+                   let codbutton=document.getElementById("f-option5")
+                   let onlinebutton=document.getElementById("f-option6")
+                  
+                      let payment
+                      if(walletbutton.checked){
+                      payment=walletbutton.value
+                      }
+                      else if(codbutton.checked){
+                      payment=codbutton.value
+                      }else if(onlinebutton.checked){
+                      payment=onlinebutton.value
+                      }
+                      
+                $.ajax({
+                  url: '/makeorder',
+                  method: 'POST',
+                  data: {
+                    addressId: addressId,
+                    payment_option: payment,
+                    GrandTotal: GrandTotal
+              
+                  },
+                   success:(response) => {
+                    console.log('Received response:', response);
+                    
+                    
+                    if (response.method === 'wallet') {
+                      showWalletSuccessMessage();
+                      }else	if (response.method == 'cod') {
+                      console.log('cashon deli')
+                      Swal.fire({
+                        title: "Order success",
+                        text: "order placed successfully",
+                        icon: "success",
+                        showCancelButton: true,
+                        confirmButtonText: "view orders",
+                        cancelButtonText: "continue shopping",
+                        reverseButtons: true
+                      }).then(function (result) {
+                        if (result.value) {
+                          location.href = '/home'
+                          // result.dismiss can be "cancel", "overlay",
+                          // "close", and "timer"
+                        } else if (result.dismiss === "cancel") {
+                          location.href = '/checkout'
+                        }
+                      });
+              
+                    }else if(response.method === 'online'){
+                    console.log('generaterOrder',response.generateOrder)
+                      const options = {
+                          "key": "rzp_test_XLuQj8MFj0FaxS", // Enter the Key ID generated from the Dashboard
+                          "amount": response.generateOrder.amount_due, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                          "currency": "INR",
+                          "name": "Future Furniture", //your business name
+                          "description": "Test Transaction",
+                          "image": "https://example.com/your_logo",
+                          "order_id":response.generateOrder.id , //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                          "handler": function (status){
+                            
+                            verifyPayment(response,status)
+                          },
+                          "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
+                            "name": "Gaurav Kumar", //your customer's name
+                            "email": "gaurav.kumar@example.com", 
+                            "contact": "9000090000"  //Provide the customer's phone number for better conversion rates 
+                          },
+                          "notes": {
+                            "address": "Razorpay Corporate Office"
+                          },
+                          "theme": {
+                            "color": "#3399cc"
+                          }
+                        };
+                        
+                        var rzp1 = new Razorpay(options);
+                        rzp1.open();
+              
+              
+                    }else {
+                      Swal.fire({
+                        title: 'Error Occured',
+                        text: "Can't process order error occured",
+                        icon: 'fail',
+                        timer: 5000
+                      })
+              
+                    }
+                  },
+                  error:(err)=>{
+                    alert(err)
+                  }
+                })
+              }
+              
+              function verifyPayment(order,payment){
+                console.log('verify payemennn')
+                $.ajax({
+                  url:'/verifyPayment',
+                  method:'POST',
+                  data:{
+                    order,
+                    payment
+                  },
+                  success:(response)=>{
+                    if(response.status){                        
+                      location.href='/orderlist'
+                    } else{
+                      alert("Payment failed!" + response.errMsg)
+                    }
+                  }
+                })
+              }
+              function showWalletSuccessMessage() {
+                  Swal.fire({
+                      icon: 'success',
+                      title: 'Wallet Payment Successful!',
+                      text: 'Your order was placed successfully using your wallet balance.',
+                      showCancelButton: true,
+                      cancelButtonText: 'Continue Shopping',
+                      confirmButtonText: 'View Orders',
+                      cancelButtonColor: '#d33',
+                      confirmButtonColor: 'btn-success',
+                      heightAuto: false,
+                  }).then((result) => {
+                      if (result.value) {
+                          // Redirect to order details page
+                          location.href = '/orderDetails?id=' + response.generateOrder.id;
+                      } else if (result.dismiss === 'cancel') {
+                          // Redirect to product list page
+                          location.href = '/productList';
+                      }
+                  });
+              }
+              
+              
+              </script> -->
+              
+              
+              <!-- <script>
                 async function address() {
                   const pay = document.querySelectorAll('input[name="payment"]');
                   let selectedPay = '';
@@ -297,7 +558,7 @@
                 
                 
                  </script>
-              
+               -->
               
             </div>
           </div>

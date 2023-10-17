@@ -31,9 +31,11 @@
                               <% if (product.quantity <= 0) { %>
                                <a href="#" class="add_cart">out of stock <i class="ti-heart" onclick="addToWishlist('<%= product._id %>')"></i></a>
                               <% } else { %>
-                              <a href="#" class="add_cart" onclick="addtocart('<%= product._id %>')" data-product-id="<%= product._id %>">+ add to cart<i class="ti-heart" onclick="addToWishlist('<%= product._id %>')"></i></a>
+                              <a href="#" class="add_cart" onclick="addtocart('<%= product._id %>')" data-product-id="<%= product._id %>">+ add to cart<i  ><button class="btn btn-danger btn-sm mx-2" onclick="removeFromWishList(this)" data-product-id="<%= product._id %>">Remove</button>
+                              </i></a>
                              <% } %>
                           </div>
+                          
                         </div>
                       </div>
                     </div>
