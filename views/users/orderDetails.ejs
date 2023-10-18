@@ -82,10 +82,13 @@
                 <h4>Order Info</h4>
                 <ul>
                   <li>
-                    <p>Date</p><span>: <%= order.createdAt %></span>
+                    <p>Date</p><span>: <%= order.createdAt.toLocaleDateString() %></span>
                   </li>
                   <li>
                     <p>Order Number</p><span>: <%= order.orderId %></span>
+                  </li>
+                  <li>
+                    <p>Order Status</p><span>: <%= order.status %></span>
                   </li>
                   <% order.products.forEach(product => { %>
                   <li>
@@ -98,13 +101,11 @@
                   <li>
                     <p>Payment Method</p><span>: <%= order.paymentMethod %></span>
                   </li>
-                </ul>
-                <h4>Shipping Address</h4>
-                <ul>
+                
                   <li>
-                    <p>Street</p><span>: <%= order.shippingAddress.address1 %></span>
+                    <p>order address</p><span>: <%= order.shippingAddress %></span>
                   </li>
-                  <li>
+                  <!-- <li>
                     <p>Street 2</p><span>: <%= order.shippingAddress.address2 %></span>
                   </li>
                   <li>
@@ -115,7 +116,7 @@
                   </li>
                   <li>
                     <p>Postcode</p><span>: <%= order.shippingAddress.postcode %></span>
-                  </li>
+                  </li> -->
                 </ul>
                 <div class="order-buttons">
                     <% if (order.orderStatus !== 'Cancelled' && order.orderStatus !== 'Returned' && order.orderStatus !== 'Shipped' && order.orderStatus !== 'Pending') { %>

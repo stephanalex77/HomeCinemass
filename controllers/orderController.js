@@ -330,9 +330,10 @@ const showorder = async (req, res) => {
 const cancelOrder = async (req, res) => {
   try {
     const { orderId } = req.body;
+    console.log('Cancel Order Request - Order ID:', orderId);
     const order = await Order.findById(orderId);
     console.log("what is inside body???", req.body);
-    console.log('order:::', order);
+    console.log('order::::::::::::::::::::::', order);
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
@@ -353,15 +354,15 @@ const cancelOrder = async (req, res) => {
       return res.status(400).json({ message: 'Cannot cancel an order placed for more than 10 days' });
     }
 
-    order.orderStatus = 'Cancelled';
-
-    console.log('kjlkj');
+    order.status = 'Cancelled';
     const orderssss = await order.save();
-    console.log("is order is there:::::::", orderssss);
-    return res.json({ success: true });
+
+    console.log('Order Cancelled:', orderssss);
+    // return res.json({ success: true });
+    res.json({ success: true });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' ,success: false});
   }
 };
 
@@ -376,7 +377,7 @@ const returnOrder = async (req, res) => {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    if (order.orderStatus !== 'Delivered') {
+    if (order.status !== 'Delivered') {
       return res.status(400).json({ message: 'Cannot return an order that is not delivered' });
     }
 
@@ -388,7 +389,7 @@ const returnOrder = async (req, res) => {
       return res.status(400).json({ message: 'Cannot return an order placed for more than 10 days' });
     }
 
-    order.orderStatus = 'Returned';
+    order.status = 'Returned';
     order.reasonResponse = selectedReason;
     await order.save();
 
@@ -398,6 +399,16 @@ const returnOrder = async (req, res) => {
     return res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+const orderStatusAdminSide = async(req, res)=>{
+  try {
+    const orders = await Order.find().populate('user');
+    res.render('orderList',{orders})
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 module.exports = {
 
   populateProductDetails,
@@ -409,6 +420,7 @@ module.exports = {
   createOrder,
   verifyRazorpayPayment,
   cancelOrder,
-  returnOrder
+  returnOrder,
+  orderStatusAdminSide
 
 }

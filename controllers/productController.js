@@ -206,21 +206,23 @@ const getProductInsideCategory = async(req, res)=>{
   try {
     const categoryId = req.params.categoryId;
     console.log(categoryId);
-    
+
     if (categoryId === 'all') {
-      const products = await Product.find();
-      res.json(products);
-      console.log('Filtered products 1:', products);
+        // Fetch all products
+        // Replace this with your actual database query
+        const products = await Product.find();
+        res.json(products);
     } else {
-      const products = await Product.find({ category_id: categoryId });
-      res.json(products);
-      console.log('Filtered products 2:', products);
+        // Fetch products for the specified category
+        // Replace this with your actual database query
+        const products = await Product.find({ category_id: categoryId });
+        res.json(products);
     }
-  } catch (error) {
+} catch (error) {
     console.error('Error fetching products by category:', error);
     res.status(500).json({ error: 'An error occurred while fetching products' });
-  }
 }
+};
 
 const searchProduct = async (req, res) => {
   try {

@@ -36,6 +36,8 @@ const categoryController= require("../controllers/categoryController")
 const productController= require("../controllers/productController")
 
 const couponController = require("../controllers/couponController")
+
+const orderController = require("../controllers/orderController")
 // user side
 admin_route.get('/',auth.isLogout,adminController.loadLogin)
 
@@ -114,6 +116,12 @@ admin_route.post('/listCoupon', couponController.listCoupon);
 
 
 // admin_route.get('/coupons/delete-coupon',auth.isLogin, couponController.deleteCoupon)
+
+//ORDER MANAGE
+admin_route.get('/orderManage', auth.isLogin, orderController.orderStatusAdminSide);
+
+
+
 
 admin_route.get('*',function(req,res){
     res.status(404).send('Page Not Found');

@@ -38,12 +38,31 @@
     <div class="row">
       <div class="col-md-3">
         <ul class="list-unstyled categories" id="categoryList">
-          <li><a href="#" data-category-id="all">All Categories</a></li>
+            <li><a href="#" data-category-id="all">All Categories</a></li>
             <% for (let i = 0; i < categories.length; i++) { %>
-              <li><a href="#" data-category-id="<%= categories[i]._id %>"><%= categories[i].categoryname.charAt(0).toUpperCase() + categories[i].categoryname.slice(1) %> <span><%= categories[i].quantity %></span></a></li>
+                <li><a href="#" data-category-id="<%= categories[i]._id %>"><%= categories[i].categoryname.charAt(0).toUpperCase() + categories[i].categoryname.slice(1) %> <span><%= categories[i].quantity %></span></a></li>
             <% } %>
         </ul>
-      </div>
+    </div>
+    
+
+    <script>
+      $(document).ready(function() {
+    $('#categoryList a').click(function(event) {
+        event.preventDefault();
+        var categoryId = $(this).data('category-id');
+        filterProductsByCategory(categoryId);
+    });
+
+    function filterProductsByCategory(categoryId) {
+        // Make an AJAX request to your server endpoint with categoryId
+        $.get(`/products/category/${categoryId}`, function(data) {
+            // Handle the response, e.g., update the UI with filtered products
+        });
+    }
+});
+
+    </script>
       <div class="col-md-9">
         <div class="row align-items-center latest_product_inner">
           <% products.forEach(product => { %>
