@@ -7,7 +7,8 @@ const orderSchema = new mongoose.Schema({
       required:true
     },
     orderId:{
-        type:String
+        type:String,
+        // required:true
     },
     products:[
       {
@@ -16,14 +17,45 @@ const orderSchema = new mongoose.Schema({
       ref: 'Products',
       required:true
         },
+
         quantity:{
           type: Number
         }
       }
     ],
-    shippingAddress: {
+    shippingAddress: [{
+      firstname:{
+        type: String,
+      },
+      lastname:{
+          type: String,
+        },
+      email:{
+          type:String,
+          unique: true
+      },
+      mobile:{
+        type: Number
+      },
+      address1:{
         type:String
-    },
+      },
+      address2:{
+        type:String
+      },
+      pincode:{
+        type:String
+      },
+      state:{
+        type:String
+      },
+      city:{
+        type:String
+      },
+       country:{
+        type:String
+      },
+    }],
     status: {
       type: String,
       enum: ['placed', 'shipped', 'Delivered', 'Cancelled', 'Returned'],

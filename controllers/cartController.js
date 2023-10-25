@@ -38,12 +38,13 @@ const getCart = async (req, res) => {
       // If the cart doesn't exist, create an empty cart
       const emptyCart = { products: [] };
       res.render("cart", {
-        cart: emptyCart,
         user,
+        cart: populatedCart, // Use populatedCart here, assuming this is the populated cart
         category,
         products,
-        calculateTotalPrice: 0,
+        calculateTotalPrice: calculateTotalPrice, // Pass calculateTotalPrice to the template
       });
+      
     } else {
       // Calculate the total price of the products in the cart
       const populatedCart = await populateProductDetails(cart);
@@ -84,23 +85,42 @@ const addToCart = async (req, res) => {
 
     let cart = await Cart.findOne({ user: userId });
     if (!cart) {
-      await Cart.create({ user: userId, products: [{product:productId, quantity}] });
+      await Cart.create({ user: userId, products: [{product:productId, quantity,product_total}],cartSubtotal});
     }
     // Check if the user already has this product in their cart
-    const existingProduct = cart.products.find((item) =>
-      item.product.equals(productId)
-    );
+  
+    // const existingProduct = cart.products?.find((item) =>
+    //   item.product.equals(productId)
+    // );
     // console.log(existingProduct);
 
-    if (existingProduct) {
-      existingProduct.quantity += Number(quantity)
-      existingProduct.price = existingProduct.product.product_sales_price * existingProduct.quantity
-      // await existingProduct.save()
-    } else {
-      cart.products.push({ product: productId, quantity });
-    }
+    // if (existingProduct) {
+      
+    //   existingProduct.quantity += Number(quantity);
+    //   existingProduct.product_total = existingProduct.product.product_sales_price * existingProduct.quantity;
+    //   existingProduct.price = existingProduct.product_total;
+    //   console.log("::::::::::::::", existingProduct.product_total);
+    // } else {
+      
+      const productToAdd = {
+        product: productId,
+        quantity: quantity,
+        product_total: product.product_sales_price * quantity ,
+      };
+      cart.products.push(productToAdd);
+      console.log(":::::aaa:::",productToAdd);
+
+      cart.cartSubtotal = cart.products.reduce((subtotal, product) => {
+        return subtotal + product.product_total;
+      }, 0);
+
+
+    // }
+
+
+    
     // console.log("kittuo???????????");
-    product.quantity-=Number(quantity)
+    // product.quantity-=Number(quantity) 
     // console.log("==========kittiyo");
     await product.save();
 
@@ -147,26 +167,33 @@ const removeFromCart = async(req, res)=>{
 
 
 // UPDATE YOUR CART
-const updateCart = async(req, res)=>{
-  const userId = req.session.user_id
-  const {productId, quantity} = req.body;
-  try{
-    const cart = await Cart.findOne({ user: userId});
-    if(!cart){
-      return res.status(404).json({ success:false,message: 'Cart not found'});
+const updateCart = async (req, res) => {
+  const userId = req.session.user_id;
+  const { productId, quantity } = req.body;
+  try {
+    const cart = await Cart.findOne({ user: userId });
+    if (!cart) {
+      return res.status(404).json({ success: false, message: 'Cart not found' });
     }
-    const existingProduct = cart.products.find(cartProduct =>cartProduct.product.equals(productId))
-    if(!existingProduct) {
-      return res.status(404).json({ success: false, message: 'Product not found'})
-    } 
+    const existingProduct = cart.products.find(cartProduct => cartProduct.product.equals(productId));
+    if (!existingProduct) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+    console.log(":::::::",quantity);
     existingProduct.quantity = quantity;
-    await cart.save()
-    res.status(200).json({ success: true, message: 'Cart updated successfully'})
-  }catch(error){
-    console.log(error.message)
-    res.status(500).json({ success: false, message: 'An error occured while updating the cart'})
+    
+    console.log("asdfghjk",existingProduct.quantity);
+
+    existingProduct.product_total = existingProduct.product_sales_price * quantity;
+    console.log("existing::::::::",existingProduct.product_total);
+    await cart.save();
+    res.status(200).json({ success: true, message: 'Cart updated successfully' });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ success: false, message: 'An error occurred while updating the cart' });
   }
-}
+};
+
 
 
 // GET CHECKOUT PAGE
@@ -209,53 +236,47 @@ const saveAddress=(req,res)=>{
 
 
 
-const  updateQuantity = async (req, res) => {
+const updateQuantity = async (req, res) => {
   try {
     const userId = req.session.user_id;
     const productId = req.body.productId;
     const operation = req.params.operation; // "increment" or "decrement"
-    // console.log("Operation===========:", operation);
-    // console.log("product id====== ", productId);
-    // console.log(userId);
-    const cart = await Cart.findOne({ user: userId }).populate(
-      "products.product"
-    );
-    console.log("cart from update cart");
+
+    const cart = await Cart.findOne({ user: userId }).populate("products.product");
+
     const product = cart.products.find((item) =>
       item._id.equals(productId)
-      );
+    );
 
-    // console.log(product);
-    // cart.products.findOne({"_id" :productId})
-    // const product = cart.products.find({"_id" :productId})
-    // console.log("this isi product");
-    // console.log(product);
     if (!product) {
       return res.status(404).json({ success: false, message: 'Product not found' });
     }
-    console.log("=========");
+
     if (operation === 'increment') {
       product.quantity += 1;
-      
     } else if (operation === 'decrement') {
-   
       product.quantity = Math.max(product.quantity - 1, 1);
     } else {
       return res.status(400).json({ success: false, message: 'Invalid operation' });
     }
 
-    // Save the updated product
-    // cart.products.push({ _id: productId, quantity });
+    // Calculate the updated product_total based on the updated quantity
+    product.product_total = product.quantity * product.product.product_sales_price;
+    // cart.cartSubtotal =product.product_total
+    cart.cartSubtotal = cart.products.reduce((subtotal, product) => {
+      return subtotal + product.product_total;
+    }, 0);
+    // Save the updated product and cart
+    // await product.save();
     await cart.save();
 
-    res.json({ success: true, message: `Quantity ${operation}ed successfully`, updatedQuantity: product.quantity });
-    
+    res.json({ success: true, message: `Quantity ${operation}ed successfully`, updatedQuantity: product.quantity, cart });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
-
 }
+
 
 
 

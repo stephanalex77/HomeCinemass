@@ -56,30 +56,39 @@
               </div>
             </div>
             
-            <!-- Coupon Code Section -->
-            <!-- Existing code -->
+
 
 <!-- Coupon Code Section -->
 <div class="row mb-5">
   <div class="col-md-12">
     <h2 class="h3 mb-3 text-black">Coupon Code</h2>
     <div class="p-3 p-lg-5 border">
-      <label for="c_code" class="text-black mb-3 bold">Select a coupon:</label>
-      <select class="form-control" id="couponSelect">
+      <!-- <label for="c_code" class="text-black mb-3 bold">Select a coupon:</label> -->
+      <!-- <select class="form-control" id="couponSelect">
         <option value="" class="bg-light">Select a coupon</option>
         <% coupons.forEach(function(coupon) { %>
           <option value="<%= coupon.couponCode %>" class="bg-primary text-white"><%= coupon.couponCode %></option>
         <% }); %>
-      </select>
-
+      </select> -->
+<% if(coupon) { %> 
       <div class="input-group w-75 mt-3">
-        <input type="text" class="form-control" id="cpnCode" placeholder="Coupon Code" aria-label="Coupon Code" aria-describedby="button-addon2">
+        <input type="text" class="form-control" id="cpnCode" value="<%= coupon.couponCode %>" placeholder="Coupon Code" aria-label="Coupon Code" aria-describedby="button-addon2">
         <div class="input-group-append">
-          <button class="btn btn-black btn-sm cpnBtn" type="button" data-min-amount="0">Apply</button>
+          <button class="btn btn-outline-black btn-sm cpnBtn" type="button" data-min-amount="0" id="applyCouponBtn"><a href="/coupons/<%= cart._id %>">select coupon</a></button>
         </div>
       </div>
     </div>
-    <input type="hidden" id="currentPurchaseAmount" value="<%= totalSubtotal %>">
+    <% }else {%>
+      <div class="input-group w-75 mt-3">
+        <input type="text" class="form-control" id="cpnCode" value="<%= coupons.couponCode %>" placeholder="Coupon Code" aria-label="Coupon Code" aria-describedby="button-addon2">
+        <div class="input-group-append">
+          <button class="btn btn-outline-black btn-sm cpnBtn" type="button" data-min-amount="0" id="applyCouponBtn"><a href="/coupons/<%= cart._id %>">select coupon</a></button>
+        </div>
+      </div>
+    </div>
+    <% } %>
+    <input type="hidden" id="currentPurchaseAmount" value="<%= cartSubtotal %>">
+
   </div>
 </div>
 
@@ -87,13 +96,88 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   $(document).ready(function () {
+  $('#couponSelect').change(function () {
+    const selectedCouponCode = $(this).val();
+    $('#cpnCode').val(selectedCouponCode);
+    $('.cpnBtn').attr('data-coupon-code', selectedCouponCode);
+
+    // Here you can add the AJAX request to apply the coupon and update the displayed total
+    applyCoupon(selectedCouponCode);
+  });
+
+  // Function to apply the coupon and update the displayed total
+  function applyCoupon(couponCode) {
+    $.ajax({
+      type: 'POST',
+      url: '/applyCoupon',
+      data: { couponCode: couponCode },
+      success: function (response) {
+        if (response.success) {
+          const updatedTotal = response.updatedTotal;
+          $('#currentPurchaseAmount').val(updatedTotal.toFixed(2));
+          // Update displayed total on the page
+          $('#displayedTotal').text('₹' + updatedTotal.toFixed(2));
+
+          if (response.discountAmount) {
+            // Update the discount amount
+            $('#discountAmount').text('-₹' + response.discountAmount.toFixed(2));
+          } else {
+            // If there's no discount, clear the discount amount display
+            $('#discountAmount').text('');
+          }
+        } else {
+          alert('Coupon not valid.');
+        }
+      },
+      error: function (error) {
+        console.log(error);
+        alert('An error occurred.');
+      }
+    });
+  }
+});
+
+</script>
+<!-- <script>
+  $(document).ready(function () {
     $('#couponSelect').change(function () {
       const selectedCouponCode = $(this).val();
       $('#cpnCode').val(selectedCouponCode);
       $('.cpnBtn').attr('data-coupon-code', selectedCouponCode);
+
+      // Here you can add the AJAX request to apply the coupon and update the displayed total
+      applyCoupon(selectedCouponCode);
     });
+
+    // Function to apply the coupon and update the displayed total
+    function applyCoupon(couponCode) {
+  $.ajax({
+    type: 'POST',
+    url: '/applyCoupon',
+    data: { couponCode: couponCode },
+    success: function (response) {
+      if (response.success) {
+        const updatedTotal = response.updatedTotal;
+        $('#currentPurchaseAmount').val(updatedTotal.toFixed(2));
+        // Update displayed total on the page
+        $('#displayedTotal').text('₹' + updatedTotal.toFixed(2));
+        if (response.discountAmount) {
+          $('#discountAmount').text('-₹' + response.discountAmount.toFixed(2));
+        }
+      } else {
+        alert('Coupon not valid.');
+      }
+    },
+    error: function (error) {
+      console.log(error);
+      alert('An error occurred.');
+    }
   });
-</script>
+}
+
+  });
+</script> -->
+
 
           </div>
 
@@ -112,14 +196,15 @@
                   <tbody>
                     <% cart.products.forEach(product => { %>
                       <tr>
-                        <td><%= product.product.product_name %> <strong class="mx-2">x</strong> <%= product.quantity %></td>
-                        <td>₹<%= (product.product.product_sales_price * product.quantity).toFixed(2) %></td>
+                        <td><%= product.product.product_name %> <strong class="mx-2">x</strong>
+                          <span class="quantity-display" data-product-id="<%= product._id %>"><%= product.quantity %></span>
+                        </td>
+                        <td class="price" data-product-id="<%= product._id %>">₹<%= product.product_total.toFixed(2) %></td>
                       </tr>
-                      <% updatedTotal += (product.product.product_sales_price * product.quantity); %>
                     <% }); %>
                     <tr>
-                      <td class="text-black font-weight-bold"><strong>Total</strong></td>
-                      <td class="text-black font-weight-bold">₹<%= updatedTotal.toFixed(2) %></td>
+                      <td class="text-black font-weight-bold"><strong>Cart Sub Total</strong></td>
+                      <td class="text-black font-weight-bold" id="cartSubtotalValue">₹<%= cartSubtotal.toFixed(2) %></td>
                     </tr>
                   </tbody>
                 </table>
@@ -146,14 +231,16 @@
                 <!-- Subtotal -->
                 <div class="d-flex justify-content-between mb-2">
                   <span class="text-black">Subtotal:</span>
-                  <span class="text-black">₹<%= totalSubtotal.toFixed(2) %></span>
+                  <span class="text-black">₹<%= cartSubtotal.toFixed(2) %></span>
                 </div>
               
                 <!-- Discount -->
+                <% if(coupon) { %> 
                 <div class="d-flex justify-content-between mb-2">
                   <span class="text-black">Discount:</span>
-                  <span class="text-black">-₹<%= updatedTotal.toFixed(2) %></span> <!-- Replace with your discount value -->
+                  <span class="text-black" id="discountAmount">-₹<%= discountAmount.toFixed(2) %></span>
                 </div>
+                <% } %>
               
                 <!-- Additional Discount -->
                 <!-- <div class="d-flex justify-content-between mb-2">
@@ -162,23 +249,30 @@
                 </div> -->
               
                 <!-- Grand Total -->
-                <% let grantTotal = updatedTotal; %> <!-- Assuming updatedTotal is the correct total you want to use as the grand total -->
-
-                  <div class="d-flex justify-content-between">
-                    <span class="text-black font-weight-bold">Grand Total:</span>
-                    <span class="text-black font-weight-bold">₹<%= grantTotal.toFixed(2) %></span>
-                  </div>
-              
+                <% let grandTotal = cartSubtotal; %>
+                <% if(coupon) { %> 
+                <div class="d-flex justify-content-between">
+                  <span class="text-black font-weight-bold">Grand Total:</span>
+                  <span class="text-black font-weight-bold">₹<%= (grandTotal-discountAmount).toFixed(2) %></span>
+                </div>
+              </div>
+              <% }else { %>
+              <div class="d-flex justify-content-between">
+                <span class="text-black font-weight-bold">Grand Total:</span>
+                <span class="text-black font-weight-bold">₹<%= grandTotal.toFixed(2) %></span>
+              </div>
+            </div>
+          <% } %>
           
               <!-- Payment Options -->
               <!-- <form action="/makeorder" method="POST"> -->
                 <div class="border p-2 mb-2">
                   <div class="payment-method">
                     <h4>Payment Method</h4>
-                    <div class="form-group form-check">
+                    <!-- <div class="form-group form-check">
                       <input form="paymentForm" type="radio" name="paymentMethod" id="f-option4" value="wallet">
                       <label class="form-check-label" for="f-option4">Wallet Only</label>
-                    </div>
+                    </div> -->
                     <div class="form-group form-check">
                       <input form="paymentForm" type="radio" name="paymentMethod" id="f-option5" value="cod">
                       <label class="form-check-label" for="f-option5">Cash on Delivery</label>
@@ -190,7 +284,7 @@
                   </div><!-- End .payment-method -->
                 </div>
                 <div class="form-group">
-                  <button class="btn btn-black btn-lg py-3 btn-block" onclick="makePurchase('<%= totalSubtotal.toFixed(2) %>')">Place Order</button>
+                  <button class="btn btn-black btn-lg py-3 btn-block" onclick="makePurchase('<%= (grandTotal-discountAmount).toFixed(2) %>')">Place Order</button>
 
 
                 </div>
@@ -202,6 +296,7 @@
 
 <script>
  function makePurchase(grandTotal) {
+  console.log("asdfghjkl;========fghjk",grandTotal);
   let addressId = $("input[name='addressId']:checked").val();
   let selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
   
@@ -283,6 +378,7 @@
     }
   });
 }
+
 function verifyPayment(order,payment){
 	console.log('verify payemennn')
 	$.ajax({
@@ -303,262 +399,7 @@ function verifyPayment(order,payment){
 }
 
 </script>
-              <!-- <script>
-
-                function makePurchase(GrandTotal) { 
-                
-                  let addressId = $("input[name='addressId']:checked").val();
-                const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
-               
-                    let walletbutton = document.getElementById("f-option4")
-                   let codbutton=document.getElementById("f-option5")
-                   let onlinebutton=document.getElementById("f-option6")
-                  
-                      let payment
-                      if(walletbutton.checked){
-                      payment=walletbutton.value
-                      }
-                      else if(codbutton.checked){
-                      payment=codbutton.value
-                      }else if(onlinebutton.checked){
-                      payment=onlinebutton.value
-                      }
-                      
-                $.ajax({
-                  url: '/makeorder',
-                  method: 'POST',
-                  data: {
-                    addressId: addressId,
-                    payment_option: payment,
-                    GrandTotal: GrandTotal
-              
-                  },
-                   success:(response) => {
-                    console.log('Received response:', response);
-                    
-                    
-                    if (response.method === 'wallet') {
-                      showWalletSuccessMessage();
-                      }else	if (response.method == 'cod') {
-                      console.log('cashon deli')
-                      Swal.fire({
-                        title: "Order success",
-                        text: "order placed successfully",
-                        icon: "success",
-                        showCancelButton: true,
-                        confirmButtonText: "view orders",
-                        cancelButtonText: "continue shopping",
-                        reverseButtons: true
-                      }).then(function (result) {
-                        if (result.value) {
-                          location.href = '/home'
-                          // result.dismiss can be "cancel", "overlay",
-                          // "close", and "timer"
-                        } else if (result.dismiss === "cancel") {
-                          location.href = '/checkout'
-                        }
-                      });
-              
-                    }else if(response.method === 'online'){
-                    console.log('generaterOrder',response.generateOrder)
-                      const options = {
-                          "key": "rzp_test_XLuQj8MFj0FaxS", // Enter the Key ID generated from the Dashboard
-                          "amount": response.generateOrder.amount_due, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-                          "currency": "INR",
-                          "name": "Future Furniture", //your business name
-                          "description": "Test Transaction",
-                          "image": "https://example.com/your_logo",
-                          "order_id":response.generateOrder.id , //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-                          "handler": function (status){
-                            
-                            verifyPayment(response,status)
-                          },
-                          "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
-                            "name": "Gaurav Kumar", //your customer's name
-                            "email": "gaurav.kumar@example.com", 
-                            "contact": "9000090000"  //Provide the customer's phone number for better conversion rates 
-                          },
-                          "notes": {
-                            "address": "Razorpay Corporate Office"
-                          },
-                          "theme": {
-                            "color": "#3399cc"
-                          }
-                        };
-                        
-                        var rzp1 = new Razorpay(options);
-                        rzp1.open();
-              
-              
-                    }else {
-                      Swal.fire({
-                        title: 'Error Occured',
-                        text: "Can't process order error occured",
-                        icon: 'fail',
-                        timer: 5000
-                      })
-              
-                    }
-                  },
-                  error:(err)=>{
-                    alert(err)
-                  }
-                })
-              }
-              
-              function verifyPayment(order,payment){
-                console.log('verify payemennn')
-                $.ajax({
-                  url:'/verifyPayment',
-                  method:'POST',
-                  data:{
-                    order,
-                    payment
-                  },
-                  success:(response)=>{
-                    if(response.status){                        
-                      location.href='/orderlist'
-                    } else{
-                      alert("Payment failed!" + response.errMsg)
-                    }
-                  }
-                })
-              }
-              function showWalletSuccessMessage() {
-                  Swal.fire({
-                      icon: 'success',
-                      title: 'Wallet Payment Successful!',
-                      text: 'Your order was placed successfully using your wallet balance.',
-                      showCancelButton: true,
-                      cancelButtonText: 'Continue Shopping',
-                      confirmButtonText: 'View Orders',
-                      cancelButtonColor: '#d33',
-                      confirmButtonColor: 'btn-success',
-                      heightAuto: false,
-                  }).then((result) => {
-                      if (result.value) {
-                          // Redirect to order details page
-                          location.href = '/orderDetails?id=' + response.generateOrder.id;
-                      } else if (result.dismiss === 'cancel') {
-                          // Redirect to product list page
-                          location.href = '/productList';
-                      }
-                  });
-              }
-              
-              
-              </script> -->
-              
-              
-              <!-- <script>
-                async function address() {
-                  const pay = document.querySelectorAll('input[name="payment"]');
-                  let selectedPay = '';
-                  for (let i = 0; i < pay.length; i++) {
-                    if (pay[i].checked) {
-                      selectedPay = pay[i].value;
-                      break;
-                    }
-                  }
-                  try {
-                    if(selectedPay=="COD"){
-                        window.location.href = '/orderthankyou?method=COD';
-                    }
-                    else{
-                        $.ajax({
-                      url:"/checkout/razor_order?method=online",
-                      type:"POST",
-                      // data: formData,
-                      success:function(res){
-                        if(res.success){
-                          var options = {
-                            "key": ""+res.key_id+"",
-                            "amount": ""+res.amount+"",
-                            "currency": "INR",
-                            // "name": ""+res.product_name+"",
-                            // "description": ""+res.description+"",
-                            // "image": "https://dummyimage.com/600x400/000/fff",
-                            "order_id": ""+res.order_id+"",
-                            "handler": function (response){
-                                            
-                                            verifyPayment(response.razorpay_payment_id,response.razorpay_order_id,response.razorpay_signature);
-                            },
-                            
-                          };
-                          var razorpayObject = new Razorpay(options);
-                          razorpayObject.on('payment.failed', function (response){
-                                        console.log("Payment Failed Event Triggered");
-                                        fetch('/checkout/clear-total-after-discount', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({}),
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log('Total after discount cleared successfully');
-                        })
-                        .catch(error => {
-                            console.error('Error clearing total after discount:', error);
-                        });
-                    });
-                        
-                          razorpayObject.open();
-                        }
-                        else{
-                          alert(res.msg);
-                        }
-                      }
-                    })
-                
-                    }
-                   
-                  } catch (err) {
-                    alert('Error' + err);
-                  }
-                
-                //   console.log(selectedAddress);
-                }
-                function verifyPayment(payment_id, order_id,razorpay_signature) {
-                   
-                   const data = {
-                       payment_id: payment_id,
-                       order_id: order_id
-                   };
-                
-                  
-                   fetch("/checkout/verifyPayment", {
-                       method: "POST",
-                       headers: {
-                           "Content-Type": "application/json",
-                           'x-razorpay-signature': razorpay_signature
-                       },
-                       body: JSON.stringify(data)
-                   })
-                   .then(response => response.json())
-                   .then(data => { 
-                        console.log(data)
-                       if (data.success) {
-                         
-                           window.location.href = '/checkout/razor-payment?method=online'
-                       }else {
-                           console.log("Payment verification failed");
-                        //    window.location.href = '/checkout/clear'
-                          
-                          
-                       }
-                   })
-                   .catch(error => {
-                       console.error("Error verifying payment:", error);
-                   
-                   });
-                }
-                
-                
-                
-                 </script>
-               -->
+             
               
             </div>
           </div>

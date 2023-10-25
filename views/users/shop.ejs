@@ -10,85 +10,156 @@
   </div>
 </div>
 
-<div class="untree_co-section pt-3">
+<div class="untree_co-section pt-4">
   <div class="container">
 
-    <div class="row align-items-center mb-5">
+    <!-- <div class="row align-items-center mb-5">
       <div class="col-lg-8">
         <h2 class="mb-3 mb-lg-0">Products</h2>
       </div>
       <div class="col-lg-4">
-
         <div class="d-flex sort align-items-center justify-content-lg-end">
           <strong class="mr-3">Sort by:</strong>
           <form action="/shop" method="GET">
             <select class="" required name="sortOrder">
               <option value="">Newest Items</option>
-              <!-- <option value="minPrice">Low to High</option>
-              <option value="maxPrice">High to Low</option> -->
+              <option value="minPrice">Low to High</option>
+              <option value="maxPrice">High to Low</option>
               <option value="asc">Price: Ascending</option>
               <option value="desc">Price: Descending</option>
-              <!-- <option value="3">Rating(High to Low)</option> -->
+              <option value="3">Rating(High to Low)</option>
             </select>
           </form>
         </div>
-      </div>
-    </div>
+      </div> 
+    </div> -->
 
     <div class="row">
-      <div class="col-md-3">
-        <ul class="list-unstyled categories" id="categoryList">
+      <div class="col-md-4">
+        <div class="dataBindig"></div>
+        <!-- <ul class="list-unstyled categories" id="categoryList">
             <li><a href="#" data-category-id="all">All Categories</a></li>
             <% for (let i = 0; i < categories.length; i++) { %>
                 <li><a href="#" data-category-id="<%= categories[i]._id %>"><%= categories[i].categoryname.charAt(0).toUpperCase() + categories[i].categoryname.slice(1) %> <span><%= categories[i].quantity %></span></a></li>
             <% } %>
-        </ul>
-    </div>
+        </ul> -->
+        <div class="userFilter" style="display: flex; flex-direction: column; align-items: center; padding-left: 2rem; align-items: flex-start;   min-width: 180px; max-width: 190px;">
+          <div style="padding-bottom: 1rem;">
+              <div>
+                  <span><strong>CATEGORY</strong></span>
+              </div>
+              <% categories.forEach(function(category) { %>
+                  <label class="d-flex" style="align-items: baseline">
+                      <input type="checkbox" class="category-control-input" data-category="<%= category._id %>">
+                      <span class="text-black" style="padding-left: .5rem;"><%= category.categoryname %></span>
+                  </label>
+              <% }); %>
+          </div>
+      
+          <div>
+              <div>
+                  <span><strong>PRICE RANGE</strong></span>
+              </div>
+              <div>
+                  <label class="d-flex">
+                      <input type="checkbox" class="price-control-input" data-range="lt15000">
+                      <span class="text-black" style="padding-left: .5rem;">Under ₹15,000</span>
+                  </label>
+                  <label class="d-flex">
+                      <input type="checkbox" class="price-control-input" data-range="lt40000">
+                      <span class="text-black" style="padding-left: .5rem;">₹15,000 - ₹40,000</span>
+                  </label>
+                  <label class="d-flex">
+                      <input type="checkbox" class="price-control-input" data-range="lt80000">
+                      <span class="text-black" style="padding-left: .5rem;">₹40,000 - ₹80,000</span>
+                  </label>
+                  <label class="d-flex">
+                      <input type="checkbox" class="price-control-input" data-range="lt150000">
+                      <span class="text-black" style="padding-left: .5rem;">₹80,000 - ₹1,50,000</span>
+                  </label>
+                  <label class="d-flex">
+                      <input type="checkbox" class="price-control-input" data-range="gt200000">
+                      <span class="text-black" style="padding-left: .5rem;">Over ₹2,00,000</span>
+                  </label>
+              </div>
+              
+          </div>
+      </div>
+      
+      </div>
+      
     
 
-    <script>
-      $(document).ready(function() {
-    $('#categoryList a').click(function(event) {
-        event.preventDefault();
-        var categoryId = $(this).data('category-id');
-        filterProductsByCategory(categoryId);
-    });
+      <!-- <script>
+            $(document).ready(function() {
+          $('#categoryList a').click(function(event) {
+              event.preventDefault();
+              var categoryId = $(this).data('category-id');
+              filterProductsByCategory(categoryId);
+          });
 
-    function filterProductsByCategory(categoryId) {
-        // Make an AJAX request to your server endpoint with categoryId
-        $.get(`/products/category/${categoryId}`, function(data) {
-            // Handle the response, e.g., update the UI with filtered products
+          function filterProductsByCategory(categoryId) {
+              // Make an AJAX request to your server endpoint with categoryId
+              $.get(`/products/category/${categoryId}`, function(data) {
+                  // Handle the response, e.g., update the UI with filtered products
+              });
+          }
         });
-    }
-});
-
-    </script>
-      <div class="col-md-9">
-        <div class="row align-items-center latest_product_inner">
+      </script> -->
+      <div class="col-md-8">
+        <div class="row align-items-center latest_product_inner products-container ">
           <% products.forEach(product => { %>
-            <div class="col-lg-4 col-sm-6">
-                <div class="single_product_item">
-                  <a href="/singleProduct/<%= product.id %>" class="product-img">
-                    <img src="/public/uploadProduct/<%= product.image[0] %>" alt="<%= product.product_name %>" style="width: 75%; height: 150px; object-fit: contain;">
-                  </a>
-                    <div class="single_product_text">
-                        <h4><%= product.product_name %></h4>
-                        <h3>Price: ₹<%= product.product_price.toFixed(2) %></h3>
-                        <h4>Sales Price: ₹<%= product.product_sales_price.toFixed(2) %></h4>
-                        <% if (product.quantity <= 0) { %>
-                          <a href="#" class="add_cart">out of stock <i class="ti-heart" onclick="addToWishlist('<%= product._id %>')"></i></a>
-                        <% } else { %>
-                        <% if(typeof user !== 'undefined'){%>
-                        <a href="#" class="add_cart" onclick="addtocart('<%= product._id %>')" data-product-id="<%= product._id %>">+ add to cart<i class="ti-heart" onclick="addToWishlist('<%= product._id %>')"></i></a>
-                        <%} else { %>
-                          <a href="/login" class="add_cart">Login its yours</a>
-                          <%}%>
+            <div class="col-lg-5 col-sm-6 ">
+              <div class="single_product_item">
+                <a href="/singleProduct/<%= product.id %>" class="product-img">
+                  <img src="/public/uploadProduct/<%= product.image[0] %>" alt="<%= product.product_name %>" style="width: 75%; height: 150px; object-fit: contain;">
+                </a>
+                <div class="single_product_text">
+                  <h4><%= product.product_name %></h4>
+                  <h3>Price: ₹<%= product.product_price.toFixed(2) %></h3>
+                  <h4>Sales Price: ₹<%= product.product_sales_price.toFixed(2) %></h4>
+                  <% if (product.quantity <= 0) { %>
+                    <a href="#" class="add_cart">Out of Stock
+                      <i href="#" class="like_us" onclick="addToWishlist('<%= product._id %>')">
+                        <a>
+                          <svg class="" viewBox="0 0 24 24" width="15" height="15" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="m12 20.703.343.667a.748.748 0 0 1-.686 0l-.003-.002-.007-.003-.025-.013a31.138 31.138 0 0 1-5.233-3.576C3.8 15.573 1 12.332 1 8.514v-.001C1 5.053 3.829 2.5 6.736 2.5 9.03 2.5 10.881 3.726 12 5.605 13.12 3.726 14.97 2.5 17.264 2.5 20.17 2.5 23 5.052 23 8.514c0 3.818-2.801 7.06-5.389 9.262a31.148 31.148 0 0 1-5.233 3.576l-.025.013-.007.003-.002.001ZM6.736 4C4.657 4 2.5 5.88 2.5 8.514c0 3.107 2.324 5.96 4.861 8.12a29.655 29.655 0 0 0 4.566 3.175l.073.041.073-.04c.271-.153.661-.3801 1.13-.674.94-.588 2.19-1.441 3.436-2.502 2.537-2.16 4.861-5.013 4.861-8.12C21.5 5.88 19.343 4 17.264 4c-2.106 0-3.801 1.389-4.553 3.643a.751.751 0 0 1-1.422 0C10.537 5.389 8.841 4 6.736 4Z">
+                            </path>
+                          </svg>
+                        </a>
+                      </i>
+                    </a>
+                  <% } else { %>
+                    <% if (user) { %>
+                      <% const productInCart = cart.products.some(cartProduct => cartProduct.product.equals(product._id)); %>
+                      <% if (productInCart) { %>
+                        <a href="/cartt">
+                          Go to Cart
+                        </a>
+                      <% } else { %>
+                        <a href="#" class="add_cart" onclick="addtocart('<%= product._id %>')" data-product-id="<%= product._id %>">
+                          + Add to Cart
+                        </a>
                       <% } %>
-                    </div>
+                      <i href="#" class="like_us" onclick="addToWishlist('<%= product._id %>')">
+                        <a>
+                          <svg class="" viewBox="0 0 24 24" width="15" height="15" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="m12 20.703.343.667a.748.748 0 0 1-.686 0l-.003-.002-.007-.003-.025-.013a31.138 31.138 0 0 1-5.233-3.576C3.8 15.573 1 12.332 1 8.514v-.001C1 5.053 3.829 2.5 6.736 2.5 9.03 2.5 10.881 3.726 12 5.605 13.12 3.726 14.97 2.5 17.264 2.5 20.17 2.5 23 5.052 23 8.514c0 3.818-2.801 7.06-5.389 9.262a31.148 31.148 0 0 1-5.233 3.576l-.025.013-.007.003-.002.001ZM6.736 4C4.657 4 2.5 5.88 2.5 8.514c0 3.107 2.324 5.96 4.861 8.12a29.655 29.655 0 0 0 4.566 3.175l.073.041.073-.04c.271-.153.661-.3801 1.13-.674.94-.588 2.19-1.441 3.436-2.502 2.537-2.16 4.861-5.013 4.861-8.12C21.5 5.88 19.343 4 17.264 4c-2.106 0-3.801 1.389-4.553 3.643a.751.751 0 0 1-1.422 0C10.537 5.389 8.841 4 6.736 4Z">
+                            </path>
+                          </svg>
+                        </a>
+                      </i>
+                    </a>
+                    <% } else { %>
+                      <a href="/login" class="add_cart">Login to Purchase</a>
+                    <% } %>
+                  <% } %>
                 </div>
+              </div>
             </div>
           <% }) %>
-        </div>  
+        </div>
+        
 
 
 
@@ -96,13 +167,14 @@
         
         
           
-
+        
+        
         <div class="row mt-5 pb-5">
           <div class="col-lg-12">
             <div class="custom-pagination">
               <% if (totalpages) { %>
                 <ul class="list-unstyled">
-                  <% if (currentpage > totalpages) { %>
+                  <% if (currentpage > 1) { %>
 
                     <li>
                       <a href="?page=<%= currentpage - 1 %>">
@@ -116,7 +188,7 @@
                   <% pages.forEach(page => { %>
                     <li class="active"><span><a href="?page=<%= page %>"><%= page %></a></span></li>
                   <% }); %>
-                  <% if (currentpage > 1) { %>
+                  <% if (currentpage < totalpages) { %>
                     <li>
                       <a href="?page=<%= currentpage + 1 %>">
                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -268,7 +340,7 @@
   </div>
 
 
-  <script>
+  <!-- <script>
     document.addEventListener("DOMContentLoaded", function () {
       const categoryList = document.getElementById("categoryList");
       const products = document.querySelectorAll(".col-md-6");
@@ -289,7 +361,7 @@
         }
       });
     });
-  </script>
+  </script> -->
 
 
   <script>
@@ -368,5 +440,313 @@
 			}
 		}
 	</script>
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const productCategory = new Set();
+    const productRange = new Set();
+    let sort = undefined
+    let search;
+    let pcategory = []
+    let pr = []
+    function categoryAddOrRemoveble(value) {
+      if (productCategory.has(value)) {
+        productCategory.delete(value);
+      } else {
+        productCategory.add(value);
+      }
+    }
+
+
+    function rangeAddOrRemovable(value) {
+      if (productRange.has(value)) {
+        productRange.delete(value);
+      } else {
+        productRange.add(value)
+      }
+    }
+
+    const categoryButton = document.querySelectorAll('.category-control-input');
+
+    const priceCheckboxes = document.querySelectorAll('.price-control-input');
+
+    const priceButton = document.querySelectorAll('.price-control-input');
+
+    const selectElement = document.querySelector('.sort-control-input')
+
+    // const productsContainer = document.querySelector('.colorlib-product .container .row.row-pb-md');
+    const productsContainer = document.querySelector('.containProduct');
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton')
+    search = searchInput;
+
+    // {{!-- const paginationButtons = document.querySelectorAll('.pagination-button');
+    // const productsContainer = document.querySelector('.colorlib-product .container .row.row-pb-md');
+    // const paginationContainer = document.querySelector('.paginationhome .unlist'); --}}
+
+    categoryButton.forEach(button => {
+      button.addEventListener('change', async () => {
+        const category = button.getAttribute('data-category');
+        categoryAddOrRemoveble(category)// i have doubts category or name
+        pcategory = [...productCategory]
+     
+        fetch('/filterProduct', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            productRange: pr,
+            productCategory: pcategory,
+            sort: sort,
+            search: search,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.noProducts) {
+              Swal.fire({
+                title: 'No matching products',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#88c8bc',
+              }).then((result) => {
+                console.log('fail');
+                if (result.isConfirmed) {
+                  window.location.href = '/shop';
+                }
+              });
+            } else {
+              updateProducts(data.products);
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+      })
+    })
+    priceButton.forEach(button => {
+      button.addEventListener('change', async () => {
+        let price = button.getAttribute('data-range');
+        rangeAddOrRemovable(price)
+        pr = [...productRange]
+        $.ajax({
+          url: '/filterProduct',
+          data: {
+            productRange: pr,
+            productCategory: pcategory,
+            sort: sort,
+            search: search
+          },
+          method: 'post',
+          success: (response) => {
+            console.log('respojkfj',response);
+            if (response.noProducts) {
+              Swal.fire({
+                title: 'No matching product',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#88c8bc',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.href = '/shop'
+                }
+              })
+            } else {
+              console.log('respons-price',response.products);
+              updateProducts(response.products);
+            }
+          }
+        })
+      })
+    })
+
+    searchButton.addEventListener('click', function () {
+      search = searchInput.value;
+      $.ajax({
+        url: '/filterProduct',
+        data: {
+          productRange: pr,
+          productCategory: pcategory,
+          sort: sort,
+          search: search
+        },
+        method: 'post',
+        success: (response) => {
+          if (response.noProducts) {
+            Swal: fire({
+              title: 'No Matching Products',
+              confirmButtonText: 'Ok',
+              confirmButtonColor: '#88c8bc',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = '/shop'
+              }
+            })
+          } else {
+            console.log('ppppppppp::::::',response.products);
+            updateProducts(response.products);
+          }
+        }
+      })
+    })
+    selectElement.addEventListener('change', function () {
+      const selectedIndex = this.selectedIndex;
+      const selectedOption = this.options[selectedIndex]
+      const sortValue = selectedOptions.getAttribute('data-sort');
+      sort = sortValue
+      console.log(sort, 'sorting')
+    })
+
+    // {{!-- paginationContainer.addEventListener('click', (event) => {
+    //   const target = event.target;
+    //   if (target.classList.contains('pagination-button')) {
+    //     page = target.getAttribute('data-page');
+    //     $.ajax({
+    //       url: '/filterProduct',
+    //       data: {
+    //         productRange: pr,
+    //         productCategory: pcategory,
+    //         sort: sort,
+    //         search: search,
+    //         page: page
+    //       },
+    //       method: 'post',
+    //       success: (response) => {
+    //         if (response.noProducts) {
+    //           Swal.fire({
+    //             title: 'No matching Products',
+    //             confirmButtonText: 'OK',
+    //             confirmButtonColor: '#88c8bc',
+    //           }).then((result) => {
+    //             if (result.isConfirmed) {
+    //               window.location.href = 'productList'
+    //             }
+    //           });
+    //         } else {
+    //           updateProducts(response.product);
+    //           updatePagination(response.currentPage, response.totalPage, response.pages)
+
+    //         }
+    //       }
+    //     })
+    //   }
+    // }); --}}
+
+    // function updateProducts(products) {
+    //   productsContainer.innerHTML = '';
+    //   products.forEach(product => {
+    //     const productHTML =
+    //       `<div class="col-lg-3 col-sm-6 mt-3">
+    //       <a href="/productdetails/${product._id} ">
+    //             <div class="card" style="border-radius: 1px; border: 1px solid black;">
+    //           <img src="/product-images/${product.images[0]}" alt="product-image"
+    //             style="width: 200px; height: 250px; " class="img-fluid mx-auto d-block" alt="img">
+    //           <div class="card-body text-center">
+    //             <h5 class="card-title">${product.product_name}</h5>
+    //             <p class="card-text">₹${product.product_sales_price}</p>
+
+    //           </div>
+    //         </div>
+    //       </a>
+    //     </div>`
+
+    //     productsContainer.insertAdjacentHTML('beforeend', productHTML);
+    //      console.log('contain',productsContainer);
+
+    //   })
+    // }
+    // const products = [{id:1,image:'123',product_name:'hjh',product_price:20000,product_sales_price:120,quantity:1}];
+
+function generateProductHTML(product) {
+  return `
+    <div class="col-lg-5 col-sm-6 containProduct">
+      <div class="single_product_item">
+        <a href="/singleProduct/${product.id}" class="product-img">
+          <img src="/public/uploadProduct/${product.image[0]}" alt="${product.product_name}" style="width: 75%; height: 150px; object-fit: contain;">
+        </a>
+        <div class="single_product_text">
+          <h4>${product.product_name}</h4>
+          <h3>Price: ₹${product.product_price.toFixed(2)}</h3>
+          <h4>Sales Price: ₹${product.product_sales_price.toFixed(2)}</h4>
+          
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+
+function updateProducts(products) {
+  const productsContainer = document.querySelector(".products-container");
+  console.log('container',productsContainer);
+  // const productsContainer = document.querySelector(".dataBindig");
+  
+
+  if (productsContainer) {
+    productsContainer.innerHTML = '';
+    console.log('producttttt' , products);
+    products.forEach(product => {
+      // console.log('inside foreach',products);
+      const productHTML = generateProductHTML(product);
+      productsContainer.insertAdjacentHTML('beforeend', productHTML);
+  
+      // productsContainer.insertAdjacentHTML('beforeend', productHTML);
+      
+    });
+  }
+}
+
+// Call the updateProducts function to display the products
+// updateProducts(products);
+
+//     {{!-- function updatePagination(currentPage, totalPage, pages) {
+//   paginationContainer.innerHTML = ''; // Remove the comma at the end and use a semicolon here
+//   let paginationHtml = '';
+//   if (currentPage > 1) {
+//       paginationHtml += `
+//       <li style='margin-right: 10px;'>
+//           <a>
+//               <button data-page='${currentPage - 1}' class='btn mb-2 btn-secondary pagination-button' id='paginationButton'>Previous</button>
+//           </a>
+//       </li>
+//       `;
+//   }
+//   pages.forEach(page => {
+//       if (page === currentPage) {
+//           paginationHtml += `
+//           <li style="margin-right: 10px;" class="active">
+//               <a href="#">
+//                   <button type="button" data-page="${page}" class="btn mb-2 btn-primary pagination-button">${page}</button>
+//               </a>
+//           </li>
+//           `;
+//       } else {
+//           paginationHtml += `
+//           <li style="margin-right: 10px;">
+//               <a>
+//                   <button type="button" data-page="${page}" class="btn mb-2 btn-secondary pagination-button" id="paginationButton">${page}</button>
+//               </a>
+//           </li>
+//           `;
+//       }
+//   });
+//   if (currentPage < totalPage) {
+//       paginationHtml += `
+//       <li style="margin-right: 10px;">
+//           <a>
+//               <button data-page="${currentPage + 1}" class="btn mb-2 btn-secondary pagination-button" id="paginationButton">Next</button>
+//           </a>
+//       </li>
+//       `;
+//   }
+//   paginationContainer.insertAdjacentHTML('beforeend', paginationHtml); // Correct the typo here
+// } --}}
+
+
+  });
+
+
+</script> 
+
 
 <%- include('../layouts/homeLayout/footer')%>

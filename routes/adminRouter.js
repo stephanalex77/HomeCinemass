@@ -74,6 +74,8 @@ admin_route.post('/category/unlist/:_id',auth.isLogin, categoryController.unList
 // admin_route.get('/category/unlist/:_id',auth.isLogin, categoryController.unListCategory);
 
 admin_route.get('/categories/delete-category',auth.isLogin,categoryController.deleteCategory);
+// admin_route.get('/categories/add-offer',auth.isLogin,categoryController.loadCategoryOffer);
+admin_route.get('/categoryOffer',auth.isLogin,categoryController.categoryOffer);
 
 // Route to list a category
 admin_route.get('/admin/categories/list/:categoryId',auth.isLogin, categoryController.listCategory);
@@ -110,7 +112,7 @@ admin_route.get('/couponlist',auth.isLogin,couponController.couponList)
 admin_route.get('/coupons', auth.isLogin, couponController.coupons)
 admin_route.post('/addCoupon',auth.isLogin, couponController.addCoupon)
 admin_route.get('/edit-coupon/:id',auth.isLogin,couponController.editCouponPage)
-admin_route.put('/editcoupon/:id',auth.isLogin,couponController.editCoupon)
+admin_route.post('/editcoupon/:id',auth.isLogin,couponController.editCoupon)
 admin_route.post('/unListCoupon', couponController.unListCoupon);
 admin_route.post('/listCoupon', couponController.listCoupon);
 

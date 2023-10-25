@@ -91,19 +91,24 @@
                   <tbody>
                     <% cart.products.forEach(product => { %>
                       <tr>
-                        <td><%= product.product.product_name %> <strong class="mx-2">x</strong> <%= product.quantity %></td>
-                        <td >₹<%= (product.product.product_sales_price * product.quantity).toFixed(2) %></td>
+                        <td><%= product.product.product_name %> <strong class="mx-2">x</strong>
+                          <span class="quantity-display" data-product-id="<%= product._id %>"><%= product.quantity %></span>
+                        </td>
+                        <td class="price" data-product-id="<%= product._id %>">₹<%= product.product_total.toFixed(2) %></td>
                       </tr>
+                      
                     <% }); %>
                     <tr>
-                      <td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
-                      <td class="text-black">₹<%= totalSubtotal.toFixed(2) %></td>
+                      <td class="text-black font-weight-bold"><strong>Cart Sub Total</strong></td>
+                      <td class="text-black" id="cartSubtotalValue">₹<%= cart.cartSubtotal.toFixed(2) %></td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                       <td class="text-black font-weight-bold"><strong>Total</strong></td>
-                      <td class="text-black font-weight-bold">₹<%= totalSubtotal.toFixed(2) %></td>
-                    </tr>
+                      <td class="text-black font-weight-bold" id="cartSubtotalValue">₹<span><%= cart.cartSubtotal.toFixed(2) %></span></td>
+                    </tr> -->
+                    
                   </tbody>
+                  
                   
                 </table>
             
@@ -270,8 +275,89 @@
   </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function () {
+  $('.decrement-button').click(function () {
+    updateQuantity($(this).data('product-id'), 'decrement');
+  });
 
-    <script>
+  $('.increment-button').click(function () {
+    updateQuantity($(this).data('product-id'), 'increment');
+  });
+
+  // Listen to input changes to update the price when the quantity changes
+  $('.quantity-input').change(function () {
+    const productId = $(this).data('product-id');
+    updatePrice(productId);
+    // updateCartTotal();
+  });
+});
+
+function updateQuantity(productId, operation) {
+  const quantityInput = $(`#quantityInput${productId}`);
+  let currentQuantity = parseInt(quantityInput.val(), 10);
+
+  if (operation === 'decrement') {
+    currentQuantity = Math.max(currentQuantity - 1, 1);
+  } else if (operation === 'increment') {
+    currentQuantity += 1;
+  }
+
+  quantityInput.val(currentQuantity);
+  $(`.quantity-display[data-product-id="${productId}"]`).text(currentQuantity);
+
+  // Update the associated price
+  updatePrice(productId);
+  // updateCartTotal();
+
+  $.ajax({
+    url: `/update-quantity/${operation}`,
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify({
+      productId: productId,
+      quantity: currentQuantity,
+    }),
+    success: function (data) {
+     console.log('my dataaaaaa',data);
+     updateCartTotal(data);
+    },
+    error: function (error) {
+      console.error('Error:', error);
+    },
+  });
+}
+
+
+
+
+function updatePrice(productId) {
+  const quantityInput = $(`#quantityInput${productId}`);
+  const priceElement = $(`.price[data-product-id="${productId}"]`);
+  const salesPrice = parseFloat(priceElement.data('sales-price'));
+  const quantity = parseInt(quantityInput.val(), 10);
+  const totalPrice = (salesPrice * quantity).toFixed(2);
+
+  priceElement.text(`₹${totalPrice}`);
+}
+
+function updateCartTotal({cart}) {
+
+  let cartTotal = 0;
+  // Assuming `cart.products` contains the cart items
+  cart.products.forEach(product => {
+    const total = product.product_total; // This should be updated on the server
+    cartTotal += parseFloat(total);
+  });
+
+  const cartSubtotal = cartTotal.toFixed(2);
+  console.log($('#cartSubtotal'));
+  $('#cartSubtotalValue').text(`₹${cartSubtotal}`);
+ 
+}
+
+</script>
+ <!-- <script>
       $(document).ready(function () {
         $('.decrement-button').click(function () {
           updateQuantity($(this).data('product-id'), 'decrement');
@@ -312,6 +398,7 @@
             quantity: currentQuantity,
           }),
           success: function (data) {
+            const cartSubtotal=document.getElementById('cartSubtotal') 
             console.log(data);
           },
           error: function (error) {
@@ -329,7 +416,7 @@
         
         priceElement.text(`₹${totalPrice}`);
       }
-    </script>
+    </script> -->
     
     
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

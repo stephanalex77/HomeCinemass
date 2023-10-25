@@ -17,9 +17,19 @@ const cartSchema  = new mongoose.Schema({
                 default: 1,
                 min: 1,
             },
+
+            product_total:{
+                type:Number,
+                required:true
+            }
+
         
         }
     ],
+    cartSubtotal:{
+        type:Number,
+        required:true
+    },
   
 })
 

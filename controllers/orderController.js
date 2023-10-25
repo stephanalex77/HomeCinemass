@@ -4,6 +4,7 @@ const Products = require("../models/productModel");
 const User = require("../models/userModel");
 const Coupon = require("../models/couponModel")
 const Order = require("../models/orderModel")
+const Wallet = require("../models/walletModel")
 const razorpay = require('razorpay');
 
 const key_secret = process.env.RAZORPAY_SECRET_KEY;
@@ -29,7 +30,6 @@ const getOrderReview = async (req, res) => {
   const user = await User.findById({ _id: userId });
 
   try {
-
     const order = await Order.findOne({ user: userId }).populate('shippingAddress');
     const cart = await Cart.findOne({ user: userId }).populate('products.product');
     const currentDate = new Date();
@@ -37,26 +37,35 @@ const getOrderReview = async (req, res) => {
     const coupons = await Coupon.find({
       isListed: true,
       expirationDate: { $gte: currentDate }
-    })
-    console.log("coupons:::", coupons);
+    });
+
     if (cart && cart.products) {
-      const totalSubtotal = cart.products.reduce((total, product) => {
-        const subtotal = product.product.product_sales_price * product.quantity;
-        return total + subtotal;
+      // Calculate cartSubtotal based on your cart schema
+      const cartSubtotal = cart.products.reduce((total, product) => {
+        return total + product.product_total;
       }, 0);
 
+      // Now, apply the coupon to calculate the discount amount
+      const couponCode = req.query.couponCode;// Replace with the actual coupon code
+      const coupon = await Coupon.findOne({ couponCode: couponCode });
+      console.log('coupojln',coupon)
+
+     const discountAmount = req.session.discountAmount;
+     
       // Find the default address
       const defaultAddress = user.address.find(address => address.is_default);
 
-      res.render('orderreview', { user, cart, coupons, totalSubtotal, defaultAddress, order });
-
+      res.render('orderreview', { user, cart, coupons,coupon, cartSubtotal, defaultAddress, order, discountAmount });
     } else {
-      res.send('else')
+      res.send('else');
     }
   } catch (error) {
     console.log(error.message);
   }
-}
+};
+
+
+
 
 
 const orderDetails = async (req, res) => {
@@ -83,7 +92,7 @@ const makeOrder = async (req, res) => {
   try {
     const userId = req.session.user_id;
     const user = await User.findById({ _id: userId });
-
+    const orderid = await generateOrderID();
     const shippingAddress = user.address.find(address => address.is_default);
     const { payment_option, GrandTotal } = req.body;
 
@@ -97,13 +106,15 @@ const makeOrder = async (req, res) => {
     if (payment_option === 'cod') {
       const newOrder = new Order({
         user: userId,
+        orderId: orderid,
         products: cart.products.map((item) => ({
           product: item.product._id,
           quantity: item.quantity,
         })),
         shippingAddress,
         paymentMethod: payment_option,
-        total_amount,
+        total_amount:GrandTotal,
+        
         createdAt: new Date(),
       });
 
@@ -122,20 +133,26 @@ const makeOrder = async (req, res) => {
           product: item.product._id,
           quantity: item.quantity,
         })),
+        // orderId:userId,
         shippingAddress,
         paymentMethod: payment_option,
-        total_amount,
+        total_amount:GrandTotal,
         createdAt: new Date(), // Corrected field name
       });
 
-      const savedOrder = await newOrder.save();
-
-      // Clear the cart (you may need to update this part based on how you manage the cart)
-      cart.products = [];
-      await cart.save();
+      req.session.newOrder = newOrder;
+      const savedOrder = req.session.newOrder
 
       // Generate a Razorpay order
       const generateOrder = await generateOrderRazorpay(savedOrder._id, total_amount);
+      console.log(savedOrder._id,"----------------------------------------------")
+
+      console.log(generateOrder.id,"========================");
+      // const savedOrder = await newOrder.save();
+
+      // Clear the cart (you may need to update this part based on how you manage the cart)
+   
+  
 
       // Store the generated order details in the session
 
@@ -151,73 +168,17 @@ const makeOrder = async (req, res) => {
   }
 };
 
+const generateOrderID = async () => {
+  try {
+    const timestamp = new Date().getTime();
+    const random = Math.floor(Math.random() * 1000);
+    return `${timestamp}-${random}`;
+  } catch (error) {
+    console.log(error.message);
+    throw error; 
+  }
+}
 
-// const makeOrder = async (req, res) => {
-//   try {
-
-//     const userId = req.session.user_id;
-//   const user = await User.findById({ _id: userId });
-
-//     const shippingAddress = user.address.find(address => address.is_default);
-//     const { payment_option  } = req.body;
-//     console.log("address undo????",shippingAddress);
-//     const cart = await Cart.findOne({ user: userId }).populate({path:'products.product'});
-
-//     let total_amount = 0;
-//     cart.products.forEach((product) => {
-//       total_amount += product.product.product_sales_price * product.quantity;
-//     });
-
-//     if (payment_option === "COD") {
-//       const newOrder = new Order({
-//         user: userId,
-//         products: cart.products.map((item) => ({
-//           product: item.product._id,
-//           quantity: item.quantity,
-//         })),
-//         shippingAddress,
-//         paymentMethod: payment_option,
-//         total_amount,
-//         createdAt: new Date(), // Corrected field name
-//       });
-
-//       const savedOrder = await newOrder.save();
-
-//       // Clear the cart (you may need to update this part based on how you manage the cart)
-//       cart.products = [];
-//       await cart.save();
-
-//       res.json({ message: 'Order created successfully' });
-//     } else if (payment_option === 'online') {
-//       console.log("Online Payment");
-//       const newOrder = new Order({
-//         user: userId,
-//         products: cart.products.map((item) => ({
-//           product: item.product._id,
-//           quantity: item.quantity,
-//         })),
-//         shippingAddress,
-//         paymentMethod: payment_option,
-//         total_amount,
-//         createdAt: new Date(), // Corrected field name
-//       });
-
-//       // Create the order document first
-//       const savedOrder = await newOrder.save();
-
-//       // Generate a Razorpay order
-//       const generateOrder = await generateOrderRazorpay(savedOrder._id, total_amount);
-
-//       // Store the generated order details in the session
-//       req.session.newOrder = savedOrder;
-
-//       res.json({ generateOrder, method: 'online' });
-//     }
-//   } catch (error) {
-//     console.error('Error creating order:', error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// };
 
 
 const generateOrderRazorpay = (orderId, total) => {
@@ -275,11 +236,17 @@ const verifyRazorpayPayment = async (req, res) => {
   const cart = await Cart.findOne({ user: userId }).populate('products.product');
   try {
     const { razorpayOrderId, razorpayPaymentId, secret } = req.body;
+    console.log("Razorpay Order ID:", razorpayOrderId)
     verifyOrderPayment(req.body)
       .then(async () => {
-
         console.log("Payment SUCCESSFUL");
+        const orders = req.session.newOrder
+        const saveOrder = new Order(orders)
+        console.log('orderee', saveOrder)
+        await saveOrder.save()
 
+        cart.products = [];
+        await cart.save();
         res.json({ status: true });
 
       }).catch((err) => {
@@ -313,11 +280,11 @@ const showorder = async (req, res) => {
     
     // Sort orders by createdAt field in descending order (most recent first)
     const orders = await Order.find({ user: userId })
-      .populate("user.shippingAddress")
       .sort({ createdAt: -1 });
-
-    console.log("my orders:::", orders);
-    res.render('orderDetails', { orders, user });
+    
+    
+    console.log("my orders:::", orders[0].shippingAddress);
+    res.render('orderDetails', { orders, user,shippingAddress:orders[0].shippingAddress[0] });
   } catch (error) {
     console.error('Error retrieving orders:', error);
     res.status(500).send('Internal Server Error');
@@ -353,6 +320,14 @@ const cancelOrder = async (req, res) => {
     if (daysDifference > 10) {
       return res.status(400).json({ message: 'Cannot cancel an order placed for more than 10 days' });
     }
+
+    if (order.paymentMethod !== 'cod') {
+      const canceledAmount = order.totalprice;
+      const userId = order.user;
+      const transactionType = 'credit';
+      await updateWalletBalance(userId, canceledAmount, transactionType);
+  }
+
 
     order.status = 'Cancelled';
     const orderssss = await order.save();
@@ -409,6 +384,45 @@ const orderStatusAdminSide = async(req, res)=>{
   }
 }
 
+
+
+const walletDispaly = async(req, res)=>{
+  try{
+      
+          const userId = req.session.user_id; 
+  
+          const wallet = await Wallet.findOne({ userId });
+          console.log('walle::::',wallet)
+          if (!wallet) {
+              return res.render('wallet', { walletTransactions: [] });
+          }
+          res.render('walletHistory', { walletTransactions: wallet });
+      } catch (error) {
+          console.error(error.message);
+          res.status(500).send('Internal Server Error');
+      }
+ 
+}
+const updateWalletBalance = async (userId, amount)=> {
+  try {
+    console.log('hfs')
+    let wallet = await Wallet.findOne({ userId });
+    if (!wallet) {
+      wallet = new Wallet({
+        userId,
+        balance: amount,
+      });
+    } else {
+      wallet.balance += amount;
+    }
+    console.log('rbkjbc')
+    await wallet.save();
+    return { success: true, message: 'Wallet updated successfully' };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: 'Error updating wallet' };
+  }
+}
 module.exports = {
 
   populateProductDetails,
@@ -421,6 +435,8 @@ module.exports = {
   verifyRazorpayPayment,
   cancelOrder,
   returnOrder,
-  orderStatusAdminSide
+  orderStatusAdminSide,
+  
+  walletDispaly
 
 }

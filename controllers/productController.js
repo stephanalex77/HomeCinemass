@@ -4,6 +4,8 @@ const cropImage = require("../multer/cropProductImg");
 const User = require("../models/userModel");
 const validator = require("validator")
 const Category = require("../models/categoryModel")
+const Cart = require("../models/cartModel")
+const mongoose = require('mongoose')
 
 
 const getProduct = async (req, res) => {
@@ -176,14 +178,24 @@ const editProduct = async (req, res) => {
 
 const getShopProduct = async(req, res)=>{
   try {
-     // Fetch orders in descending order of createdOn
-    //  const orders = await Order.find({}).sort({ createdOn: -1 });
+     let sortList ;
+     if(req.query.asc){
+      sortList={product_sales_price:1}
+     }
+     if(req.query.desc){
+      sortList={product_sales_price:-1}
+     }
+
+     let query={}
+
+
 
     //  const products = await Product.find();
-    const products = await Product.find({}).sort({ createdOn: -1 });
+    const products = await Product.find({}).sort(sortList);
     const userId = req.session.user_id; 
     const user = await User.findOne({ _id: userId });
     const categories = await Category.find();
+    const cart = await Cart.findOne({ user: userId });
      const itemsPerPage = 6;
      const currentpage = parseInt(req.query.page) || 1;
      const startIndex = (currentpage - 1) * itemsPerPage;
@@ -194,8 +206,8 @@ const getShopProduct = async(req, res)=>{
      
     //  console.log(orders,"ods");
 
-    res.render("shop", { user, products:currentproduct, categories,pages,currentpage, totalpages  });
-    await cropImage.crop(req);
+    res.render("shop", { user, products:currentproduct, categories,pages,currentpage, totalpages ,cart });
+    // await cropImage.crop(req);
   } catch (error) {
     console.log(error.message);
     
@@ -203,50 +215,110 @@ const getShopProduct = async(req, res)=>{
 }
 
 const getProductInsideCategory = async(req, res)=>{
-  try {
-    const categoryId = req.params.categoryId;
-    console.log(categoryId);
+  console.log('getProductInsideCategory called');
+  const productCategory = req.body.productCategory;
+  const productRange = req.body.productRange;
+  let sort = req.body.sort
+  let serarch = req.body.search;
+  let rangeFilter = []
+  let filter = { }
+  if (serarch) {
+    const regex = new RegExp('^' + serarch, 'i');
+    filter.product_name = regex
+  }
+  if (productCategory) {
+    filter.category_id = { $in: productCategory }
+  }
 
-    if (categoryId === 'all') {
-        // Fetch all products
-        // Replace this with your actual database query
-        const products = await Product.find();
-        res.json(products);
-    } else {
-        // Fetch products for the specified category
-        // Replace this with your actual database query
-        const products = await Product.find({ category_id: categoryId });
-        res.json(products);
+  console.log("productCategory================",productCategory)
+  console.log("productRange================",productRange)
+
+
+  if (productRange) {
+    for (let i = 0; i < productRange.length; i++) {
+      const el = productRange[i];
+      if (el === 'lt15000') {
+        rangeFilter.push({ product_sales_price: { $lte: 15000 } });
+      }
+      if (el === 'lt40000') {
+        rangeFilter.push({ product_sales_price: { $gt: 15000, $lte: 40000 } });
+      }
+      if (el === 'lt80000') {
+        rangeFilter.push({ product_sales_price: { $gt: 40000, $lte: 80000 } });
+      }
+      if (el === 'lt150000') {
+        rangeFilter.push({ product_sales_price: { $gt: 80000, $lte: 150000 } });
+      }
+      if (el === 'lt200000') {
+        rangeFilter.push({ product_sales_price: { $gt: 150000, $lte: 200000 } });
+      }
+      if (el === 'gt200000') {
+        rangeFilter.push({ product_sales_price: { $gt: 200000 } });
+      }
     }
-} catch (error) {
-    console.error('Error fetching products by category:', error);
-    res.status(500).json({ error: 'An error occurred while fetching products' });
+  }
+
+  // console.log("range filter::::",rangeFilter );
+  if (rangeFilter.length)
+    filter.$or = rangeFilter
+
+console.log("range filter::::",rangeFilter );
+  console.log(":=:=:===:=:=:",filter)
+  if (sort) {
+    if (sort == 'HL') {
+      sort = { product_sales_price: -1 }
+    }
+    if (sort == 'LH') {
+      sort = { product_sales_price: 1 }
+    }
+    if (sort == 'NA') {
+      sort = { date: -1 }
+    }
+  } else {
+    sort = { date: -1 }
+  }
+  
+  const products = await getFilteredProducts(filter, sort);
+  console.log("=======>",products)
+
+
+
+
+
+  const itemsPerPage = 6;
+  let currentPage = parseInt(req.body.page);
+  if (isNaN(currentPage)) {
+    currentPage = 1;
+  }
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedProducts = products.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+  const pages = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pages.push(i);
+  }
+  if (products.length) {
+    res.json({ products: paginatedProducts, currentPage, totalPages, pages })
+  } else {
+    res.json({ noProducts:true})
 }
+
 };
-
-const searchProduct = async (req, res) => {
+const getFilteredProducts = async (filter, sort) => {
   try {
-    const { keyword, category, } = req.query;
-    let query = {};
-
-    if (keyword) {
-      query.product_name = { $regex: new RegExp(keyword, 'i') };
-    }
-
-    if (category) {
-      query.category_id = category; 
-    }
-
-    
-    const products = await Product.find(query).populate('category_id');
-    const categories = await Category.find();
-    
-    res.render('shop', { products, categories });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
+    console.log('Filter:', filter);
+    const products = await Product.find(filter).sort(sort);
+    console.log('Filtered Products:', products);
+    return products;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 };
+
+
+
 
 
 
@@ -262,5 +334,6 @@ module.exports = {
   editproductLoad,
   getShopProduct,
   getProductInsideCategory,
-  searchProduct
+  // searchProduct,
+  // getFilterName
 };

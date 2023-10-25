@@ -100,17 +100,42 @@ const deleteCategory = async (req, res) => {
     console.log("Deleting category with ID:", id);
     await Category.deleteOne({ _id: id });
     console.log("Category deleted successfully.");
+
     res.redirect("/admin/category");
+
   } catch (error) {
     console.log(error.message);
-  }
+  }
 };
+
+const loadCategoryOffer = async (req, res) => {
+  try {
+    const id = req.query.id;
+    console.log("Deleting category with ID:", id);
+    await Category.findOne({ _id: id });
+    console.log("Category deleted successfully.");
+    res.render("/admin/category");
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const categoryOffer = async(req, res)=>{
+  try {
+    res.render("categoryOffer");
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 
 module.exports = {
   getCategory,
   addCategory,
   unListCategory,
   listCategory,
-  deleteCategory
+  deleteCategory,
+  loadCategoryOffer,
+  categoryOffer
 
 };
