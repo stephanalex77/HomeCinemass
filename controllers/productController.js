@@ -22,7 +22,7 @@ const getProduct = async (req, res) => {
 // ADD PRODUCT AT ADMIN SIDE
 const addProduct = async (req, res) => {
   try {
-    if (!req.files || req.files.length===0) {
+    if (!req.files || req.files.length === 0) {
       return res.status(400).send("No files were uploaded.");
     }
     const images = req.files.map((file) => file.filename);
@@ -33,16 +33,23 @@ const addProduct = async (req, res) => {
     if (!category) {
       return res.status(400).json({ error: "Category not found" });
     }
+
+    // Calculate the product_sales_price with a discount
+    const product_price = req.body.product_price;
+    const specialOffer = req.body.product_sales_price; 
+    const discount = (product_price * specialOffer) / 100;
+    const product_sales_price = product_price - discount;
+
     const product = new Product({
       product_name: req.body.product_name,
-      product_price: req.body.product_price,
-      product_sales_price: req.body.product_sales_price,
+      product_price: product_price, 
+      product_sales_price: product_sales_price, 
       quantity: req.body.quantity,
       description: req.body.description,
       image: images,
       category_id: category._id,
     });
-    
+
     await product.save();
     const categories = await getCategoryList();
     res.render("admin/product", { categories });
@@ -50,6 +57,7 @@ const addProduct = async (req, res) => {
     console.log(error);
   }
 };
+
 
 
 
@@ -81,6 +89,7 @@ const getProductDetails = async (req, res) => {
 // SHOW PRODUCT DETAILS AT USER SIDE
 const showProductDetails = async (req, res) => {
   try {
+
     const productId = req.params.productId;
     // console.log("============================================");
     // console.log(productId);
@@ -88,12 +97,14 @@ const showProductDetails = async (req, res) => {
     const userId = req.session.user_id;
     const user = await User.findById({ _id: userId });
     const category = await Category.findById(product.category_id);
+    const cart = await Cart.findOne({ user: userId });
+
     // console.log("++++++++++++++++++");
     if (!product) {
    
       return res.status(404).send("Product not found");
     }
-    res.render("singleProduct", {user, product, categoryName: category.categoryname  });
+    res.render("singleProduct", {user, product, categoryName: category.categoryname, cart  });
     // const products = await Product.find();
     // res.render("singleProduct", { product });
   } catch (error) {
@@ -128,7 +139,15 @@ const listProduct = async (req, res) => {
     const products = await Product.find().populate('category_id');
     const categories = await Category.find();
 
-    res.render("productList", { products, categories });
+    const itemsPerPage = 6;
+     const currentpage = parseInt(req.query.page) || 1;
+     const startIndex = (currentpage - 1) * itemsPerPage;
+     const endIndex = startIndex + itemsPerPage;
+     const totalpages = Math.ceil(products.length / itemsPerPage);
+     const pages = Array.from({ length: totalpages }, (_, i) => i + 1); // Create an array of page numbers
+     const currentproduct = products.slice(startIndex, endIndex);
+
+    res.render("productList", {  categories, products:currentproduct,pages,currentpage, totalpages });
     await cropImage.crop(req);
   } catch (error) {
     console.log(error.message);
@@ -196,6 +215,7 @@ const getShopProduct = async(req, res)=>{
     const user = await User.findOne({ _id: userId });
     const categories = await Category.find();
     const cart = await Cart.findOne({ user: userId });
+    
      const itemsPerPage = 6;
      const currentpage = parseInt(req.query.page) || 1;
      const startIndex = (currentpage - 1) * itemsPerPage;

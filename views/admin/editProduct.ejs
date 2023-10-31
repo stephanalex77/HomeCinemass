@@ -66,9 +66,8 @@
                         <span class="text">Order Manage</span>
                     </a>
                     <div class="submenu">
-                        <a href="page-orders-1.html">Order list 1</a>
-                        <a href="page-orders-2.html">Order list 2</a>
-                        <a href="page-orders-detail.html">Order detail</a>
+                        <a href="/admin/orderManage">Order list 1</a>
+                        
                     </div>
                 </li>
                 
@@ -194,7 +193,7 @@
                             
                            
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                            <a class="dropdown-item text-danger" href="/admin/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
                         </div>
                     </li>
                 </ul>
@@ -273,7 +272,7 @@
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="mb-4">
-                                            <label class="form-label">Offer price</label>
+                                            <label class="form-label">Offer percentage</label>
                                             <input name="product_sales_price" value="<%= product.product_sales_price%>" type="text" class="form-control">
                                         </div>
                                     </div>
@@ -306,9 +305,9 @@
                                         <div class="image-container">
                                             <img src="/public/uploadProduct/<%= image %>" alt="<%= product.product_name %>">
                                             <p><%= image %></p>
+                                            <input class="form-control" type="file" name="images" multiple value="<%= product.image %>">
                                         </div>
                                     <% }); %>
-                                    <input class="form-control" type="file" name="images" multiple value="<%= product.image[0] %>">
                                 </div>
                             </div>
                             

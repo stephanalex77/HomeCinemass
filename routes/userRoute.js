@@ -66,9 +66,10 @@ user_route.get('/home',auth.isLogin,userController.loadHome);
 user_route.get('/logout',auth.isLogin,userController.userLogout);
 
 
+
 // cart management
 
-user_route.get('/cartt', auth.isLogin, cartController.getCart);
+user_route.get('/cartt', auth.isLogin, auth.isBlock, cartController.getCart);
 user_route.post('/add-item-to-cart',auth.isLogin,cartController.addToCart);
 user_route.delete('/removeFromCart/:productId', auth.isLogin, cartController.removeFromCart);
 user_route.get('/checkoutpage', auth.isLogin, cartController.getCheckOutPage);
@@ -100,10 +101,16 @@ user_route.get('/orderreview', auth.isLogin,orderController.getOrderReview);
 user_route.post('/orderreview', auth.isLogin,orderController.getOrderReview);
 user_route.post('/createOrder', auth.isLogin, orderController.createOrder);
 user_route.get('/orders', auth.isLogin, orderController.showorder);
+
+
 // user_route.get('/makeorder', auth.isLogin, orderController.makeOrder);
 user_route.post('/makeorder', auth.isLogin, orderController.makeOrder);
 user_route.post('/verifyPayment',auth.isLogin,orderController.verifyRazorpayPayment);
 user_route.get('/orders/:orderId', auth.isLogin, orderController.showorder);
+user_route.get('/view-order/:userId/:orderId',auth.isLogin, orderController.singleOrderDetails)
+
+
+
 user_route.post('/ordercancel',auth.isLogin, orderController.cancelOrder);
 user_route.post('/orderreturn', auth.isLogin, orderController.returnOrder);
 // user_route.get('/orders/:orderId', auth.isLogin, orderController.returnOrder);

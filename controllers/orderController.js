@@ -6,6 +6,7 @@ const Coupon = require("../models/couponModel")
 const Order = require("../models/orderModel")
 const Wallet = require("../models/walletModel")
 const razorpay = require('razorpay');
+const { OrderedBulkOperation } = require("mongodb");
 
 const key_secret = process.env.RAZORPAY_SECRET_KEY;
 const key_id = process.env.RAZORPAY_ID_KEY;
@@ -45,12 +46,13 @@ const getOrderReview = async (req, res) => {
         return total + product.product_total;
       }, 0);
 
+      console.log("cart totallll:::",cartSubtotal );
       // Now, apply the coupon to calculate the discount amount
       const couponCode = req.query.couponCode;// Replace with the actual coupon code
       const coupon = await Coupon.findOne({ couponCode: couponCode });
       console.log('coupojln',coupon)
 
-     const discountAmount = req.session.discountAmount;
+     const discountAmount = req.session.discountAmount|| 0;
      
       // Find the default address
       const defaultAddress = user.address.find(address => address.is_default);
@@ -97,7 +99,7 @@ const makeOrder = async (req, res) => {
     const { payment_option, GrandTotal } = req.body;
 
     const cart = await Cart.findOne({ user: userId }).populate({ path: 'products.product' });
-
+    req.session.discountAmount = 0
     let total_amount = 0;
     cart.products.forEach((product) => {
       total_amount += product.product.product_sales_price * product.quantity;
@@ -127,13 +129,14 @@ const makeOrder = async (req, res) => {
       res.json({ method: 'cod' });
     } else if (payment_option === 'online') {
       console.log("Online Payment");
+      const tempvalue ="stephan"
       const newOrder = new Order({
         user: userId,
         products: cart.products.map((item) => ({
           product: item.product._id,
           quantity: item.quantity,
         })),
-        // orderId:userId,
+        orderId:tempvalue,
         shippingAddress,
         paymentMethod: payment_option,
         total_amount:GrandTotal,
@@ -144,10 +147,11 @@ const makeOrder = async (req, res) => {
       const savedOrder = req.session.newOrder
 
       // Generate a Razorpay order
-      const generateOrder = await generateOrderRazorpay(savedOrder._id, total_amount);
-      console.log(savedOrder._id,"----------------------------------------------")
+      const generateOrder = await generateOrderRazorpay(savedOrder._id, GrandTotal);
+      // console.log(savedOrder.orderId,"----------------------------------------------")
 
       console.log(generateOrder.id,"========================");
+      req.session.tempOrder = generateOrder.id
       // const savedOrder = await newOrder.save();
 
       // Clear the cart (you may need to update this part based on how you manage the cart)
@@ -234,13 +238,17 @@ const verifyRazorpayPayment = async (req, res) => {
   console.log('funtion')
   const userId = req.session.user_id;
   const cart = await Cart.findOne({ user: userId }).populate('products.product');
+
   try {
     const { razorpayOrderId, razorpayPaymentId, secret } = req.body;
-    console.log("Razorpay Order ID:", razorpayOrderId)
+    // console.log("Razorpay Order ID:", razorpayOrderId)
+    
     verifyOrderPayment(req.body)
       .then(async () => {
         console.log("Payment SUCCESSFUL");
         const orders = req.session.newOrder
+        const orderId =req.session.tempOrder
+        orders.orderId = orderId
         const saveOrder = new Order(orders)
         console.log('orderee', saveOrder)
         await saveOrder.save()
@@ -297,10 +305,7 @@ const showorder = async (req, res) => {
 const cancelOrder = async (req, res) => {
   try {
     const { orderId } = req.body;
-    console.log('Cancel Order Request - Order ID:', orderId);
     const order = await Order.findById(orderId);
-    console.log("what is inside body???", req.body);
-    console.log('order::::::::::::::::::::::', order);
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
@@ -308,15 +313,14 @@ const cancelOrder = async (req, res) => {
     if (order.orderStatus === 'Cancelled') {
       return res.status(400).json({ message: 'Order is already cancelled' });
     }
+
     if (order.orderStatus === 'Delivered') {
       return res.status(400).json({ message: 'Cannot cancel a delivered order' });
     }
     const currentDate = new Date();
-    console.log("current Date:::", currentDate);
     const orderDate = order.createdAt;
-    console.log("qqqqqqqqqqqqqqqqqqqq", orderDate);
     const daysDifference = Math.floor((currentDate - orderDate) / (1000 * 60 * 60 * 24));
-    console.log('bbbbbbbbbbbbbbbbbbbb', daysDifference);
+
     if (daysDifference > 10) {
       return res.status(400).json({ message: 'Cannot cancel an order placed for more than 10 days' });
     }
@@ -331,7 +335,6 @@ const cancelOrder = async (req, res) => {
 
     order.status = 'Cancelled';
     const orderssss = await order.save();
-
     console.log('Order Cancelled:', orderssss);
     // return res.json({ success: true });
     res.json({ success: true });
@@ -344,10 +347,9 @@ const cancelOrder = async (req, res) => {
 
 const returnOrder = async (req, res) => {
   try {
-    console.log("sdfghjkl");
     const { orderId } = req.body;
     const order = await Order.findById(orderId);
-    console.log("aaaaaaaaaaaaaaaaa", order);
+
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
@@ -375,10 +377,26 @@ const returnOrder = async (req, res) => {
   }
 };
 
+
+
+
+
+
+
 const orderStatusAdminSide = async(req, res)=>{
   try {
-    const orders = await Order.find().populate('user');
-    res.render('orderList',{orders})
+    const orders = await Order.find().populate('user').sort({ createdAt: -1 });
+    const itemsPerPage = 6;
+     const currentpage = parseInt(req.query.page) || 1;
+     const startIndex = (currentpage - 1) * itemsPerPage;
+     const endIndex = startIndex + itemsPerPage;
+     const totalpages = Math.ceil(orders.length / itemsPerPage);
+     const pages = Array.from({ length: totalpages }, (_, i) => i + 1); // Create an array of page numbers
+     const currentorders = orders.slice(startIndex, endIndex);
+     
+    //  console.log(orders,"ods");
+
+    res.render("orderList", {orders, orders:currentorders,pages,currentpage, totalpages });
   } catch (error) {
     console.log(error.message);
   }
@@ -423,6 +441,63 @@ const updateWalletBalance = async (userId, amount)=> {
     return { success: false, message: 'Error updating wallet' };
   }
 }
+
+const singleOrderDetails = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const orderId = req.params.orderId;
+
+    // Find the user and order based on the user ID and order ID
+    const user = await User.findById(userId);
+
+    // Use the "populate" method to populate the "products.product" field
+    const order = await Order.findOne({ user: userId, _id: orderId }).populate({
+      path: 'products.product',
+    }).populate('shippingAddress');;
+
+    if (!user || !order) {
+      return res.status(404).send('Order not found');
+    }
+
+    res.render('singleOrderDetails', { order, user, shippingAddress: order.shippingAddress });
+
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Internal Server Error');
+  }
+}
+
+
+const adminOrderDetails = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const orderId = req.params.orderId;
+
+    console.log('User ID:', userId);
+    console.log('Order ID:', orderId);
+
+    const user = await User.findById(userId);
+    const order = await Order.findOne({ user: userId, _id: orderId }).populate({
+      path: 'products.product',
+    }).populate('shippingAddress');
+
+    if (!user || !order) {
+      console.log('Order not found');
+      return res.status(404).send('Order not found');
+    }
+
+    res.render('singleOrderDetails', { order, user, shippingAddress: order.shippingAddress });
+
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Internal Server Error');
+  }
+}
+
+
+
+
+
 module.exports = {
 
   populateProductDetails,
@@ -436,7 +511,8 @@ module.exports = {
   cancelOrder,
   returnOrder,
   orderStatusAdminSide,
-  
-  walletDispaly
+  walletDispaly,
+  singleOrderDetails,
+  adminOrderDetails
 
 }

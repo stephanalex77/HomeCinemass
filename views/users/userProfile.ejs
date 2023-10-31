@@ -81,7 +81,7 @@
                 <div id="addresses">
                   <h2>Addresses</h2>
                   <!-- List of Addresses Here -->
-                  <% addresses.forEach(address => { %>
+                <% addresses.forEach(address => { %>
                   <div class="address">
                     <p>
                       <%= address.address1 %>, <br />
@@ -97,24 +97,7 @@
                       Edit
                     </button>
 
-                    <script>
-                      // Get a reference to the "Edit" buttons with the class "edit-address-button"
-                      const editAddressButtons = document.querySelectorAll(
-                        ".edit-address-button"
-                      );
-
-                      // Add a click event listener to each "Edit" button
-                      editAddressButtons.forEach((button) => {
-                        button.addEventListener("click", () => {
-                          // Get the address ID from the "data-address-id" attribute of the clicked button
-                          const addressId =
-                            button.getAttribute("data-address-id");
-
-                          // Redirect to the "/getEditAddress" route with the address ID as a query parameter
-                          window.location.href = `/getEditAddress?addressId=${addressId}`;
-                        });
-                      });
-                    </script>
+                    
 
                     <!-- <button class="btn btn-danger">Delete</button> -->
                     <!-- Add a data attribute to the "Delete" button to store the address ID -->
@@ -125,7 +108,7 @@
                       Delete
                     </button>
                   </div>
-                  <% }); %>
+                <% }); %>
 
                   <button class="btn btn-success" id="addAddressButton">
                     Add New Address
@@ -522,5 +505,22 @@
       });
   }
 </script>
+<script>
+  // Get a reference to the "Edit" buttons with the class "edit-address-button"
+  const editAddressButtons = document.querySelectorAll(
+    ".edit-address-button"
+  );
 
+  // Add a click event listener to each "Edit" button
+  editAddressButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      // Get the address ID from the "data-address-id" attribute of the clicked button
+      const addressId =
+        button.getAttribute("data-address-id");
+
+      // Redirect to the "/getEditAddress" route with the address ID as a query parameter
+      window.location.href = `/getEditAddress?addressId=${addressId}`;
+    });
+  });
+</script>
 <%- include('../layouts/homeLayout/footer')%>

@@ -121,7 +121,7 @@ admin_route.post('/listCoupon', couponController.listCoupon);
 
 //ORDER MANAGE
 admin_route.get('/orderManage', auth.isLogin, orderController.orderStatusAdminSide);
-
+admin_route.get('/adminOrderDetails', auth.isLogin, orderController.adminOrderDetails)
 
 
 

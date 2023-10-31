@@ -1,6 +1,7 @@
 const User = require("../models/userModel");
+const Cart = require("../models/cartModel")
 const bcrypt = require("bcrypt");
-const { name } = require("ejs");
+const { name, render } = require("ejs");
 const Product = require("../models/productModel");
 const nodemailer = require("nodemailer");
 const randomString = require("randomstring");
@@ -185,7 +186,12 @@ const loadHome = async (req, res) => {
   try {
     const products = await Product.find();
     const userData = await User.findById({ _id: req.session.user_id });
-    res.render("home", { user: userData, products });
+    const userId = req.session.user_id;
+
+    const cart = await Cart.findOne({ user: userId });
+    
+    
+    res.render("home", { user: userData, products, cart });
   } catch (error) {
     console.log(error.message);
   }
@@ -194,6 +200,7 @@ const loadHome = async (req, res) => {
 const homeLoad = async (req, res) => {
   try {
     const products = await Product.find();
+    
     res.render("home", { products });
   } catch (error) {
     console.log(error.message);
@@ -471,6 +478,7 @@ const loadEditAddress = async (req, res) => {
     // Fetch the user's address data from the database
     const user = await User.findById(req.session.user_id);
     console.log("who is the user:::", user);
+    
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
@@ -539,7 +547,8 @@ const editAddress = async (req, res) => {
     // Save the updated user
     await user.save();
 
-    return res.status(200).json({ success: true, message: 'Address updated successfully' });
+    // return res.status(200).json({ success: true, message: 'Address updated successfully' });
+    res.redirect("/profile")
   } catch (error) {
     console.error(error);
     return res.status(500).json({ success: false, message: 'Internal Server Error' });

@@ -28,7 +28,7 @@ const addCategory = async (req, res) => {
       alert("Category name must be at least 3 characters long");
       return false;
     }
-
+    
     const existingCategory = await Category.findOne({
       categoryname: { $regex: '^' + categoryname + '$', $options: 'i' }
     });
@@ -42,7 +42,7 @@ const addCategory = async (req, res) => {
       await newCategory.save();
       if(newCategory){
         
-        res.redirect("/admin/category");
+      res.redirect("/admin/category");
       }
     }
 

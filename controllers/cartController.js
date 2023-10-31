@@ -83,9 +83,11 @@ const addToCart = async (req, res) => {
       return res.status(400).json({ success: false, message: "Out of stock" });
     }
 
+    const product_total = product.product_sales_price* quantity
+
     let cart = await Cart.findOne({ user: userId });
     if (!cart) {
-      await Cart.create({ user: userId, products: [{product:productId, quantity,product_total}],cartSubtotal});
+      await Cart.create({ user: userId, products: [{product:productId, quantity,product_total}],cartSubtotal:product_total});
     }
     // Check if the user already has this product in their cart
   
@@ -100,7 +102,7 @@ const addToCart = async (req, res) => {
     //   existingProduct.product_total = existingProduct.product.product_sales_price * existingProduct.quantity;
     //   existingProduct.price = existingProduct.product_total;
     //   console.log("::::::::::::::", existingProduct.product_total);
-    // } else {
+     else {
       
       const productToAdd = {
         product: productId,
@@ -125,6 +127,7 @@ const addToCart = async (req, res) => {
     await product.save();
 
     await cart.save();
+     }
 
     res.status(200).json({ success: true, message:"item added to cart" });
   } catch (error) {
@@ -157,7 +160,10 @@ const removeFromCart = async(req, res)=>{
     cart.products.splice(productIndex, 1);
 
     await cart.save();
-    res.status(200).json({success: true});
+    cart = await Cart.findOne({ user: userId }).populate(
+      "products.product"
+    );
+    res.status(200).json({success: true, cart});
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'An error occurred while removing the product from the cart' });
@@ -218,6 +224,7 @@ const getCheckOutPage = async (req, res) => {
     } else {
       res.render('checkoutpage', {user, cart: null, totalSubtotal: 0 });
     }
+    req.session.discountAmount=0
   } catch (error) {
     console.log(error);
     res.status(500).send('Internal Server Error');

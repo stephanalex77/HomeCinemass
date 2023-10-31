@@ -1,3 +1,5 @@
+
+const User = require('../models/userModel')
 const isLogin = async (req, res, next) => {
   try {
     if (req.session && req.session.user_id) {
@@ -22,7 +24,28 @@ next();
   }
 }
 
+const isBlock = async (req, res, next) => {
+  try { 
+    const user = await User.findById({ _id: req.session.user_id })
+    console.log(user,"no user");
+
+    if (user.is_block === true ) {
+      delete  req.session.user_id   
+       res.redirect('/login');
+
+      
+    } else {
+      console.log("...................................");
+      next();
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).render('404',{message:'Internal server error'});
+  }
+}
+
 module.exports= {
   isLogin,
-  isLogout
+  isLogout,
+  isBlock
 }

@@ -131,7 +131,7 @@
                     </a>
                   <% } else { %>
                     <% if (user) { %>
-                      <% const productInCart = cart.products.some(cartProduct => cartProduct.product.equals(product._id)); %>
+                      <% const productInCart = cart && cart.products.some(cartProduct => cartProduct.product.equals(product._id)); %>
                       <% if (productInCart) { %>
                         <a href="/cartt">
                           Go to Cart
