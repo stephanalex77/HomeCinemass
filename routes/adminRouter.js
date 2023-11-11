@@ -38,12 +38,14 @@ const productController= require("../controllers/productController")
 const couponController = require("../controllers/couponController")
 
 const orderController = require("../controllers/orderController")
+
+const salesReportController = require("../controllers/salesReportController")
 // user side
 admin_route.get('/',auth.isLogout,adminController.loadLogin)
 
 admin_route.post('/', adminController.verifyLogin)
 
-admin_route.get('/home',auth.isLogin,adminController.loadDashboard);
+// admin_route.get('/home',auth.isLogin,adminController.loadDashboard);
 
 admin_route.get('/logout',auth.isLogin,adminController.logout)
 
@@ -61,7 +63,9 @@ admin_route.get('/unblock',auth.isLogin, adminController.unblockuser)
 // category get and post
 admin_route.get('/category',auth.isLogin, categoryController.getCategory)
 
-admin_route.post('/category',auth.isLogin, categoryController.addCategory)
+// admin_route.post('/category',auth.isLogin, categoryController.addCategory)
+admin_route.post('/category', auth.isLogin, categoryController.addCategory);
+
 
 
 
@@ -115,16 +119,17 @@ admin_route.get('/edit-coupon/:id',auth.isLogin,couponController.editCouponPage)
 admin_route.post('/editcoupon/:id',auth.isLogin,couponController.editCoupon)
 admin_route.post('/unListCoupon', couponController.unListCoupon);
 admin_route.post('/listCoupon', couponController.listCoupon);
-
+admin_route.post('/deleteeditproduct', auth.isLogin,productController.deteEditeproduct)
 
 // admin_route.get('/coupons/delete-coupon',auth.isLogin, couponController.deleteCoupon)
 
 //ORDER MANAGE
 admin_route.get('/orderManage', auth.isLogin, orderController.orderStatusAdminSide);
-admin_route.get('/adminOrderDetails', auth.isLogin, orderController.adminOrderDetails)
-
-
-
+admin_route.get('/orderManage/:orderId', auth.isLogin, orderController.adminOrderDetails)
+admin_route.post('/status/:orderId/', auth.isLogin, orderController.updateStatus)
+admin_route.get('/salesreport', auth.isLogin, salesReportController.salesReport)
+admin_route.get('/reports/sales/download/:type', auth.isLogin, salesReportController.adminDownloadReports);
+admin_route.get('/home', auth.isLogin, orderController.getDashboard)
 admin_route.get('*',function(req,res){
     res.status(404).send('Page Not Found');
 })

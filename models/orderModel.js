@@ -23,6 +23,9 @@ const orderSchema = new mongoose.Schema({
         }
       }
     ],
+    reasonResponse:{
+      type:String
+    },
     shippingAddress: [{
       firstname:{
         type: String,
@@ -58,9 +61,14 @@ const orderSchema = new mongoose.Schema({
     }],
     status: {
       type: String,
-      enum: ['placed', 'shipped', 'Delivered', 'Cancelled', 'Returned'],
+      enum: ['placed', 'Shipped', 'Delivered', 'Cancelled', 'Returned'],
       default: 'placed'
     },
+    orderDate: {
+      type: Date,
+      default: Date.now 
+  },
+
     paymentMethod: {
       type: String,
       

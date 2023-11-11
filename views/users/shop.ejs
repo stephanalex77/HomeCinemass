@@ -1,19 +1,19 @@
 <%- include('../layouts/homeLayout/header')%>
-<div class="page-heading bg-light">
-  <div class="container">
-    <div class="row align-items-end text-center">
-      <div class="col-lg-7 mx-auto">
-        <h1>Shop</h1>  
-        <p class="mb-4"><a href="index.html">HOME</a> / <strong>SHOP</strong></p>        
+  <div class="page-heading bg-light">
+    <div class="container">
+      <div class="row align-items-end text-center">
+        <div class="col-lg-7 mx-auto">
+          <h1>Shop</h1>
+          <p class="mb-4"><a href="index.html">HOME</a> / <strong>SHOP</strong></p>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="untree_co-section pt-4">
-  <div class="container">
+  <div class="untree_co-section pt-4">
+    <div class="container">
 
-    <!-- <div class="row align-items-center mb-5">
+      <!-- <div class="row align-items-center mb-5">
       <div class="col-lg-8">
         <h2 class="mb-3 mb-lg-0">Products</h2>
       </div>
@@ -34,63 +34,66 @@
       </div> 
     </div> -->
 
-    <div class="row">
-      <div class="col-md-4">
-        <div class="dataBindig"></div>
-        <!-- <ul class="list-unstyled categories" id="categoryList">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="dataBindig"></div>
+          <!-- <ul class="list-unstyled categories" id="categoryList">
             <li><a href="#" data-category-id="all">All Categories</a></li>
             <% for (let i = 0; i < categories.length; i++) { %>
                 <li><a href="#" data-category-id="<%= categories[i]._id %>"><%= categories[i].categoryname.charAt(0).toUpperCase() + categories[i].categoryname.slice(1) %> <span><%= categories[i].quantity %></span></a></li>
             <% } %>
         </ul> -->
-        <div class="userFilter" style="display: flex; flex-direction: column; align-items: center; padding-left: 2rem; align-items: flex-start;   min-width: 180px; max-width: 190px;">
-          <div style="padding-bottom: 1rem;">
+          <div class="userFilter"
+            style="display: flex; flex-direction: column; align-items: center; padding-left: 2rem; align-items: flex-start;   min-width: 180px; max-width: 190px;">
+            <div style="padding-bottom: 1rem;">
               <div>
-                  <span><strong>CATEGORY</strong></span>
+                <span><strong>CATEGORY</strong></span>
               </div>
               <% categories.forEach(function(category) { %>
-                  <label class="d-flex" style="align-items: baseline">
-                      <input type="checkbox" class="category-control-input" data-category="<%= category._id %>">
-                      <span class="text-black" style="padding-left: .5rem;"><%= category.categoryname %></span>
-                  </label>
-              <% }); %>
-          </div>
-      
-          <div>
-              <div>
-                  <span><strong>PRICE RANGE</strong></span>
-              </div>
-              <div>
-                  <label class="d-flex">
-                      <input type="checkbox" class="price-control-input" data-range="lt15000">
-                      <span class="text-black" style="padding-left: .5rem;">Under ₹15,000</span>
-                  </label>
-                  <label class="d-flex">
-                      <input type="checkbox" class="price-control-input" data-range="lt40000">
-                      <span class="text-black" style="padding-left: .5rem;">₹15,000 - ₹40,000</span>
-                  </label>
-                  <label class="d-flex">
-                      <input type="checkbox" class="price-control-input" data-range="lt80000">
-                      <span class="text-black" style="padding-left: .5rem;">₹40,000 - ₹80,000</span>
-                  </label>
-                  <label class="d-flex">
-                      <input type="checkbox" class="price-control-input" data-range="lt150000">
-                      <span class="text-black" style="padding-left: .5rem;">₹80,000 - ₹1,50,000</span>
-                  </label>
-                  <label class="d-flex">
-                      <input type="checkbox" class="price-control-input" data-range="gt200000">
-                      <span class="text-black" style="padding-left: .5rem;">Over ₹2,00,000</span>
-                  </label>
-              </div>
-              
-          </div>
-      </div>
-      
-      </div>
-      
-    
+                <label class="d-flex" style="align-items: baseline">
+                  <input type="checkbox" class="category-control-input" data-category="<%= category._id %>">
+                  <span class="text-black" style="padding-left: .5rem;">
+                    <%= category.categoryname %>
+                  </span>
+                </label>
+                <% }); %>
+            </div>
 
-      <!-- <script>
+            <div>
+              <div>
+                <span><strong>PRICE RANGE</strong></span>
+              </div>
+              <div>
+                <label class="d-flex">
+                  <input type="checkbox" class="price-control-input" data-range="lt15000">
+                  <span class="text-black" style="padding-left: .5rem;">Under ₹15,000</span>
+                </label>
+                <label class="d-flex">
+                  <input type="checkbox" class="price-control-input" data-range="lt40000">
+                  <span class="text-black" style="padding-left: .5rem;">₹15,000 - ₹40,000</span>
+                </label>
+                <label class="d-flex">
+                  <input type="checkbox" class="price-control-input" data-range="lt80000">
+                  <span class="text-black" style="padding-left: .5rem;">₹40,000 - ₹80,000</span>
+                </label>
+                <label class="d-flex">
+                  <input type="checkbox" class="price-control-input" data-range="lt150000">
+                  <span class="text-black" style="padding-left: .5rem;">₹80,000 - ₹1,50,000</span>
+                </label>
+                <label class="d-flex">
+                  <input type="checkbox" class="price-control-input" data-range="gt200000">
+                  <span class="text-black" style="padding-left: .5rem;">Over ₹2,00,000</span>
+                </label>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+
+
+        <!-- <script>
             $(document).ready(function() {
           $('#categoryList a').click(function(event) {
               event.preventDefault();
@@ -106,241 +109,288 @@
           }
         });
       </script> -->
-      <div class="col-md-8">
-        <div class="row align-items-center latest_product_inner products-container ">
-          <% products.forEach(product => { %>
-            <div class="col-lg-5 col-sm-6 ">
-              <div class="single_product_item">
-                <a href="/singleProduct/<%= product.id %>" class="product-img">
-                  <img src="/public/uploadProduct/<%= product.image[0] %>" alt="<%= product.product_name %>" style="width: 75%; height: 150px; object-fit: contain;">
-                </a>
-                <div class="single_product_text">
-                  <h4><%= product.product_name %></h4>
-                  <h3>Price: ₹<%= product.product_price.toFixed(2) %></h3>
-                  <h4>Sales Price: ₹<%= product.product_sales_price.toFixed(2) %></h4>
-                  <% if (product.quantity <= 0) { %>
-                    <a href="#" class="add_cart">Out of Stock
-                      <i href="#" class="like_us" onclick="addToWishlist('<%= product._id %>')">
-                        <a>
-                          <svg class="" viewBox="0 0 24 24" width="15" height="15" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="m12 20.703.343.667a.748.748 0 0 1-.686 0l-.003-.002-.007-.003-.025-.013a31.138 31.138 0 0 1-5.233-3.576C3.8 15.573 1 12.332 1 8.514v-.001C1 5.053 3.829 2.5 6.736 2.5 9.03 2.5 10.881 3.726 12 5.605 13.12 3.726 14.97 2.5 17.264 2.5 20.17 2.5 23 5.052 23 8.514c0 3.818-2.801 7.06-5.389 9.262a31.148 31.148 0 0 1-5.233 3.576l-.025.013-.007.003-.002.001ZM6.736 4C4.657 4 2.5 5.88 2.5 8.514c0 3.107 2.324 5.96 4.861 8.12a29.655 29.655 0 0 0 4.566 3.175l.073.041.073-.04c.271-.153.661-.3801 1.13-.674.94-.588 2.19-1.441 3.436-2.502 2.537-2.16 4.861-5.013 4.861-8.12C21.5 5.88 19.343 4 17.264 4c-2.106 0-3.801 1.389-4.553 3.643a.751.751 0 0 1-1.422 0C10.537 5.389 8.841 4 6.736 4Z">
-                            </path>
-                          </svg>
-                        </a>
-                      </i>
-                    </a>
-                  <% } else { %>
-                    <% if (user) { %>
-                      <% const productInCart = cart && cart.products.some(cartProduct => cartProduct.product.equals(product._id)); %>
-                      <% if (productInCart) { %>
-                        <a href="/cartt">
-                          Go to Cart
-                        </a>
+        <div class="col-md-8">
+          <div class="row align-items-center latest_product_inner products-container  ">
+            <% products.forEach(product=> { %>
+              <div class="col-lg-5 col-sm-6 ">
+                <div class="single_product_item">
+                  <a href="/singleProduct/<%= product.id %>" class="product-img">
+                    <img src="/public/uploadProduct/<%= product.image[0] %>" alt="<%= product.product_name %>"
+                      style="width: 75%; height: 150px; object-fit: contain;">
+                  </a>
+                  <div class="single_product_text">
+                    <h4>
+                      <%= product.product_name %>
+                    </h4>
+                    <h3>Price: ₹<%= product.product_price.toFixed(2) %>
+                    </h3>
+                    <h4>Sales Price: ₹<%= product.product_sales_price.toFixed(2) %>
+                    </h4>
+                    <% if (product.quantity <=0) { %>
+                      <a href="#" class="add_cart">Out of Stock
+                        <i href="#" class="like_us" onclick="addToWishlist('<%= product._id %>')">
+                          <a>
+                            <svg class="" viewBox="0 0 24 24" width="15" height="15" fill="currentColor"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                d="m12 20.703.343.667a.748.748 0 0 1-.686 0l-.003-.002-.007-.003-.025-.013a31.138 31.138 0 0 1-5.233-3.576C3.8 15.573 1 12.332 1 8.514v-.001C1 5.053 3.829 2.5 6.736 2.5 9.03 2.5 10.881 3.726 12 5.605 13.12 3.726 14.97 2.5 17.264 2.5 20.17 2.5 23 5.052 23 8.514c0 3.818-2.801 7.06-5.389 9.262a31.148 31.148 0 0 1-5.233 3.576l-.025.013-.007.003-.002.001ZM6.736 4C4.657 4 2.5 5.88 2.5 8.514c0 3.107 2.324 5.96 4.861 8.12a29.655 29.655 0 0 0 4.566 3.175l.073.041.073-.04c.271-.153.661-.3801 1.13-.674.94-.588 2.19-1.441 3.436-2.502 2.537-2.16 4.861-5.013 4.861-8.12C21.5 5.88 19.343 4 17.264 4c-2.106 0-3.801 1.389-4.553 3.643a.751.751 0 0 1-1.422 0C10.537 5.389 8.841 4 6.736 4Z">
+                              </path>
+                            </svg>
+                          </a>
+                        </i>
+                      </a>
                       <% } else { %>
-                        <a href="#" class="add_cart" onclick="addtocart('<%= product._id %>')" data-product-id="<%= product._id %>">
-                          + Add to Cart
-                        </a>
-                      <% } %>
-                      <i href="#" class="like_us" onclick="addToWishlist('<%= product._id %>')">
-                        <a>
-                          <svg class="" viewBox="0 0 24 24" width="15" height="15" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="m12 20.703.343.667a.748.748 0 0 1-.686 0l-.003-.002-.007-.003-.025-.013a31.138 31.138 0 0 1-5.233-3.576C3.8 15.573 1 12.332 1 8.514v-.001C1 5.053 3.829 2.5 6.736 2.5 9.03 2.5 10.881 3.726 12 5.605 13.12 3.726 14.97 2.5 17.264 2.5 20.17 2.5 23 5.052 23 8.514c0 3.818-2.801 7.06-5.389 9.262a31.148 31.148 0 0 1-5.233 3.576l-.025.013-.007.003-.002.001ZM6.736 4C4.657 4 2.5 5.88 2.5 8.514c0 3.107 2.324 5.96 4.861 8.12a29.655 29.655 0 0 0 4.566 3.175l.073.041.073-.04c.271-.153.661-.3801 1.13-.674.94-.588 2.19-1.441 3.436-2.502 2.537-2.16 4.861-5.013 4.861-8.12C21.5 5.88 19.343 4 17.264 4c-2.106 0-3.801 1.389-4.553 3.643a.751.751 0 0 1-1.422 0C10.537 5.389 8.841 4 6.736 4Z">
-                            </path>
-                          </svg>
-                        </a>
-                      </i>
-                    </a>
-                    <% } else { %>
-                      <a href="/login" class="add_cart">Login to Purchase</a>
-                    <% } %>
-                  <% } %>
+                        <% if (user) { %>
+                          <% const productInCart=cart && cart.products.some(cartProduct=>
+                            cartProduct.product.equals(product._id)); %>
+                            <% if (productInCart) { %>
+                              <a href="/cartt">
+                                Go to Cart
+                              </a>
+                              <% } else { %>
+                                <a href="#" class="add_cart" onclick="addtocart('<%= product._id %>')"
+                                  data-product-id="<%= product._id %>">
+                                  + Add to Cart
+                                </a>
+                                <% } %>
+                                  <i href="#" class="like_us" onclick="addToWishlist('<%= product._id %>')">
+                                    <a>
+                                      <svg class="" viewBox="0 0 24 24" width="15" height="15" fill="currentColor"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                          d="m12 20.703.343.667a.748.748 0 0 1-.686 0l-.003-.002-.007-.003-.025-.013a31.138 31.138 0 0 1-5.233-3.576C3.8 15.573 1 12.332 1 8.514v-.001C1 5.053 3.829 2.5 6.736 2.5 9.03 2.5 10.881 3.726 12 5.605 13.12 3.726 14.97 2.5 17.264 2.5 20.17 2.5 23 5.052 23 8.514c0 3.818-2.801 7.06-5.389 9.262a31.148 31.148 0 0 1-5.233 3.576l-.025.013-.007.003-.002.001ZM6.736 4C4.657 4 2.5 5.88 2.5 8.514c0 3.107 2.324 5.96 4.861 8.12a29.655 29.655 0 0 0 4.566 3.175l.073.041.073-.04c.271-.153.661-.3801 1.13-.674.94-.588 2.19-1.441 3.436-2.502 2.537-2.16 4.861-5.013 4.861-8.12C21.5 5.88 19.343 4 17.264 4c-2.106 0-3.801 1.389-4.553 3.643a.751.751 0 0 1-1.422 0C10.537 5.389 8.841 4 6.736 4Z">
+                                        </path>
+                                      </svg>
+                                    </a>
+                                  </i>
+                                  </a>
+                                  <% } else { %>
+                                    <a href="/login" class="add_cart">Login to Purchase</a>
+                                    <% } %>
+                                      <% } %>
+                  </div>
                 </div>
               </div>
-            </div>
-          <% }) %>
-        </div>
-        
+              <% }) %>
+          </div>
 
 
 
-        <!-- // SCRIPT FOR SHOW PRODUCTS ACCORDING TO ITS CATEGORY -->
-        
-        
-          
-        
-        
-        <div class="row mt-5 pb-5">
-          <div class="col-lg-12">
-            <div class="custom-pagination">
-              <% if (totalpages) { %>
-                <ul class="list-unstyled">
-                  <% if (currentpage > 1) { %>
 
-                    <li>
-                      <a href="?page=<%= currentpage - 1 %>">
-                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                          <path fill-rule="evenodd" d="M5.854 4.646a.5.5 0 0 1 0 .708L3.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"/>
-                          <path fill-rule="evenodd" d="M2.5 8a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
-                        </svg>                      
-                      </a>
-                    </li>
-                 <% } %>
-                  <% pages.forEach(page => { %>
-                    <li class="active"><span><a href="?page=<%= page %>"><%= page %></a></span></li>
-                  <% }); %>
-                  <% if (currentpage < totalpages) { %>
-                    <li>
-                      <a href="?page=<%= currentpage + 1 %>">
-                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                          <path fill-rule="evenodd" d="M10.146 4.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 8l-2.647-2.646a.5.5 0 0 1 0-.708z"/>
-                          <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8z"/>
-                        </svg>
-                      </a>
-                    </li>
+          <!-- // SCRIPT FOR SHOW PRODUCTS ACCORDING TO ITS CATEGORY -->
+
+
+
+
+
+          <div class="row mt-5 pb-5 ">
+            <div class="col-lg-12">
+              <div class="custom-pagination ">
+                <% if (totalpages) { %>
+                  <ul class="list-unstyled paginationhome">
+                    <% if (currentpage> 1) { %>
+
+                      <!-- <li>
+                        <a href="?page=<%= currentpage - 1 %>">
+                          <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left" fill="currentColor"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                              d="M5.854 4.646a.5.5 0 0 1 0 .708L3.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z" />
+                            <path fill-rule="evenodd"
+                              d="M2.5 8a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+                          </svg>
+                        </a>
+                      </li> -->
+                      <li style="margin-right: 10px;"><a href="?page=<%= currentpage - 1 %>"><button
+                            class="btn mb-2 btn-secondary">Previous</button></a></li>
+                      <% } %>
+                        <% pages.forEach(page=> { %>
+                          <!-- <li class="active  "><span><a href="?page=<%= page %>">
+                                <%= page %>
+                              </a></span></li> -->
+                          <li style="margin-right: 10px;" class="active">
+                            <a href="#">
+                              <button type="button" data-page="<%= page %>"
+                                class="btn mb-2 btn-primary pagination-button">
+                                <%= page %>
+                              </button>
+                            </a>
+                          </li>
+                          <% }); %>
+                            <% if (currentpage < totalpages) { %>
+                              <!-- <li>
+                                <a href="?page=<%= currentpage + 1 %>">
+                                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right"
+                                    fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                      d="M10.146 4.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 8l-2.647-2.646a.5.5 0 0 1 0-.708z" />
+                                    <path fill-rule="evenodd"
+                                      d="M2 8a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8z" />
+                                  </svg>
+                                </a>
+                              </li> -->
+                              <li style="margin-right: 10px;"><a href="?page=<%= currentpage + 1 %>"><button
+                                    class="btn mb-2 btn-secondary">Next</button></a></li>
+
+
+
+                              <% } %>
+                  </ul>
                   <% } %>
-               </ul>
-              <% } %>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> <!-- /.untree_co-section -->
-
- 
-
-  <div class="untree_co-section bg-light">
-    <div class="container">
-      <div class="row align-items-stretch">
-        <div class="col-12 col-sm-6 col-md-4 mb-3 mb-md-0">
-          <div class="feature h-100">
-            <div class="icon mb-4">
-              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-truck" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5v7h-1v-7a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .5.5v1A1.5 1.5 0 0 1 0 10.5v-7zM4.5 11h6v1h-6v-1z"/>
-                <path fill-rule="evenodd" d="M11 5h2.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5h-1v-1h1a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4.5h-1V5zm-8 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 1a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
-                <path fill-rule="evenodd" d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 1a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
-              </svg>
-            </div>
-            <h3>Worldwide Delivery</h3>
-            <p>Far far away, behind the word mountains, far from the countries.</p>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-md-4 mb-3 mb-md-0">
-          <div class="feature h-100">
-            <div class="icon mb-4">
-              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-shield-lock" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M5.443 1.991a60.17 60.17 0 0 0-2.725.802.454.454 0 0 0-.315.366C1.87 7.056 3.1 9.9 4.567 11.773c.736.94 1.533 1.636 2.197 2.093.333.228.626.394.857.5.116.053.21.089.282.11A.73.73 0 0 0 8 14.5c.007-.001.038-.005.097-.023.072-.022.166-.058.282-.111.23-.106.525-.272.857-.5a10.197 10.197 0 0 0 2.197-2.093C12.9 9.9 14.13 7.056 13.597 3.159a.454.454 0 0 0-.315-.366c-.626-.2-1.682-.526-2.725-.802C9.491 1.71 8.51 1.5 8 1.5c-.51 0-1.49.21-2.557.491zm-.256-.966C6.23.749 7.337.5 8 .5c.662 0 1.77.249 2.813.525a61.09 61.09 0 0 1 2.772.815c.528.168.926.623 1.003 1.184.573 4.197-.756 7.307-2.367 9.365a11.191 11.191 0 0 1-2.418 2.3 6.942 6.942 0 0 1-1.007.586c-.27.124-.558.225-.796.225s-.526-.101-.796-.225a6.908 6.908 0 0 1-1.007-.586 11.192 11.192 0 0 1-2.417-2.3C2.167 10.331.839 7.221 1.412 3.024A1.454 1.454 0 0 1 2.415 1.84a61.11 61.11 0 0 1 2.772-.815z"/>
-                <path d="M9.5 6.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                <path d="M7.411 8.034a.5.5 0 0 1 .493-.417h.156a.5.5 0 0 1 .492.414l.347 2a.5.5 0 0 1-.493.585h-.835a.5.5 0 0 1-.493-.582l.333-2z"/>
-              </svg>
-            </div>
-            <h3>Secure Payments</h3>
-            <p>Far far away, behind the word mountains, far from the countries.</p>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-md-4 mb-3 mb-md-0">
-          <div class="feature h-100">
-            <div class="icon mb-4">
-              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-counterclockwise" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M12.83 6.706a5 5 0 0 0-7.103-3.16.5.5 0 1 1-.454-.892A6 6 0 1 1 2.545 5.5a.5.5 0 1 1 .91.417 5 5 0 1 0 9.375.789z"/>
-                <path fill-rule="evenodd" d="M7.854.146a.5.5 0 0 0-.708 0l-2.5 2.5a.5.5 0 0 0 0 .708l2.5 2.5a.5.5 0 1 0 .708-.708L5.707 3 7.854.854a.5.5 0 0 0 0-.708z"/>
-              </svg>
-            </div>
-            <h3>Simple Returns</h3>
-            <p>Far far away, behind the word mountains, far from the countries.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> <!-- /.untree_co-section -->
-
-  <div class="site-footer">
-
-
-    <div class="container">
-      <div class="row justify-content-between">
-        <div class="col-lg-5">
-          <div class="widget mb-4">
-            <h3 class="mb-2">About UntreeStore</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate modi cumque rem recusandae quaerat at asperiores beatae saepe repudiandae quam rerum aspernatur dolores et ipsa obcaecati voluptates libero</p>
-          </div>
-          <div class="widget">
-            <h3>Join our mailing list and receive exclusives</h3>
-            <form action="#" class="subscribe">
-              <div class="d-flex">
-                <input type="email" class="form-control" placeholder="Email address">
-                <input type="submit" class="btn btn-black" value="Subscribe">
               </div>
-            </form>
-
-
+            </div>
           </div>
-        </div>
-        <div class="col-lg-2">
-          <div class="widget">
-            <h3>Help</h3> 
-            <ul class="list-unstyled">
-              <li><a href="#">Contact us</a></li>
-              <li><a href="#">Account</a></li>
-              <li><a href="#">Shipping</a></li>
-              <li><a href="#">Returns</a></li>
-              <li><a href="#">FAQ</a></li>   
-            </ul>
-          </div>
-        </div>
-        <div class="col-lg-2">
-          <div class="widget">
-            <h3>About</h3>
-            <ul class="list-unstyled">
-              <li><a href="#">About us</a></li>
-              <li><a href="#">Press</a></li>
-              <li><a href="#">Careers</a></li>
-              <li><a href="#">Team</a></li>
-              <li><a href="#">FAQ</a></li>   
-            </ul>
-          </div>
-        </div>
-        <div class="col-lg-2">
-          <div class="widget">
-            <h3>Shop</h3>
-            <ul class="list-unstyled">
-              <li><a href="#">Store</a></li>
-              <li><a href="#">Gift Cards</a></li>
-              <li><a href="#">Student Discount</a></li>
-            </ul>
-          </div>
-        </div>
-
-      </div>
-
-
-      <div class="row mt-5">
-        <div class="col-12 text-center">
-          <ul class="list-unstyled social">
-            <li><a href="#"><span class="icon-facebook"></span></a></li>
-            <li><a href="#"><span class="icon-instagram"></span></a></li>
-            <li><a href="#"><span class="icon-linkedin"></span></a></li>
-            <li><a href="#"><span class="icon-twitter"></span></a></li>
-          </ul>
-        </div>
-        <div class="col-12 text-center copyright">
-          <p>Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash; Designed with love by <a href="https://untree.co">Untree.co</a> <!-- License information: https://untree.co/license/ -->
-          </p>
-
         </div>
       </div>
-    </div> <!-- /.container -->
-  </div> <!-- /.site-footer -->
+    </div> <!-- /.untree_co-section -->
 
-  <div id="overlayer"></div>
-  <div class="loader">
-    <div class="spinner-border" role="status">
-      <span class="sr-only">Loading...</span>
+
+
+    <div class="untree_co-section bg-light">
+      <div class="container">
+        <div class="row align-items-stretch">
+          <div class="col-12 col-sm-6 col-md-4 mb-3 mb-md-0">
+            <div class="feature h-100">
+              <div class="icon mb-4">
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-truck" fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd"
+                    d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5v7h-1v-7a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .5.5v1A1.5 1.5 0 0 1 0 10.5v-7zM4.5 11h6v1h-6v-1z" />
+                  <path fill-rule="evenodd"
+                    d="M11 5h2.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5h-1v-1h1a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4.5h-1V5zm-8 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 1a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+                  <path fill-rule="evenodd" d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 1a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+                </svg>
+              </div>
+              <h3>Worldwide Delivery</h3>
+              <p>Far far away, behind the word mountains, far from the countries.</p>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-md-4 mb-3 mb-md-0">
+            <div class="feature h-100">
+              <div class="icon mb-4">
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-shield-lock" fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd"
+                    d="M5.443 1.991a60.17 60.17 0 0 0-2.725.802.454.454 0 0 0-.315.366C1.87 7.056 3.1 9.9 4.567 11.773c.736.94 1.533 1.636 2.197 2.093.333.228.626.394.857.5.116.053.21.089.282.11A.73.73 0 0 0 8 14.5c.007-.001.038-.005.097-.023.072-.022.166-.058.282-.111.23-.106.525-.272.857-.5a10.197 10.197 0 0 0 2.197-2.093C12.9 9.9 14.13 7.056 13.597 3.159a.454.454 0 0 0-.315-.366c-.626-.2-1.682-.526-2.725-.802C9.491 1.71 8.51 1.5 8 1.5c-.51 0-1.49.21-2.557.491zm-.256-.966C6.23.749 7.337.5 8 .5c.662 0 1.77.249 2.813.525a61.09 61.09 0 0 1 2.772.815c.528.168.926.623 1.003 1.184.573 4.197-.756 7.307-2.367 9.365a11.191 11.191 0 0 1-2.418 2.3 6.942 6.942 0 0 1-1.007.586c-.27.124-.558.225-.796.225s-.526-.101-.796-.225a6.908 6.908 0 0 1-1.007-.586 11.192 11.192 0 0 1-2.417-2.3C2.167 10.331.839 7.221 1.412 3.024A1.454 1.454 0 0 1 2.415 1.84a61.11 61.11 0 0 1 2.772-.815z" />
+                  <path d="M9.5 6.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                  <path
+                    d="M7.411 8.034a.5.5 0 0 1 .493-.417h.156a.5.5 0 0 1 .492.414l.347 2a.5.5 0 0 1-.493.585h-.835a.5.5 0 0 1-.493-.582l.333-2z" />
+                </svg>
+              </div>
+              <h3>Secure Payments</h3>
+              <p>Far far away, behind the word mountains, far from the countries.</p>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-md-4 mb-3 mb-md-0">
+            <div class="feature h-100">
+              <div class="icon mb-4">
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-counterclockwise"
+                  fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd"
+                    d="M12.83 6.706a5 5 0 0 0-7.103-3.16.5.5 0 1 1-.454-.892A6 6 0 1 1 2.545 5.5a.5.5 0 1 1 .91.417 5 5 0 1 0 9.375.789z" />
+                  <path fill-rule="evenodd"
+                    d="M7.854.146a.5.5 0 0 0-.708 0l-2.5 2.5a.5.5 0 0 0 0 .708l2.5 2.5a.5.5 0 1 0 .708-.708L5.707 3 7.854.854a.5.5 0 0 0 0-.708z" />
+                </svg>
+              </div>
+              <h3>Simple Returns</h3>
+              <p>Far far away, behind the word mountains, far from the countries.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> <!-- /.untree_co-section -->
+
+    <div class="site-footer">
+
+
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col-lg-5">
+            <div class="widget mb-4">
+              <h3 class="mb-2">About UntreeStore</h3>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate modi cumque rem recusandae quaerat
+                at asperiores beatae saepe repudiandae quam rerum aspernatur dolores et ipsa obcaecati voluptates libero
+              </p>
+            </div>
+            <div class="widget">
+              <h3>Join our mailing list and receive exclusives</h3>
+              <form action="#" class="subscribe">
+                <div class="d-flex">
+                  <input type="email" class="form-control" placeholder="Email address">
+                  <input type="submit" class="btn btn-black" value="Subscribe">
+                </div>
+              </form>
+
+
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <div class="widget">
+              <h3>Help</h3>
+              <ul class="list-unstyled">
+                <li><a href="#">Contact us</a></li>
+                <li><a href="#">Account</a></li>
+                <li><a href="#">Shipping</a></li>
+                <li><a href="#">Returns</a></li>
+                <li><a href="#">FAQ</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <div class="widget">
+              <h3>About</h3>
+              <ul class="list-unstyled">
+                <li><a href="#">About us</a></li>
+                <li><a href="#">Press</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Team</a></li>
+                <li><a href="#">FAQ</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <div class="widget">
+              <h3>Shop</h3>
+              <ul class="list-unstyled">
+                <li><a href="#">Store</a></li>
+                <li><a href="#">Gift Cards</a></li>
+                <li><a href="#">Student Discount</a></li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="row mt-5">
+          <div class="col-12 text-center">
+            <ul class="list-unstyled social">
+              <li><a href="#"><span class="icon-facebook"></span></a></li>
+              <li><a href="#"><span class="icon-instagram"></span></a></li>
+              <li><a href="#"><span class="icon-linkedin"></span></a></li>
+              <li><a href="#"><span class="icon-twitter"></span></a></li>
+            </ul>
+          </div>
+          <div class="col-12 text-center copyright">
+            <p>Copyright &copy;
+              <script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash; Designed with
+              love by <a href="https://untree.co">Untree.co</a> <!-- License information: https://untree.co/license/ -->
+            </p>
+
+          </div>
+        </div>
+      </div> <!-- /.container -->
+    </div> <!-- /.site-footer -->
+
+    <div id="overlayer"></div>
+    <div class="loader">
+      <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
     </div>
-  </div>
 
 
-  <!-- <script>
+    <!-- <script>
     document.addEventListener("DOMContentLoaded", function () {
       const categoryList = document.getElementById("categoryList");
       const products = document.querySelectorAll(".col-md-6");
@@ -364,304 +414,330 @@
   </script> -->
 
 
-  <script>
-		function addtocart(productId) {
-			console.log(productId);
-			fetch("/add-item-to-cart", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ productId }),
-			})
-				.then((response) => {
-					if (response.ok) {
-						return response.json();
-					} else {
-						throw new Error("Network response was not ok");
-					}
-				})
-				.then((data) => {
-					console.log(data);
-					const updatedCartQuantity = data.cartQuantity;
-					const itemInCartElement = document.getElementById("item-in-cart");
-					if (itemInCartElement) {
-						itemInCartElement.textContent = updatedCartQuantity.toString();
-					}
-					// Display a SweetAlert2 notification for "Added to cart"
-					Swal.fire({
-						position: 'center',
-						icon: 'success',
-						title: 'Added to cart',
-						showConfirmButton: false,
-						timer: 1000
-					});
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		}
-	</script>
-	
-
-	<script>
-		async function addToWishlist(productId) {
-			try {
-				const response = await fetch("/add-item-to-wishlist", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({ productId }),
-				});
-	
-				if (response.ok) {
-					const data = await response.json();
-					if (data.success) {
-						// Product added to wishlist successfully, show a SweetAlert2 success notification
-						Swal.fire({
-							position: 'center',
-							icon: 'success',
-							title: 'Added to wishlist successfully',
-							showConfirmButton: false,
-							timer: 1000
-						});
-					} else {
-						// Handle error response here if needed
-						console.error(data.message);
-					}
-				} else {
-					// Handle network error here if needed
-					console.error("Network response was not ok");
-				}
-			} catch (error) {
-				// Handle other errors here if needed
-				console.error(error);
-			}
-		}
-	</script>
-
-<script>
-
-  document.addEventListener('DOMContentLoaded', function () {
-    const productCategory = new Set();
-    const productRange = new Set();
-    let sort = undefined
-    let search;
-    let pcategory = []
-    let pr = []
-    function categoryAddOrRemoveble(value) {
-      if (productCategory.has(value)) {
-        productCategory.delete(value);
-      } else {
-        productCategory.add(value);
-      }
-    }
-
-
-    function rangeAddOrRemovable(value) {
-      if (productRange.has(value)) {
-        productRange.delete(value);
-      } else {
-        productRange.add(value)
-      }
-    }
-
-    const categoryButton = document.querySelectorAll('.category-control-input');
-
-    const priceCheckboxes = document.querySelectorAll('.price-control-input');
-
-    const priceButton = document.querySelectorAll('.price-control-input');
-
-    const selectElement = document.querySelector('.sort-control-input')
-
-    // const productsContainer = document.querySelector('.colorlib-product .container .row.row-pb-md');
-    const productsContainer = document.querySelector('.containProduct');
-    const searchInput = document.getElementById('searchInput');
-    const searchButton = document.getElementById('searchButton')
-    search = searchInput;
-
-    // {{!-- const paginationButtons = document.querySelectorAll('.pagination-button');
-    // const productsContainer = document.querySelector('.colorlib-product .container .row.row-pb-md');
-    // const paginationContainer = document.querySelector('.paginationhome .unlist'); --}}
-
-    categoryButton.forEach(button => {
-      button.addEventListener('change', async () => {
-        const category = button.getAttribute('data-category');
-        categoryAddOrRemoveble(category)// i have doubts category or name
-        pcategory = [...productCategory]
-     
-        fetch('/filterProduct', {
-          method: 'POST',
+    <script>
+      function addtocart(productId) {
+        console.log(productId);
+        fetch("/add-item-to-cart", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            productRange: pr,
-            productCategory: pcategory,
-            sort: sort,
-            search: search,
-          }),
+          body: JSON.stringify({ productId }),
         })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.noProducts) {
-              Swal.fire({
-                title: 'No matching products',
-                confirmButtonText: 'OK',
-                confirmButtonColor: '#88c8bc',
-              }).then((result) => {
-                console.log('fail');
-                if (result.isConfirmed) {
-                  window.location.href = '/shop';
-                }
-              });
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
             } else {
-              updateProducts(data.products);
+              throw new Error("Network response was not ok");
             }
           })
+          .then((data) => {
+            console.log(data);
+            const updatedCartQuantity = data.cartQuantity;
+            const itemInCartElement = document.getElementById("item-in-cart");
+            if (itemInCartElement) {
+              itemInCartElement.textContent = updatedCartQuantity.toString();
+            }
+            // Display a SweetAlert2 notification for "Added to cart"
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: 'Added to cart',
+              showConfirmButton: false,
+              timer: 1000
+            });
+          })
           .catch((error) => {
-            console.error('Error:', error);
+            console.log(error);
           });
-      })
-    })
-    priceButton.forEach(button => {
-      button.addEventListener('change', async () => {
-        let price = button.getAttribute('data-range');
-        rangeAddOrRemovable(price)
-        pr = [...productRange]
-        $.ajax({
-          url: '/filterProduct',
-          data: {
-            productRange: pr,
-            productCategory: pcategory,
-            sort: sort,
-            search: search
-          },
-          method: 'post',
-          success: (response) => {
-            console.log('respojkfj',response);
-            if (response.noProducts) {
+      }
+    </script>
+
+
+    <script>
+      async function addToWishlist(productId) {
+        try {
+          const response = await fetch("/add-item-to-wishlist", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ productId }),
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            if (data.success) {
               Swal.fire({
-                title: 'No matching product',
-                confirmButtonText: 'OK',
-                confirmButtonColor: '#88c8bc',
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  window.location.href = '/shop'
+                position: 'center',
+                icon: 'success',
+                title: data.message,
+                showConfirmButton: false,
+                timer: 1000
+              });
+            } else {
+              Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: data.message,
+                showConfirmButton: false,
+                timer: 1000
+              });
+              // console.error(data.message);
+            }
+          } else {
+            console.error("Network response was not ok");
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    </script>
+
+    <script>
+
+
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const productCategory = new Set();
+        const productRange = new Set();
+        let sort = undefined
+        let search;
+        let pcategory = []
+        let pr = []
+        function categoryAddOrRemoveble(value) {
+          if (productCategory.has(value)) {
+            productCategory.delete(value);
+          } else {
+            productCategory.add(value);
+          }
+        }
+
+
+        function rangeAddOrRemovable(value) {
+          if (productRange.has(value)) {
+            productRange.delete(value);
+          } else {
+            productRange.add(value)
+          }
+        }
+
+        const categoryButton = document.querySelectorAll('.category-control-input');
+
+        const priceCheckboxes = document.querySelectorAll('.price-control-input');
+
+        const priceButton = document.querySelectorAll('.price-control-input');
+
+        const selectElement = document.querySelector('.sort-control-input')
+
+        // const productsContainer = document.querySelector('.colorlib-product .container .row.row-pb-md');
+        const productsContainer = document.querySelector('.containProduct .colorlib-product .container .row.row-pb-md');
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton')
+        search = searchInput.value;
+
+        // const paginationButtons = document.querySelectorAll('.pagination-button');
+        // const productsContainer = document.querySelector('.colorlib-product .container .row.row-pb-md');
+        // const paginationContainer = document.querySelector('.paginationhome .unlist');
+        const paginationContainer = document.querySelector('.paginationhome');
+        console.log('jkjkj', paginationContainer);
+
+
+
+        categoryButton.forEach(button => {
+          button.addEventListener('change', async () => {
+            const category = button.getAttribute('data-category');
+            categoryAddOrRemoveble(category)// i have doubts category or name
+            pcategory = [...productCategory]
+
+            fetch('/filterProduct', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                productRange: pr,
+                productCategory: pcategory,
+                sort: sort,
+                search: search,
+              }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                console.log(data, 'res')
+                if (data.noProducts) {
+                  Swal.fire({
+                    title: 'No matching products',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#88c8bc',
+                  }).then((result) => {
+                    console.log('fail');
+                    if (result.isConfirmed) {
+                      window.location.href = '/shop';
+                    }
+                  });
+                } else {
+                  updateProducts(data.products);
                 }
               })
-            } else {
-              console.log('respons-price',response.products);
-              updateProducts(response.products);
-            }
-          }
+              .catch((error) => {
+                console.error('Error:', error);
+              });
+          })
         })
-      })
-    })
+        priceButton.forEach(button => {
+          button.addEventListener('change', async () => {
+            let price = button.getAttribute('data-range');
+            rangeAddOrRemovable(price)
+            pr = [...productRange]
+            $.ajax({
+              url: '/filterProduct',
+              data: {
+                productRange: pr,
+                productCategory: pcategory,
+                sort: sort,
+                search: search
+              },
+              method: 'post',
+              success: (response) => {
+                console.log(response, 'res')
+                if (response.noProducts) {
+                  Swal.fire({
+                    title: 'No matching product',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#88c8bc',
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      window.location.href = '/shop'
+                    }
+                  })
+                } else {
+                  console.log('respons-price', response.products);
+                  updateProducts(response.products);
+                }
+              }
+            })
+          })
+        })
+        searchButton?.addEventListener('click', function () {
+          search = searchInput.value;
+          $.ajax({
+            url: '/filterProduct',
+            data: {
+              productRange: pr,
+              productCategory: pcategory,
+              sort: sort,
+              search: search
+            },
+            method: 'post',
+            success: (response) => {
+              console.log(response, 'res')
+              if (response.noProducts) {
+                Swal: fire({
+                  title: 'No Matching Products',
+                  confirmButtonText: 'Ok',
+                  confirmButtonColor: '#88c8bc',
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    window.location.href = '/shop'
+                  }
+                })
+              } else {
+                console.log('ppppppppp::::::', response.products);
+                updateProducts(response.products);
+              }
+            }
+          })
+        })
 
-    searchButton.addEventListener('click', function () {
-      search = searchInput.value;
-      $.ajax({
-        url: '/filterProduct',
-        data: {
-          productRange: pr,
-          productCategory: pcategory,
-          sort: sort,
-          search: search
-        },
-        method: 'post',
-        success: (response) => {
-          if (response.noProducts) {
-            Swal: fire({
-              title: 'No Matching Products',
-              confirmButtonText: 'Ok',
-              confirmButtonColor: '#88c8bc',
-            }).then((result) => {
-              if (result.isConfirmed) {
-                window.location.href = '/shop'
+
+        selectElement?.addEventListener('change', function () {
+          const selectedIndex = this.selectedIndex;
+          const selectedOption = this.options[selectedIndex]
+          const sortValue = selectedOptions.getAttribute('data-sort');
+          sort = sortValue
+          console.log(sort, 'sorting')
+        })
+
+
+
+        const paginationButtons = document.querySelectorAll('.pagination-button');
+
+        paginationContainer.addEventListener('click', (event) => {
+
+          event.preventDefault()
+          const target = event.target;
+          console.log(target.classList, 'hello');
+          if (target.classList.contains('pagination-button')) {
+            page = target.getAttribute('data-page');
+            console.log('pageee', page);
+            $.ajax({
+              url: '/filterProduct',
+              data: {
+                productRange: pr,
+                productCategory: pcategory,
+                sort: sort,
+                search: search,
+                page: page
+              },
+              method: 'post',
+              success: (response) => {
+                console.log(response, 'res');
+                if (response.noProducts) {
+                  Swal.fire({
+                    title: 'No matching Products',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#88c8bc',
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      window.location.href = '/shop'
+                    }
+                  });
+                } else {
+                  console.log('pppppp', response.products);
+                  updateProducts(response.products);
+                  updatePagination(response.currentPage, response.totalPages, response.pages)
+
+                }
               }
             })
           } else {
-            console.log('ppppppppp::::::',response.products);
-            updateProducts(response.products);
+
+            // updatePagination(1, 1, [1])
           }
-        }
-      })
-    })
-    selectElement.addEventListener('change', function () {
-      const selectedIndex = this.selectedIndex;
-      const selectedOption = this.options[selectedIndex]
-      const sortValue = selectedOptions.getAttribute('data-sort');
-      sort = sortValue
-      console.log(sort, 'sorting')
-    })
+        });
+        // updatePagination(1, 1, [1, 2])
 
-    // {{!-- paginationContainer.addEventListener('click', (event) => {
-    //   const target = event.target;
-    //   if (target.classList.contains('pagination-button')) {
-    //     page = target.getAttribute('data-page');
-    //     $.ajax({
-    //       url: '/filterProduct',
-    //       data: {
-    //         productRange: pr,
-    //         productCategory: pcategory,
-    //         sort: sort,
-    //         search: search,
-    //         page: page
-    //       },
-    //       method: 'post',
-    //       success: (response) => {
-    //         if (response.noProducts) {
-    //           Swal.fire({
-    //             title: 'No matching Products',
-    //             confirmButtonText: 'OK',
-    //             confirmButtonColor: '#88c8bc',
-    //           }).then((result) => {
-    //             if (result.isConfirmed) {
-    //               window.location.href = 'productList'
-    //             }
-    //           });
-    //         } else {
-    //           updateProducts(response.product);
-    //           updatePagination(response.currentPage, response.totalPage, response.pages)
+        // function updateProducts(products) {
+        //   productsContainer.innerHTML = '';
+        //   products.forEach(product => {
+        //     const productHTML =
+        //       `<div class="col-lg-3 col-sm-6 mt-3">
+        //       <a href="/productdetails/${product._id} ">
+        //             <div class="card" style="border-radius: 1px; border: 1px solid black;">
+        //           <img src="/product-images/${product.images[0]}" alt="product-image"
+        //             style="width: 200px; height: 250px; " class="img-fluid mx-auto d-block" alt="img">
+        //           <div class="card-body text-center">
+        //             <h5 class="card-title">${product.product_name}</h5>
+        //             <p class="card-text">₹${product.product_sales_price}</p>
 
-    //         }
-    //       }
-    //     })
-    //   }
-    // }); --}}
+        //           </div>
+        //         </div>
+        //       </a>
+        //     </div>`
 
-    // function updateProducts(products) {
-    //   productsContainer.innerHTML = '';
-    //   products.forEach(product => {
-    //     const productHTML =
-    //       `<div class="col-lg-3 col-sm-6 mt-3">
-    //       <a href="/productdetails/${product._id} ">
-    //             <div class="card" style="border-radius: 1px; border: 1px solid black;">
-    //           <img src="/product-images/${product.images[0]}" alt="product-image"
-    //             style="width: 200px; height: 250px; " class="img-fluid mx-auto d-block" alt="img">
-    //           <div class="card-body text-center">
-    //             <h5 class="card-title">${product.product_name}</h5>
-    //             <p class="card-text">₹${product.product_sales_price}</p>
+        //     productsContainer.insertAdjacentHTML('beforeend', productHTML);
+        //      console.log('contain',productsContainer);
 
-    //           </div>
-    //         </div>
-    //       </a>
-    //     </div>`
+        //   })
+        // }
+        // const products = [{id:1,image:'123',product_name:'hjh',product_price:20000,product_sales_price:120,quantity:1}];
 
-    //     productsContainer.insertAdjacentHTML('beforeend', productHTML);
-    //      console.log('contain',productsContainer);
-
-    //   })
-    // }
-    // const products = [{id:1,image:'123',product_name:'hjh',product_price:20000,product_sales_price:120,quantity:1}];
-
-function generateProductHTML(product) {
+        function generateProductHTML(product) {
   return `
     <div class="col-lg-5 col-sm-6 containProduct">
       <div class="single_product_item">
-        <a href="/singleProduct/${product.id}" class="product-img">
+        <a href="/singleProduct/${product._id}" class="product-img">
           <img src="/public/uploadProduct/${product.image[0]}" alt="${product.product_name}" style="width: 75%; height: 150px; object-fit: contain;">
         </a>
         <div class="single_product_text">
@@ -669,6 +745,20 @@ function generateProductHTML(product) {
           <h3>Price: ₹${product.product_price.toFixed(2)}</h3>
           <h4>Sales Price: ₹${product.product_sales_price.toFixed(2)}</h4>
           
+              <div>
+               <a href="/singleProduct/${product._id}" class="add_cart" onclick="addtocart('${product._id}')"
+                data-product-id="${product._id}">
+                + Add to Cart
+                </a>
+                <a href="#" class="like_us" onclick="addToWishlist('${product._id}')">
+                  <svg class="" viewBox="0 0 24 24" width="15" height="15" fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                  d="m12 20.703.343.667a.748.748 0 0 1-.686 0l-.003-.002-.007-.003-.025-.013a31.138 31.138 0 0 1-5.233-3.576C3.8 15.573 1 12.332 1 8.514v-.001C1 5.053 3.829 2.5 6.736 2.5 9.03 2.5 10.881 3.726 12 5.605 13.12 3.726 14.97 2.5 17.264 2.5 20.17 2.5 23 5.052 23 8.514c0 3.818-2.801 7.06-5.389 9.262a31.148 31.148 0 0 1-5.233 3.576l-.025.013-.007.003-.002.001ZM6.736 4C4.657 4 2.5 5.88 2.5 8.514c0 3.107 2.324 5.96 4.861 8.12a29.655 29.655 0 0 0 4.566 3.175l.073.041.073-.04c.271-.153.661-.3801 1.13-.674.94-.588 2.19-1.441 3.436-2.502 2.537-2.16 4.861-5.013 4.861-8.12C21.5 5.88 19.343 4 17.264 4c-2.106 0-3.801 1.389-4.553 3.643a.751.751 0 0 1-1.422 0C10.537 5.389 8.841 4 6.736 4Z">
+                  </path>
+                  </svg>
+                </a>
+              </div>
         </div>
       </div>
     </div>
@@ -676,77 +766,86 @@ function generateProductHTML(product) {
 }
 
 
-function updateProducts(products) {
-  const productsContainer = document.querySelector(".products-container");
-  console.log('container',productsContainer);
-  // const productsContainer = document.querySelector(".dataBindig");
-  
+        function updateProducts(products) {
+          const productsContainer = document.querySelector(".products-container");
+          console.log('container', productsContainer);
+          // const productsContainer = document.querySelector(".dataBindig");
 
-  if (productsContainer) {
-    productsContainer.innerHTML = '';
-    console.log('producttttt' , products);
-    products.forEach(product => {
-      // console.log('inside foreach',products);
-      const productHTML = generateProductHTML(product);
-      productsContainer.insertAdjacentHTML('beforeend', productHTML);
-  
-      // productsContainer.insertAdjacentHTML('beforeend', productHTML);
+
+          if (productsContainer) {
+            productsContainer.innerHTML = '';
+            console.log('producttttt', products);
+            products.forEach(product => {
+              // console.log('inside foreach',products);
+              const productHTML = generateProductHTML(product);
+              productsContainer.insertAdjacentHTML('beforeend', productHTML);
+
+              // productsContainer.insertAdjacentHTML('beforeend', productHTML);
+
+            });
+          }
+        }
+
+        // Call the updateProducts function to display the products
+        // updateProducts(products);
+
+        function updatePagination(currentPage, totalpages, pages) {
+          paginationContainer.innerHTML = '';
+          let paginationHtml = '';
+
+          if (currentPage > 1) {
+            paginationHtml += `
+      <li style='margin-right: 10px;'>
+          <a>
+              <button data-page='${currentPage - 1}' class='btn mb-2 btn-secondary pagination-button' id='paginationButton'>Previous</button>
+          </a>
+      </li>
+    `;
+          }
+
+          pages.forEach(page => {
+            if (page === currentPage) {
+              paginationHtml += `
+        <li style="margin-right: 10px;" class="active">
+            <a href="#">
+                <button type="button" data-page="${page}" class="btn mb-2 btn-primary pagination-button">${page}</button>
+            </a>
+        </li>
+      `;
+            } else {
+              paginationHtml += `
+        <li style="margin-right: 10px;">
+            <a>
+                <button type="button" data-page="${page}" class="btn mb-2 btn-secondary pagination-button" id="paginationButton">${page}</button>
+            </a>
+        </li>
+      `;
+            }
+          });
+
+          if (currentPage < totalpages) {
+            paginationHtml += `
       
-    });
-  }
-}
+      <li style="margin-right: 10px;"><a href="?page=${currentPage + 1}"><button
+							class="btn mb-2 btn-secondary">Next</button></a></li>
 
-// Call the updateProducts function to display the products
-// updateProducts(products);
+    `;
+          }
 
-//     {{!-- function updatePagination(currentPage, totalPage, pages) {
-//   paginationContainer.innerHTML = ''; // Remove the comma at the end and use a semicolon here
-//   let paginationHtml = '';
-//   if (currentPage > 1) {
-//       paginationHtml += `
-//       <li style='margin-right: 10px;'>
-//           <a>
-//               <button data-page='${currentPage - 1}' class='btn mb-2 btn-secondary pagination-button' id='paginationButton'>Previous</button>
-//           </a>
-//       </li>
-//       `;
-//   }
-//   pages.forEach(page => {
-//       if (page === currentPage) {
-//           paginationHtml += `
-//           <li style="margin-right: 10px;" class="active">
-//               <a href="#">
-//                   <button type="button" data-page="${page}" class="btn mb-2 btn-primary pagination-button">${page}</button>
-//               </a>
-//           </li>
-//           `;
-//       } else {
-//           paginationHtml += `
-//           <li style="margin-right: 10px;">
-//               <a>
-//                   <button type="button" data-page="${page}" class="btn mb-2 btn-secondary pagination-button" id="paginationButton">${page}</button>
-//               </a>
-//           </li>
-//           `;
-//       }
-//   });
-//   if (currentPage < totalPage) {
-//       paginationHtml += `
-//       <li style="margin-right: 10px;">
-//           <a>
-//               <button data-page="${currentPage + 1}" class="btn mb-2 btn-secondary pagination-button" id="paginationButton">Next</button>
-//           </a>
-//       </li>
-//       `;
-//   }
-//   paginationContainer.insertAdjacentHTML('beforeend', paginationHtml); // Correct the typo here
-// } --}}
+          // Update the paginationContainer with the generated HTML
+          paginationContainer.innerHTML = `
+    <ul class="list-unstyled paginationhome">
+      ${paginationHtml}
+    </ul>
+  `;
+        }
 
 
-  });
+
+      });
 
 
-</script> 
+    </script>
 
 
-<%- include('../layouts/homeLayout/footer')%>
+    <%- include('../layouts/homeLayout/footer')%>

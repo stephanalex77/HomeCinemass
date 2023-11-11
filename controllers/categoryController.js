@@ -38,6 +38,7 @@ const addCategory = async (req, res) => {
     }else{
       const newCategory = new Category({
         categoryname: req.body.categoryname,
+        OfferPrice:req.body.OfferPrice
       });
       await newCategory.save();
       if(newCategory){

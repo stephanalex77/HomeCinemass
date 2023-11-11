@@ -182,6 +182,149 @@ const verifyLogin = async (req, res) => {
   }
 };
 
+
+const forgetLoad = async (req, res) => {
+  try {
+    res.render("forget");
+  } catch (error) {
+    console.log(error.message);
+ }
+};
+
+
+const forgetVerify = async (req, res) => {
+  try {
+    const email = req.body.email;
+    const userData = await User.findOne({ email: email });
+    if (userData) {
+      if (userData.is_Verified) {
+        res.render("forget", { message: "please verify your mail.." });
+      } else {
+        const otp = randomString.generate({ length: 4, charset: "numeric" });
+        console.log(otp);
+        delete req.session.otp
+        req.session.otp = otp;
+        await sendResetPasswordMail(userData.name, userData.email, otp);
+        res.render('forgetOtp',{userId:userData.id});
+        // res.render("otp",{userId:userData})
+      }
+    } else {
+      res.render("forget", { message: "user not found" });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.redirect("/404")
+  }
+};
+
+const sendResetPasswordMail = async(name,email,otp)=>{
+  try{
+      const transporter = nodemailer.createTransport({
+          host:'smtp.gmail.com',
+          port:587,
+          secure:false,
+          requireTLS:true,
+          auth:{
+            user: "stephanalex22@gmail.com",
+            pass: "jrdjzrshqrxkgckm",
+          }
+      });
+      const mailOptions = {
+          from:"stephanalex22@gmail.com",
+          to:email,
+          subject:'for reset password',
+          html: '<p>Hyy '+name+" "+"this is your verify opt " +"  "+  otp+' "</p>'
+      }
+      transporter.sendMail(mailOptions,function(error,info){
+          if(error){
+              console.log(error);
+          }
+          else{
+              console.log("email has been sent :-",info.response);
+          }
+      })
+      
+  }catch(error){
+      console.log(error.message);
+  }
+}
+
+
+const verifyOtpLoad = async (req, res) => {
+  try {
+    res.render("forgetOtp", { userId: req.query.id });
+  } catch (error) {
+    console.log(error.message);
+ }
+};
+
+const verifyResetOtp = async (req, res) => {
+  try {
+
+    const enteredOTP = req.body.otp
+    console.log(enteredOTP,"========");
+    const saveOtp = req.session.otp;
+    if (saveOtp === enteredOTP) {
+      const id = req.body.userId.trim();
+      res.status(200).json({ success:true, message:"verification successfull",userId:id });
+    } else {
+      // const userData = await User.findById(req.body.userId);
+      // console.log(userData);
+      res.status(400).json({success:false,message:"OTP incorrect"})
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const resetPassword = async(req,res)=>{
+  try{
+    const userId = req.query.id
+   
+    res.render('forgotPassword',{userId:userId})
+  }catch(error){
+    console.log(error);
+ }
+}
+
+const resetNewPassword = async (req, res) => {
+  try {
+    const user_id = req.body.userId
+    const password = req.body.password;
+    const passwordHash = await bcrypt.hash(password,10)
+    const secure_password = passwordHash
+    const updateData = await User.findByIdAndUpdate(
+      { _id: user_id },
+      { $set: { password: secure_password } }
+    );
+
+    console.log(updateData);
+    res.redirect("/login");
+  } catch (error) {
+    console.log(error.message);
+ }
+};
+
+const resendForget = async (req, res) => {
+  try {
+    const userId = req.body.userId;
+    const user = await User.findOne({id:userId})
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+    const newOTP = randomString.generate({ length: 4, charset: "numeric" });
+    console.log(newOTP ,"newotp")
+    await sendResetPasswordMail(user.name, user.email, newOTP);
+    delete req.session.otp
+    req.session.otp = newOTP
+    return res.json({ success: true, message: "OTP Resent"});
+  } catch (error) {
+    console.error(error);
+    return res.json({ success: false, message: "Error resending OTP" });
+  }
+};
+
+
 const loadHome = async (req, res) => {
   try {
     const products = await Product.find();
@@ -209,7 +352,7 @@ const homeLoad = async (req, res) => {
 
 const userLogout = (req, res) => {
   try {
-    req.session.destroy();
+    delete req.session.user_id;
     res.redirect("/");
   } catch (error) {
     console.log(error.message);
@@ -573,6 +716,13 @@ module.exports = {
   loginLoad,
   verifyLogin,
   verifyOtp,
+  forgetLoad,
+  forgetVerify,
+  verifyOtpLoad,
+  verifyResetOtp,
+  resetPassword,
+  resetNewPassword,
+  resendForget,
   loadHome,
   homeLoad,
   userLogout,

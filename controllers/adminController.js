@@ -45,14 +45,14 @@ const loadDashboard = async (req, res) => {
   try {
     const userData = await User.findById({ _id: req.session.admin_id });
     res.set("cache-Control", "no-store");
-    res.render("home", { admin: userData });
+    res.render("home", { admin: userData});
   } catch (error) {
     console.log(error.message);
   }
 };
 const logout = async (req, res) => {
   try {
-    req.session.destroy();
+    delete req.session.admin_id;
     res.redirect("/admin");
   } catch (error) {
     console.log(error.message);

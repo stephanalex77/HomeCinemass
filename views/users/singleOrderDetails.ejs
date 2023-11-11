@@ -65,11 +65,18 @@
           </div>
         </div>
         <form action="/view-order/<%= user._id %>/<%= order._id %>" method="post">
-  
+          
         <% if (order) { %>
         <div class="col-lg-12 order-section">
           <div class="single_confirmation_details">
             <h4>Order Info</h4>
+            <div class="button-group-area mt-10" style="display: flex; justify-content: flex-end;">
+
+              <% if (order.status === 'Delivered') { %>
+                <a href="/invoice?orderId=<%= order._id %>" class="genric-btn default-border">Invoice</a>
+              <% } %>
+            
+            </div>
             <table class="table">
               <thead>
                 <tr>
@@ -79,6 +86,7 @@
                   <th>Sales Price</th>
                   <th>Quantity</th>
                   <th>Description</th>
+                  
                 </tr>
               </thead>
               <tbody>
@@ -94,33 +102,7 @@
                 <% }); %>
               </tbody>
             </table>
-            <h4>Order Address</h4>
-            <ul>
-              <li>
-                <p>Street 1</p>
-                <span>: <%= order.shippingAddress.address1 %></span>
-              </li>
-              <li>
-                <p>Street 2</p>
-                <span>: <%= shippingAddress?.address2 %></span>
-              </li>
-              <li>
-                <p>City</p>
-                <span>: <%= shippingAddress?.city %> </span>
-              </li>
-              <li>
-                <p>State</p>
-                <span>: <%= shippingAddress?.state %> </span>
-              </li>
-              <li>
-                <p>Country</p>
-                <span>: <%= shippingAddress?.country %></span>
-              </li>
-              <li>
-                <p>Postcode</p>
-                <span>: <%= shippingAddress?.pincode %></span>
-              </li>
-            </ul>
+            
           </div>
         </div>
   

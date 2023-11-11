@@ -269,10 +269,10 @@
                 <div class="border p-2 mb-2">
                   <div class="payment-method">
                     <h4>Payment Method</h4>
-                    <!-- <div class="form-group form-check">
+                    <div class="form-group form-check">
                       <input form="paymentForm" type="radio" name="paymentMethod" id="f-option4" value="wallet">
                       <label class="form-check-label" for="f-option4">Wallet Only</label>
-                    </div> -->
+                    </div>
                     <div class="form-group form-check">
                       <input form="paymentForm" type="radio" name="paymentMethod" id="f-option5" value="cod">
                       <label class="form-check-label" for="f-option5">Cash on Delivery</label>
@@ -295,7 +295,38 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
- function makePurchase(grandTotal) {
+ const makePurchase =async (grandTotal)=>{
+  
+  const resp = await fetch('/cartt?checkout=true',{
+           method:'get',
+           headers:{
+            'Content-type':"application/json"
+           }
+  })
+  const data = await resp.json()
+  console.log('my dtaa ',typeof data.cartSubtotal,data.cartSubtotal)
+  let totalValue=0;
+  if(!isNaN(grandTotal)){
+     totalValue = parseInt(grandTotal)
+  }
+  
+  if(totalValue !==data.cartSubtotal ){
+   await Swal.fire({
+    icon: 'warning', // You can use different icons (info, warning, error, etc.)
+    title: 'Cart Changed',
+    text: 'The contents of your cart have changed. Please place your order again.',
+    confirmButtonText: 'OK',
+  });
+        location.reload()
+        return
+  }
+
+
+  makePurchase1(grandTotal)
+}
+
+
+ function makePurchase1(grandTotal) {
   console.log("asdfghjkl;========fghjk",grandTotal);
   let addressId = $("input[name='addressId']:checked").val();
   let selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked');

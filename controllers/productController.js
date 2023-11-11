@@ -28,35 +28,51 @@ const addProduct = async (req, res) => {
     const images = req.files.map((file) => file.filename);
     await cropImage.crop(req);
 
-    const category = await Category.findOne({ name: req.body.categoryName });
+    console.log("hjgsdjhas", req.body);
+
+    const category = await Category.find({ _id: req.body.category_id });
+    console.log("categoryyryrhfg", category, category[0].categoryname);
 
     if (!category) {
       return res.status(400).json({ error: "Category not found" });
     }
 
-    // Calculate the product_sales_price with a discount
+    // Parse specialOffer as a number
+    const specialOffer = parseFloat(req.body.product_sales_price);
+    console.log("qqqqqqqqqqqqq", specialOffer);
+
+    if (isNaN(specialOffer) || specialOffer < 0 || specialOffer > 100) {
+      return res.status(400).json({ error: "Invalid discount percentage" });
+    }
+
+    console.log("ccccccccccccc", category[0].OfferPrice);
+
+    // Calculate the product_sales_price based on the discount percentage
     const product_price = req.body.product_price;
-    const specialOffer = req.body.product_sales_price; 
+    console.log("product_price", product_price);
     const discount = (product_price * specialOffer) / 100;
+    console.log("discount:::::::::", discount);
     const product_sales_price = product_price - discount;
+    console.log("what in this:", product_sales_price);
 
     const product = new Product({
       product_name: req.body.product_name,
-      product_price: product_price, 
-      product_sales_price: product_sales_price, 
+      product_price: product_price,
+      product_sales_price: product_sales_price,
       quantity: req.body.quantity,
       description: req.body.description,
       image: images,
-      category_id: category._id,
+      category_id: category[0]._id,
     });
 
     await product.save();
-    const categories = await getCategoryList();
-    res.render("admin/product", { categories });
+    // const categories = await getCategoryList();
+    res.redirect("/admin/productlist");
   } catch (error) {
     console.log(error);
   }
 };
+
 
 
 
@@ -136,9 +152,8 @@ const editproductLoad = async (req, res) => {
 //LIST PRODUCT AT ADMIN SIDE
 const listProduct = async (req, res) => {
   try {
-    const products = await Product.find().populate('category_id');
+    const products = await Product.find().populate('category_id').sort({ createdAt: -1 });
     const categories = await Category.find();
-
     const itemsPerPage = 6;
      const currentpage = parseInt(req.query.page) || 1;
      const startIndex = (currentpage - 1) * itemsPerPage;
@@ -155,12 +170,37 @@ const listProduct = async (req, res) => {
 };
 
 
+const deteEditeproduct = async (req, res) => {
+  try {
+    
+    console.log("hi hello");
+        const productId = req.body.productId
+        const removeindex = req.body.index
+      console.log("qwertyui",productId);
+      console.log("asdfghjk", removeindex);
+        const findProduct = await Product.findOne({ _id: productId })
+        if (!findProduct) {
+            res.status(404).send('Product not found');
+        } else {
+            findProduct.image.splice(removeindex, 1)
+            findProduct.save()
+
+            res.status(200).json({ message: 'Product image deleted successfully', product: findProduct });
+        }
+  }
+  catch (error) {
+      console.log(error.message);
+  }
+}
+
 // EDIT PRODUCT
+
+
+
 const editProduct = async (req, res) => {
   try {
-    const productId = req.params.id;
+    const id = req.params.id;
     const {
-      product_id,
       product_name,
       description,
       product_price,
@@ -169,31 +209,48 @@ const editProduct = async (req, res) => {
       quantity,
     } = req.body;
 
-    let updatedFields = {
-      product_id,
-      product_name,
-      description,
-      product_price,
-      product_sales_price,
-      category_id,
-      quantity,
-    };
-
-    if (req.files && req.files.length > 0) {
-      const images = req.files.map((file) => file.filename);
-      updatedFields.image = images;
+    // Check if the product with the given id exists
+    const existingProduct = await Product.findById(id);
+    console.log("qwerty:::", existingProduct);
+    if (!existingProduct) {
+      return res.status(404).json({ error: "Product not found" });
     }
-    const updatedProduct = await Product.findByIdAndUpdate(productId, updatedFields, { new: true });
 
-    if (!updatedProduct) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
+   
+    if (req.files.length != 0) {
+      const images = req.files.map(file => file.filename);
+      const productData = existingProduct
+      if (productData.image.length < 4) {
+
+          for (let i = 0; i < images.length; i++) {
+              productData.image.push(images[i])
+              if (productData.image.length == 4) {
+                  break
+              }
+          }   
+          await productData.save()
+      }
+  } 
+
+    // Update the product fields other than images
+    existingProduct.product_name = product_name;
+    existingProduct.product_price = product_price;
+    existingProduct.product_sales_price = product_sales_price;
+    existingProduct.quantity = quantity;
+    existingProduct.description = description;
+    existingProduct.category_id = category_id;
+
+
+    // Save the updated product
+    await existingProduct.save();
+
     res.redirect('/admin/productlist');
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).render('404', { message: "Internal server error" });
+    console.error(error.message);
   }
 };
+
 
 const getShopProduct = async(req, res)=>{
   try {
@@ -206,8 +263,6 @@ const getShopProduct = async(req, res)=>{
      }
 
      let query={}
-
-
 
     //  const products = await Product.find();
     const products = await Product.find({}).sort(sortList);
@@ -236,6 +291,7 @@ const getShopProduct = async(req, res)=>{
 
 const getProductInsideCategory = async(req, res)=>{
   console.log('getProductInsideCategory called');
+  const user = await User.findById(req.session.user_id)
   const productCategory = req.body.productCategory;
   const productRange = req.body.productRange;
   let sort = req.body.sort
@@ -299,7 +355,7 @@ console.log("range filter::::",rangeFilter );
   }
   
   const products = await getFilteredProducts(filter, sort);
-  console.log("=======>",products)
+  // console.log("=======>",products)
 
 
 
@@ -307,6 +363,7 @@ console.log("range filter::::",rangeFilter );
 
   const itemsPerPage = 6;
   let currentPage = parseInt(req.body.page);
+  console.log(currentPage,'pgno')
   if (isNaN(currentPage)) {
     currentPage = 1;
   }
@@ -319,7 +376,7 @@ console.log("range filter::::",rangeFilter );
     pages.push(i);
   }
   if (products.length) {
-    res.json({ products: paginatedProducts, currentPage, totalPages, pages })
+    res.json({ products: paginatedProducts, currentPage, totalPages, pages ,user})
   } else {
     res.json({ noProducts:true})
 }
@@ -351,6 +408,7 @@ module.exports = {
   getProductDetails,
   showProductDetails,
   editProduct,
+  deteEditeproduct,
   editproductLoad,
   getShopProduct,
   getProductInsideCategory,

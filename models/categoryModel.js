@@ -11,7 +11,7 @@ const categorySchema = new mongoose.Schema({
   },
   OfferPrice:{
     type:Number,
-    default:0
+    require:true
 }
 
 })

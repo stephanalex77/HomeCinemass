@@ -17,6 +17,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="">
     <!-- Template CSS -->
     <link href="/assets/css/main.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 </head>
 
 <body>
@@ -35,7 +36,7 @@
         <nav>
             <ul class="menu-aside">
                 <li class="menu-item ">
-                    <a class="menu-link" href="index.html"> <i class="icon material-icons md-home"></i>
+                    <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
@@ -77,8 +78,7 @@
                     </a>
                     <div class="submenu">
                         <a href="/admin/users">List Users</a>
-                        <a href="page-sellers-list.html">Sellers list</a>
-                        <a href="page-seller-detail.html">Seller profile</a>
+                        
                     </div>
                 </li>
                 <li class="menu-item has-submenu">
@@ -230,17 +230,17 @@
                                 </div>
                                 <div class="mb-4">
                                     <label for="category_id" class="form-label">Category</label>
-                                    <select class="form-select" name="category_id">
+                                    <select class="form-control" name="category_id" id="category_id">
                                         <option selected>Select category</option>
-                                        <% for (let i = 0; i < categories.length; i++) { %>
-                                            <option value="<%= categories[i]._id %>">
-                                                <%= categories[i].categoryname %>
-                                            </option>
-                                        <% } %>
-                                        <% if (categories.length === 0) { %>
-                                            <option disabled>Category is not found!!!</option>
-                                        <% } %>
-                                    </select>
+    
+                                            <% categories.forEach(function(category) { %>
+                                                <option value="<%= category._id %>" 
+                                                    
+                                                >
+                                                    <%= category.categoryname %>
+                                                </option>
+                                            <% }); %>
+                                        </select>
                                 </div>
                                 
                                 <div class="mb-4">
@@ -280,7 +280,7 @@
                     </div> 
                 </div>
               
-                <div class="col-lg-3">
+                <!-- <div class="col-lg-3">
                     <div class="card mb-4">
                       <div class="card-header">
                         <h4>Media</h4>
@@ -292,7 +292,23 @@
                         </div>
                       </div>
                     </div>
+                </div> -->
+                  
+                <div class="col-lg-3">
+                    <div class="card mb-4">
+                      <div class="card-header">
+                        <h4>Media</h4>
+                      </div>
+                      <div class="card-body">
+                        <div class="input-upload">
+                          <img id="image-preview" src="/assets/imgs/theme/upload.svg" alt="Image Preview">
+                          <input class="form-control" type="file" name="images" id="image-input" multiple>
+                          <!-- <button id="crop-button">Crop</button> -->
+                        </div>
+                      </div>
+                    </div>
                   </div>
+                
                   
                   
               </form>
@@ -333,6 +349,7 @@
             const imageInput = document.getElementById('image-input');
             imageInput.addEventListener('change', updateImagePreview);
           </script>
+          
     </main>
     <script src="/assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/assets/js/vendors/bootstrap.bundle.min.js"></script>
@@ -341,6 +358,9 @@
     <script src="/assets/js/vendors/jquery.fullscreen.min.js"></script>
     <!-- Main Script -->
     <script src="/assets/js/main.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script> 
+    
+      
 </body>
 
 

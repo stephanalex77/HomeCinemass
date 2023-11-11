@@ -64,9 +64,13 @@ user_route.post('/login',userController.verifyLogin);
 user_route.get('/registeration',userController.loadRegister);
 user_route.get('/home',auth.isLogin,userController.loadHome);
 user_route.get('/logout',auth.isLogin,userController.userLogout);
-
-
-
+user_route.get('/forget',userController.forgetLoad)
+user_route.post('/forget',userController.forgetVerify)
+user_route.get('/forgetOtp',userController.verifyOtpLoad)
+user_route.post('/forgetVerify',userController.verifyResetOtp)
+user_route.post('/resendForgot',userController.resendForget)
+user_route.get('/resetPassword',userController.resetPassword)
+user_route.post('/resetPassword',userController.resetNewPassword)
 // cart management
 
 user_route.get('/cartt', auth.isLogin, auth.isBlock, cartController.getCart);
@@ -115,6 +119,7 @@ user_route.post('/ordercancel',auth.isLogin, orderController.cancelOrder);
 user_route.post('/orderreturn', auth.isLogin, orderController.returnOrder);
 // user_route.get('/orders/:orderId', auth.isLogin, orderController.returnOrder);
 user_route.get('/orderthankyou', auth.isLogin, orderController.getOrderThankyou);
+user_route.get('/invoice', auth.isLogin, orderController.getOrderInvoice)
 // user_route.get('applycoupon', auth.isLogin, couponController.applyCoupon);
 user_route.post('/couponget', auth.isLogin, couponController.applyCoupon);
 user_route.get('/coupons/:cartid', auth.isLogin, couponController.couponGet)

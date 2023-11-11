@@ -18,7 +18,7 @@ const walletSchema= new mongoose.Schema({
                 default: Date.now
             },
             type: {
-                type: String, // You can specify the type as 'debit' or 'credit' or any other relevant types
+                type: String, 
                 default: false
             },
             amount: {
@@ -27,6 +27,8 @@ const walletSchema= new mongoose.Schema({
             }
         }
     ]
-})
+},
+{ timestamps: true }
+)
 
 module.exports = mongoose.model('Wallet',walletSchema)

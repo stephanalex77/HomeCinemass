@@ -95,12 +95,13 @@
                           <p>Order Status</p>
                           <span>: <%= order.status %></span>
                         </li>
-                        <% order.products.forEach(product=> { %>
+                          
+                        <% order.products.forEach(product => { %>
                           <li>
                             <p>Product Name</p>
-                            <span>: <%= order.product_name %></span>
+                            <span>: <%= product.product.product_name %></span>
                           </li>
-                          <% }); %>
+                        <% }); %>
                             <li>
                               <p>Total</p>
                               <span>: ₹<%= order.total_amount %></span>
@@ -111,32 +112,21 @@
                             </li>
                       </ul>
                       <h4>Order Address</h4>
-                      <ul>
-                        <li>
-                          <p>Street 1</p>
-                          <span>: <%= shippingAddress.address1 %></span>
-                        </li>
-                        <li>
-                          <p>Street 2</p>
-                          <span>: <%= shippingAddress.address2 %></span>
-                        </li>
-                        <li>
-                          <p>City</p>
-                          <span>: <%= shippingAddress.city %> </span>
-                        </li>
-                        <li>
-                          <p>State</p>
-                          <span>: <%= shippingAddress.state %> </span>
-                        </li>
-                        <li>
-                          <p>Country</p>
-                          <span>: <%= shippingAddress.country %></span>
-                        </li>
-                        <li>
-                          <p>Postcode</p>
-                          <span>: <%= shippingAddress.pincode %></span>
-                        </li>
-                      </ul>
+                      
+            
+                          <span> <%= shippingAddress.address1 %></span>
+                        
+                          <span>, <%= shippingAddress.address2 %></span>
+                        
+                          <span>, <%= shippingAddress.city %> </span>
+                        
+                          <span>, <%= shippingAddress.state %> </span>
+                        
+                          <span>, <%= shippingAddress.country %></span>
+                        
+                          <span>, <%= shippingAddress.pincode %></span>
+                     
+                      
                       <div class="order-buttons">
                         <!-- <% if (order.orderStatus !=='Cancelled' && order.orderStatus !=='Returned' && order.orderStatus!=='Shipped' && order.orderStatus !=='Pending' ) { %>
                           
@@ -145,7 +135,7 @@
                             <a href="#" class="genric-btn success-border" onclick="returnOrder('<%= order._id %>')">Return</a>
                           <% } %>
                           
-                          <% if (order.status !== 'Cancelled') { %>
+                          <% if (order.status !== 'Cancelled' && order.status !== 'Delivered' ) { %>
                             <a href="#" class="genric-btn danger-border" onclick="cancelOrder('<%= order._id %>')">Cancel</a>
                           <% } %>
 
@@ -160,6 +150,63 @@
             </div>
           </div>
         </section>
+        <div class="row mt-5 pb-5 ">
+          <div class="col-lg-12">
+            <div class="custom-pagination ">
+              <% if (totalpages) { %>
+                <ul class="list-unstyled paginationhome">
+                  <% if (currentpage> 1) { %>
+  
+                    <!-- <li>
+                      <a href="?page=<%= currentpage - 1 %>">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left" fill="currentColor"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd"
+                            d="M5.854 4.646a.5.5 0 0 1 0 .708L3.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z" />
+                          <path fill-rule="evenodd"
+                            d="M2.5 8a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+                        </svg>
+                      </a>
+                    </li> -->
+                    <li style="margin-right: 10px;"><a href="?page=<%= currentpage - 1 %>"><button
+                          class="btn mb-2 btn-secondary">Previous</button></a></li>
+                    <% } %>
+                      <% pages.forEach(page=> { %>
+                        <!-- <li class="active  "><span><a href="?page=<%= page %>">
+                              <%= page %>
+                            </a></span></li> -->
+                        <li style="margin-right: 10px;" class="active">
+                          <a href="#">
+                            <button type="button" data-page="<%= page %>"
+                              class="btn mb-2 btn-primary pagination-button">
+                              <%= page %>
+                            </button>
+                          </a>
+                        </li>
+                        <% }); %>
+                          <% if (currentpage < totalpages) { %>
+                            <!-- <li>
+                              <a href="?page=<%= currentpage + 1 %>">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right"
+                                  fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                  <path fill-rule="evenodd"
+                                    d="M10.146 4.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 8l-2.647-2.646a.5.5 0 0 1 0-.708z" />
+                                  <path fill-rule="evenodd"
+                                    d="M2 8a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8z" />
+                                </svg>
+                              </a>
+                            </li> -->
+                            <li style="margin-right: 10px;"><a href="?page=<%= currentpage + 1 %>"><button
+                                  class="btn mb-2 btn-secondary">Next</button></a></li>
+  
+  
+  
+                            <% } %>
+                </ul>
+                <% } %>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="untree_co-section bg-light">
         <div class="container">

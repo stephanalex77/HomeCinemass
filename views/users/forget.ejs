@@ -1,0 +1,57 @@
+<% include('../layouts/header.ejs') %>
+
+  <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/public/css/userlogin.css" />
+    <link rel="stylesheet" href="/public/css/bootstrap.css" />
+    <link rel="stylesheet" href="/public/css/newlogin.css" />
+  </head>
+
+  <!-- Start Banner Area -->
+
+  <section>
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center">
+        <h1>AV STORE</h1>
+      </div>
+    </div>
+  </section>
+  <!-- End Banner Area -->
+
+  <!--================Login Box Area =================-->
+
+  <section class="login_box_area section_gap">
+    <div class="container d-flex justify-content-center ">
+      <!-- <div class="row col-10"> -->
+        <!-- <div class="col-lg-6"> -->
+          <div class="login_form_inner">
+
+            <% if(typeof message !=='undefined' ){ %>
+              <div class="alert alert-success text-center py-2 mb-2">
+                <h5>
+                  <%= message %>
+                </h5>
+              </div>
+              <% } %>
+                <div class="container1 ">
+                  <div class="header1" style="margin-top:-5rem">
+                    <h1>Forget Password</h1>
+                  </div>
+                  <form class="row login_form" action="/forget" method="post">
+                    <div class="form-group">
+                      <input type="email" class="form-control" id="email" name="email" placeholder="Email" required />
+                    </div>
+                    <div class="text-center col-md-12 form-group ">
+                      <button type="submit" value="Send Reset Link" class="primary-btn">
+                        Send Reset OTP
+                      </button>
+                      <!-- <input type="submit" class="primary-btn1" value="Send Reset Link"> -->
+                    </div>
+                  </form>
+                </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <% include('../layouts/footer.ejs') %>

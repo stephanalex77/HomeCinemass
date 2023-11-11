@@ -5,7 +5,10 @@ const User = require("../models/userModel");
 const Coupon = require("../models/couponModel")
 const Order = require("../models/orderModel")
 const Wallet = require("../models/walletModel")
+const fs = require("fs");
+const { Readable } = require('stream');
 const razorpay = require('razorpay');
+const easyinvoice = require('easyinvoice');
 const { OrderedBulkOperation } = require("mongodb");
 
 const key_secret = process.env.RAZORPAY_SECRET_KEY;
@@ -29,6 +32,7 @@ const getOrderReview = async (req, res) => {
   const userId = req.session.user_id;
 
   const user = await User.findById({ _id: userId });
+
 
   try {
     const order = await Order.findOne({ user: userId }).populate('shippingAddress');
@@ -97,14 +101,14 @@ const makeOrder = async (req, res) => {
     const orderid = await generateOrderID();
     const shippingAddress = user.address.find(address => address.is_default);
     const { payment_option, GrandTotal } = req.body;
-
+   
     const cart = await Cart.findOne({ user: userId }).populate({ path: 'products.product' });
     req.session.discountAmount = 0
     let total_amount = 0;
     cart.products.forEach((product) => {
       total_amount += product.product.product_sales_price * product.quantity;
     });
-
+     
     if (payment_option === 'cod') {
       const newOrder = new Order({
         user: userId,
@@ -287,12 +291,23 @@ const showorder = async (req, res) => {
     const user = await User.findById({ _id: userId });
     
     // Sort orders by createdAt field in descending order (most recent first)
-    const orders = await Order.find({ user: userId })
+    const orders = await Order.find({ user: userId }).populate('products.product')
       .sort({ createdAt: -1 });
-    
-    
-    console.log("my orders:::", orders[0].shippingAddress);
-    res.render('orderDetails', { orders, user,shippingAddress:orders[0].shippingAddress[0] });
+
+       console.log("orders:",orders);
+      const itemsPerPage = 2;
+       const currentpage = parseInt(req.query.page) || 1;
+       const startIndex = (currentpage - 1) * itemsPerPage;
+       const endIndex = startIndex + itemsPerPage;
+       const totalpages = Math.ceil(orders.length / itemsPerPage);
+       const pages = Array.from({ length: totalpages }, (_, i) => i + 1); // Create an array of page numbers
+       const currentorders = orders.slice(startIndex, endIndex);
+       
+      //  console.log(orders,"ods");
+  
+
+    // console.log("my orders:::", orders[0].shippingAddress);
+    res.render('orderDetails', {  user,shippingAddress:orders[0].shippingAddress[0], orders:currentorders,pages,currentpage, totalpages });
   } catch (error) {
     console.error('Error retrieving orders:', error);
     res.status(500).send('Internal Server Error');
@@ -326,7 +341,7 @@ const cancelOrder = async (req, res) => {
     }
 
     if (order.paymentMethod !== 'cod') {
-      const canceledAmount = order.totalprice;
+      const canceledAmount = order.total_amount;
       const userId = order.user;
       const transactionType = 'credit';
       await updateWalletBalance(userId, canceledAmount, transactionType);
@@ -412,35 +427,52 @@ const walletDispaly = async(req, res)=>{
           const wallet = await Wallet.findOne({ userId });
           console.log('walle::::',wallet)
           if (!wallet) {
-              return res.render('wallet', { walletTransactions: [] });
+              return res.render('wallet', { transactions: [] });
           }
-          res.render('walletHistory', { walletTransactions: wallet });
+          res.render('walletHistory', { transactions: wallet });
       } catch (error) {
           console.error(error.message);
           res.status(500).send('Internal Server Error');
       }
  
 }
-const updateWalletBalance = async (userId, amount)=> {
+const updateWalletBalance = async (userId, amount, transactionType) => {
   try {
-    console.log('hfs')
-    let wallet = await Wallet.findOne({ userId });
+    const wallet = await Wallet.findOne({ userId });
     if (!wallet) {
-      wallet = new Wallet({
+      // Create a new wallet with the initial transaction
+      const newWallet = new Wallet({
         userId,
         balance: amount,
+        transactions: [
+          {
+            type: transactionType,
+            amount: amount,
+          },
+        ],
       });
+      await newWallet.save();
     } else {
+      // Update the wallet balance
       wallet.balance += amount;
+
+      // Create a new transaction and push it to the transactions array
+      const newTransaction = {
+        type: transactionType,
+        amount: amount,
+      };
+      wallet.transactions.push(newTransaction);
+
+      await wallet.save();
     }
-    console.log('rbkjbc')
-    await wallet.save();
+
     return { success: true, message: 'Wallet updated successfully' };
   } catch (error) {
     console.error(error);
     return { success: false, message: 'Error updating wallet' };
   }
-}
+};
+
 
 const singleOrderDetails = async (req, res) => {
   try {
@@ -468,35 +500,564 @@ const singleOrderDetails = async (req, res) => {
 }
 
 
-const adminOrderDetails = async (req, res) => {
+// const adminOrderDetails = async (req, res) => {
+//   try {
+//     const userId = req.params.userId;
+//     const orderId = req.params.orderId;
+
+//     console.log('User ID:', userId);
+//     console.log('Order ID:', orderId);
+
+//     const user = await User.findById(userId);
+//     const order = await Order.findOne({ user: userId, _id: orderId }).populate({
+//       path: 'products.product',
+//     }).populate('shippingAddress');
+
+//     if (!user || !order) {
+//       console.log('Order not found');
+//       return res.status(404).send('Order not found');
+//     }
+
+//     res.render('singleOrderDetails', { order, user, shippingAddress: order.shippingAddress });
+
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).send('Internal Server Error');
+//   }
+// }
+
+const adminOrderDetails = async(req,res)=>{
   try {
     const userId = req.params.userId;
-    const orderId = req.params.orderId;
 
-    console.log('User ID:', userId);
-    console.log('Order ID:', orderId);
-
+    const orderId = req.params.orderId
+    console.log("my orderid:",orderId);
     const user = await User.findById(userId);
-    const order = await Order.findOne({ user: userId, _id: orderId }).populate({
-      path: 'products.product',
-    }).populate('shippingAddress');
 
-    if (!user || !order) {
-      console.log('Order not found');
-      return res.status(404).send('Order not found');
-    }
+    const order = await Order.findById(orderId).populate("products.product").populate("user").populate('shippingAddress');
+    // const order = await Order.findOne({ user: userId, _id: orderId }).populate({
+    //         path: 'products.product',
+    //       }).populate('shippingAddress');
+    console.log("my orders:",order);
+    res.render('adminOrderDetails',{order, user, shippingAddress: order.shippingAddress})
+  } catch (error) {
+    console.log(error.message);
+    // res.redirect('/404')
+  }
+ }
 
-    res.render('singleOrderDetails', { order, user, shippingAddress: order.shippingAddress });
+
+
+ const getOrderInvoice = async (req, res) => {
+
+  try {
+    const id = req.query.orderId
+
+    const userId = req.session.userId;
+    
+    result = await getOrderById(id);
+   
+    const date = result.orderDate.toLocaleDateString();
+    const product = result.products;
+    // console.log("produ:::::::1",product[0].product);
+    // console.log("produ:::::::2",product[0].product.description);
+    // console.log("produ:::::::3",product[0].product.product_sales_price);
+    // console.log("produ:::::::4",product);
+
+    const order = {
+      id: id,
+      total: parseInt(result.total_amount),
+      date: date,
+      payment: result.paymentMethod,
+      // name: result.address.name,
+      // shippingAddress: result.address.address,
+      // tel: result.address.tel,
+      // city: result.address.city,
+      // state: result.address.state,
+      // pincode: result.address.pincode,
+      product: result.products,
+    };
+    // console.log('hello',result)
+    // console.log('type',typeof result.products)
+    // let products = []
+
+    // for(let x in result.products){
+    //   products.push(
+    //     {
+    //       "quantity": parseInt(result.products[x].quantity),
+    //       // "description": result.products[x].product.description,
+    //       "name":result.products[x].product.product_name,
+    //       "tax-rate": 0,
+    //       "price":result.products[x].product.product_sales_price,
+    //     }
+    //   )
+    // }
+
+
+    const products = result.products.map((product) => ({
+      "quantity": parseInt(product.quantity),
+      "description":product.product.product_name,
+      "name":product.product.product_name,
+      "tax-rate": 0,
+      "price":product.product.product_sales_price,
+    }));
+
+    console.log('producsd',products)
+
+    let data = {
+      customize: {},
+      images: {
+        // logo: "https://public.easyinvoice.cloud/img/logo_en_original.png",
+
+        background: "https://public.easyinvoice.cloud/img/watermark-draft.jpg",
+      },
+
+
+      sender: {
+        company: "Halang",
+        address: "Brototype",
+        zip: "686633",
+        city: "Maradu",
+        country: "India",
+      },
+
+      client: {
+        company: order.name,
+        address: order.shippingAddress,
+        zip: order.pincode,
+        city: order.city,
+        // state:" <%=order.state%>",
+        country: "India",
+      },
+      information: {
+        number: order._Id,
+
+        date: order.orderDate,
+        // Invoice due date
+        "due-date": "Nil",
+      },
+
+      products: products,
+      // The message you would like to display on the bottom of your invoice
+      "bottom-notice": "Thank you,Keep shopping.",
+    };
+    result = Object.values(result)
+
+
+
+    easyinvoice.createInvoice(data, async (result) => {
+      //The response will contain a base64 encoded PDF file
+      console.log(result, "jjj11", data, "pdf11");
+      if (result && result.pdf) {
+        await fs.writeFileSync("invoice.pdf", result.pdf, "base64");
+
+
+
+
+        // Set the response headers for downloading the file
+        res.setHeader('Content-Disposition', 'attachment; filename="invoice.pdf"');
+        res.setHeader('Content-Type', 'application/pdf');
+
+        // Create a readable stream from the PDF base64 string
+        const pdfStream = new Readable();
+        pdfStream.push(Buffer.from(result.pdf, 'base64'));
+        
+        pdfStream.push(null);
+
+        // Pipe the stream to the response
+        pdfStream.pipe(res);
+      } else {
+        // Handle the case where result.pdf is undefined or empty
+        res.status(500).send("Error generating the invoice");
+      }
+
+
+    }).catch((err) => {
+      console.log(err, "errrrrrr")
+    })
+
 
   } catch (error) {
-    console.error(error.message);
-    res.status(500).send('Internal Server Error');
+    // res.render('/error')
+    console.log(error.message);
+  }
+}
+async function getOrderById(orderId) {
+  try {
+    const order = await Order.findById(orderId)
+      .populate({
+        path: 'products.product',
+        model: 'Products',
+      });
+    return order;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+const updateStatus = async (req, res) => {
+  try {
+
+    const { orderId } = req.params;
+    const { newStatus } = req.body;
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      return res.status(400).json({ message: 'Order not found' });
+    }
+
+    if (order.status === 'Delivered') {
+      return res.status(400).json({ message: 'Order is already delivered' });
+    }
+    if (order.status === 'Returned') {
+      return res.status(400).json({ message: 'Order is already Returned' });
+    }
+    if (order.status === 'Cancelled') {
+      return res.status(400).json({ message: 'Order is already canceled' });
+    }
+    order.status = newStatus;
+
+    if (newStatus === 'Delivered') {
+      order.delivered = {
+        deliveredDate: new Date(),
+      };
+    }
+ 
+    await order.save();
+
+    res.status(200).json({ success: true });
+
+  } catch (error) {
+    // res.redirect('/admin/404')
+    console.log(error.message);
+ }
+}
+
+// ! ******************
+
+async function calculateDeliveredOrderTotal() {
+  try {
+    const totalData = await Order.aggregate([
+      {
+        $match: {
+          status: 'Delivered',
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalPriceSum: { $sum: '$total_amount' },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+    
+    if (totalData.length === 0) {
+      return {
+        _id: null,
+        totalPriceSum: 0,
+        count: 0,
+      };
+    }
+
+    return totalData;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+
+async function calculateCategorySales() {
+  try {
+    const categorySalesData = await Order.aggregate([
+      {
+        $unwind: '$products',
+      },
+      {
+        $lookup: {
+          from: 'products',
+          localField: 'products.product',
+          foreignField: '_id',
+          as: 'productDetails',
+        },
+      },
+      {
+        $unwind: '$productDetails',
+      },
+      {
+        $match: {
+          status: 'Delivered',
+        },
+      },
+      {
+        $lookup: {
+          from: 'Categories',
+          localField: 'productDetails.categoryname',
+          foreignField: 'categoryname',
+          as: 'categoryDetails',
+        },
+      },
+      {
+        $unwind: '$categoryDetails',
+      },
+      {
+        $group: {
+          _id: '$productDetails.categoryname',
+          categoryName: { $first: '$categoryDetails.categoryname' },
+          totalSales: {
+            $sum: { $multiply: ['$productDetails.product_sales_price', '$products.quantity'] },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          categoryName: 1,
+          totalSales: 1,
+        },
+      },
+    ]);
+
+    return categorySalesData;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+async function calculateDailySales() {
+  try {
+    const dailySalesData = await Order.aggregate([
+      {
+        $match: {
+          status: 'Delivered',
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              format: '%Y-%m-%d',
+              date: '$orderDate',
+            },
+          },
+          dailySales: {
+            $sum: '$total_amount',
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
+    ]);
+
+    return dailySalesData;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function calculateOrderCountByDate() {
+  try {
+    const orderCountData = await Order.aggregate([
+      {
+        $match: {
+          status: 'Delivered',
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              format: '%Y-%m-%d',
+              date: '$orderDate',
+            },
+          },
+          orderCount: { $sum: 1 },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
+    ]);
+
+    return orderCountData;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function calculateProductsCount() {
+  try {
+    const productCount = await Products.countDocuments();
+
+    return productCount;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+async function calculateOnlineOrderCountAndTotal() {
+  try {
+    const onlineOrderData = await Order.aggregate([
+      {
+        $match: {
+          paymentMethod: 'online',
+          status: 'Delivered',
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalPriceSum: { $sum: '$total_amount' },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    return onlineOrderData;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+async function calculateCodOrderCountAndTotal() {
+  try {
+    const codOrderData = await Order.aggregate([
+      {
+        $match: {
+          paymentMethod: 'cod',
+          status: 'Delivered',
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalPriceSum: { $sum: '$total_amount' },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    return codOrderData;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+
+async function getLatestOrders() {
+  try {
+    const latestOrders = await Order.aggregate([
+      {
+        $unwind: '$products',
+      },
+      {
+        $sort: {
+          date: -1,
+        },
+      },
+      {
+        $limit: 10,
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user',
+          foreignField: '_id',
+          as: 'userDetails',
+        },
+      },
+      {
+        $addFields: {
+          username: {
+            $arrayElemAt: ['$userDetails.name', 0],
+          },
+          address: {
+            $arrayElemAt: ['$userDetails.address.name', 0],
+          },
+        },
+      },
+      {
+        $project: {
+          userDetails: 0,
+        },
+      },
+    ]);
+
+    return latestOrders;
+  } catch (error) {
+    throw error;
   }
 }
 
 
 
 
+async function calculateListedCategoryCount() {
+  try {
+    const listedCategoryCount = await Category.countDocuments({ isListed: true });
+
+    return listedCategoryCount;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+
+const getDashboard = async (req, res) => {
+  try {
+
+    const ordersData = await calculateDeliveredOrderTotal()
+    const orders = ordersData[0]
+    const categorySales = await calculateCategorySales()
+    const salesData = await calculateDailySales()
+    const salesCount = await calculateOrderCountByDate()
+    const categoryCount = await calculateListedCategoryCount()
+    const productsCount = await calculateProductsCount()
+    const onlinePay = await calculateOnlineOrderCountAndTotal()
+    const codPay = await calculateCodOrderCountAndTotal()
+    const latestorders = await getLatestOrders()
+
+       console.log(ordersData,"get dashBorde rsData")
+    //  console.log(orders,"get dashBordorders")
+       console.log(categorySales,"get dashBorders categorySales")
+      //  console.log(salesData,"get dashBorders  salesData")
+      //  console.log(salesCount,"get dashBordersData salesCount")
+       console.log(categoryCount ,"get dashBorders categoryCount ")
+      //  console.log(productsCount,"get dashBorders productsCount")
+      //  console.log(onlinePay,"get dashBord onlinePay")
+      //  console.log(codPay,"get dashBord codPay")
+      //  console.log(latestorders,"get dashBord latestorders")
+      //  console.log("productsCount:", productsCount);
+       console.log("categoryCount:", categoryCount);
+      // console.log("onlinePay.totalPriceSum:", onlinePay[0].totalPriceSum);
+      // console.log("onlinePay.count:", onlinePay[0].count);
+    // console.log('uasername', latestorders)
+
+    res.render('home', {
+      orders, productsCount, categoryCount,
+      onlinePay: onlinePay[0], salesData, order: latestorders, salesCount,
+      codPay: codPay[0], categorySales
+    })
+
+  }
+  catch (error) {
+    // res.render('/error')
+    console.log(error.message);
+  }
+
+}
 
 module.exports = {
 
@@ -513,6 +1074,9 @@ module.exports = {
   orderStatusAdminSide,
   walletDispaly,
   singleOrderDetails,
-  adminOrderDetails
+  adminOrderDetails,
+  getOrderInvoice,
+  updateStatus,
+  getDashboard
 
 }

@@ -56,7 +56,11 @@ const getCart = async (req, res) => {
       }
       console.log("this is my cart items")
       // console.log(cart)
-
+ 
+      if(req?.query?.checkout=== 'true')
+      {
+        return res.json(cart)
+      }
       res.render("cart", {user, cart, category, products, calculateTotalPrice });
     }
   } catch (error) {
@@ -91,18 +95,18 @@ const addToCart = async (req, res) => {
     }
     // Check if the user already has this product in their cart
   
-    // const existingProduct = cart.products?.find((item) =>
-    //   item.product.equals(productId)
-    // );
-    // console.log(existingProduct);
+    const existingProduct = cart.products?.find((item) =>
+      item.product.equals(productId)
+    );
+    console.log(existingProduct);
 
-    // if (existingProduct) {
+    if (existingProduct) {
       
-    //   existingProduct.quantity += Number(quantity);
-    //   existingProduct.product_total = existingProduct.product.product_sales_price * existingProduct.quantity;
-    //   existingProduct.price = existingProduct.product_total;
-    //   console.log("::::::::::::::", existingProduct.product_total);
-     else {
+      existingProduct.quantity += Number(quantity);
+      existingProduct.product_total = existingProduct.product.product_sales_price * existingProduct.quantity;
+      existingProduct.price = existingProduct.product_total;
+      console.log("::::::::::::::", existingProduct.product_total);
+    }else {
       
       const productToAdd = {
         product: productId,

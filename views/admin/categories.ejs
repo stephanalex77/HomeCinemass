@@ -35,7 +35,7 @@
         <nav>
             <ul class="menu-aside">
                 <li class="menu-item ">
-                    <a class="menu-link" href="index.html"> <i class="icon material-icons md-home"></i>
+                    <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
@@ -76,8 +76,7 @@
                     </a>
                     <div class="submenu">
                         <a href="/admin/users">List Users</a>
-                        <a href="page-sellers-list.html">Sellers list</a>
-                        <a href="page-seller-detail.html">Seller profile</a>
+                        
                     </div>
                 </li>
                 <li class="menu-item has-submenu">
@@ -218,30 +217,16 @@
                                     <label for="product_name" class="form-label">Name</label>
                                     <input type="text" placeholder="Type here" class="form-control" name="categoryname" id="product_name" />
                                 </div>
-                                <!-- <div class="mb-4">
-                                    <label for="product_name" class="form-label">category id</label>
-                                    <input type="text" placeholder="Type here" class="form-control" name="category_id" id="product_id" />
-                                </div> -->
-                                <!-- <div class="mb-4">
-                                    <label for="product_slug" class="form-label">Slug</label>
-                                    <input type="text" placeholder="Type here" class="form-control" id="product_slug" />
-                                </div> -->
-                                <!-- <div class="mb-4">
-                                    <label class="form-label">Parent</label>
-                                    <select class="form-select">
-                                        <option>Clothes</option>
-                                        <option>T-Shirts</option>
-                                    </select>
-                                </div> -->
-                               
-                                <!-- <div class="mb-4">
-                                    <label class="form-label">Description</label>
-                                    <textarea placeholder="Type here" name="description" class="form-control"></textarea>
-                                </div> -->
+                                <div class="mb-4">
+                                    <label for="product_name" class="form-label">category offer</label>
+                                    <input name="OfferPrice" type="text" placeholder="%" class="form-control" id="product_id" />
+                                </div>
                                 <div class="d-grid">
                                     <button type="submit" class="btn btn-primary">Create category</button>
                                 </div>
-                          
+                                <!-- <div class="d-grid">
+                                    <button type="button" class="btn btn-primary" onclick="createCategory()">Create category</button>
+                                </div> -->
                         </div>
                         <div class="col-md-9 ">
                             <div class="table-responsive px-2 mt-30">
@@ -252,19 +237,20 @@
                                             <!-- <th>Name</th> -->
                                             <th>Name</th>
                                             <!-- <th>Listed</th> -->
-                                            <!-- <th>Add offer</th> -->
+                                            <th>Category offer</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <% categories.forEach(category => { %>
                                             <tr>
-                                                <!-- <td class="text-center">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="" />
-                                                    </div>
-                                                </td> -->
+                                                
                                                 <td><b><%= category.categoryname %></b></td>
+                                                <% if(category.OfferPrice){%>
+                                                    <td><b><%= category.OfferPrice %>%</b></td>
+                                                <%}else{%>
+                                                    <td><b>0%</b></td>
+                                                <%}%>
                                                 <!-- <td>
                                                     <% if (category.isListed) { %>
                                                         <a href="/admin/categories/unlist/<%= category._id %>" class="btn btn-md rounded font-sm hover-up">Unlist</a>
@@ -308,8 +294,57 @@
             </div>
         </footer>
     </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const nameInput = document.getElementById('categoryname');
+            nameInput.addEventListener('input', validateName);
+    
+            function validateName() {
+                if (/\s/.test(nameInput.value)) {
+                    nameInput.setCustomValidity("Name cannot contain white spaces.");
+                } else {
+                    nameInput.setCustomValidity(""); 
+                }
+            }
+        });
+       </script>
+    <script>
+        async function createCategory() {
+            const categoryname = document.getElementById("product_name").value;
+            const messageElement = document.getElementById("message");
 
+            if (!categoryname) {
+                messageElement.textContent = "Category name cannot be empty";
+                return;
+            }
+            if (categoryname.length < 3) {
+                messageElement.textContent = "Category name must be at least 3 characters long";
+                return;
+            }
 
+            const formData = new FormData();
+            formData.append("categoryname", categoryname);
+
+            try {
+                const response = await fetch("/admin/category", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    // Handle a successful response, e.g., redirect or display a success message.
+                    window.location.href = "/admin/category"; // Redirect to the category page after a successful category creation.
+                } else {
+                    // Handle errors, e.g., display an error message.
+                    messageElement.textContent = "Category creation failed. Please try again.";
+                }
+            } catch (error) {
+                console.error("An error occurred:", error);
+                messageElement.textContent = "An error occurred. Please try again.";
+            }
+        }
+
+    </script>
     
     <script src="/assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/assets/js/vendors/bootstrap.bundle.min.js"></script>

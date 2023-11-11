@@ -35,7 +35,7 @@
         <nav>
             <ul class="menu-aside">
                 <li class="menu-item active">
-                    <a class="menu-link" href="index.html"> <i class="icon material-icons md-home"></i>
+                    <a class="menu-link" href="/admin/home"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
@@ -67,6 +67,7 @@
                     </a>
                     <div class="submenu">
                         <a href="/admin/orderManage">Order list 1</a>
+                        <a href="/admin/salesreport">Order list 2</a>
                         
                     </div>
                 </li>
@@ -77,8 +78,7 @@
                     </a>
                     <div class="submenu">
                         <a href="/admin/users">List Users</a>
-                        <a href="page-sellers-list.html">Sellers list</a>
-                        <a href="page-seller-detail.html">Seller profile</a>
+                        
                     </div>
                 </li>
                 <li class="menu-item has-submenu">
@@ -270,16 +270,16 @@
                               <td><%= order.createdAt.toLocaleDateString() %></td>
 
                               <td class="text-end">
-                                <a href="/admin/adminOrderDetails" class="btn btn-md rounded font-sm">Detail</a>
+                                <a href="/admin/orderManage/<%= order._id %>" class="btn btn-md rounded font-sm">Detail</a>
                                 <div class="dropdown">
                                   <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm">
                                     <i class="material-icons md-more_horiz"></i>
                                   </a>
-                                  <div class="dropdown-menu">
+                                  <!-- <div class="dropdown-menu">
                                     <a class="dropdown-item" href="#">View detail</a>
                                     <a class a dropdown-item href="#">Edit info</a>
                                     <a class="dropdown-item text-danger" href="#">Delete</a>
-                                  </div> <!-- dropdown //end -->
+                                  </div> dropdown //end -->
                                 </div>
                               </td>
                             </tr>
