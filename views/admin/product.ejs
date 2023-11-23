@@ -2,7 +2,6 @@
 <html lang="en">
 
 
-<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:31 GMT -->
 <head>
     <meta charset="utf-8">
     <title>AV Admin</title>
@@ -25,12 +24,12 @@
     <aside class="navbar-aside" id="offcanvas_aside">
         <div class="aside-top">
             <a href="index.html" class="brand-wrap logo menu-absolute m-0 h6">
-                <!-- <img src="/assets/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard"> -->
-                AV TALKIES 
+                AV TALKIES
                 <span class="text-primary ">.</span>
             </a>
             <div>
-                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+                </button>
             </div>
         </div>
         <nav>
@@ -47,38 +46,28 @@
                     <div class="submenu">
                         <a href="/admin/products">Add Product</a>
                         <a href="/admin/productlist">List Product </a>
-                        <!-- <a href="page-products-grid-2.html">Product grid 2</a> -->
                         <a href="/admin/category">Categories</a>
                     </div>
                 </li>
-                <!-- <li class="menu-item ">
-                    <a class="menu-link active" href="/admin/products"> <i class="icon material-icons  md-add_box"></i>
-                        <span class="text">Add Products</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="page-products-list.html">Product List</a>
-                        <a href="page-products-grid.html">Product grid</a>
-                        <a href="page-products-grid-2.html">Product grid 2</a>
-                        <a href="page-categories.html">Categories</a>
-                    </div>
-                </li> -->
+
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="#"> <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Order Manage</span>
                     </a>
                     <div class="submenu">
                         <a href="/admin/orderManage">Order list 1</a>
-                        
+                        <a href="/admin/salesreport">Order list 2</a>
+
                     </div>
                 </li>
-                
+
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="/admin/users"> <i class="icon material-icons md-store"></i>
                         <span class="text">User Manage</span>
                     </a>
                     <div class="submenu">
                         <a href="/admin/users">List Users</a>
-                        
+
                     </div>
                 </li>
                 <li class="menu-item has-submenu">
@@ -88,61 +77,14 @@
                     <div class="submenu">
                         <a href="/admin/coupon">Add Coupon</a>
                         <a href="/admin/coupons">List Coupon</a>
-                        <!-- <a href="page-form-product-3.html">Add product 3</a> -->
-                        <!-- <a href="page-form-product-4.html">Add product 4</a> -->
+
                     </div>
                 </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="page-transactions-1.html"> <i class="icon material-icons md-monetization_on"></i>
-                        <span class="text">Transactions</span>
-                    </a>
-                    <!-- <div class="submenu">
-                        <a href="page-transactions-1.html">Transaction 1</a>
-                        <a href="page-transactions-2.html">Transaction 2</a>
-                    </div> -->
-                </li>
-                <!-- <li class="menu-item has-submenu">
-                    <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
-                        <span class="text">Account</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="page-account-login.html">User login</a>
-                        <a href="page-account-register.html">User registration</a>
-                        <a href="page-error-404.html">Error 404</a>
-                    </div>
-                </li> -->
-                <!-- <li class="menu-item">
-                    <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
-                        <span class="text">Reviews</span>
-                    </a>
-                </li> -->
-                <!-- <li class="menu-item">
-                    <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
-                        <span class="text">Brands</span> </a>
-                </li> -->
-                <!-- <li class="menu-item">
-                    <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
-                        <span class="text">Statistics</span>
-                    </a>
-                </li> -->
+
+
             </ul>
             <hr>
-            <ul class="menu-aside">
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
-                        <span class="text">Settings</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="page-settings-1.html">Setting sample 1</a>
-                        <a href="page-settings-2.html">Setting sample 2</a>
-                    </div>
-                </li>
-                <!-- <li class="menu-item">
-                    <a class="menu-link" href="page-blank.html"> <i class="icon material-icons md-local_offer"></i>
-                        <span class="text"> Starter page </span>
-                    </a>
-                </li> -->
-            </ul>
+
             <br>
             <br>
         </nav>
@@ -150,207 +92,352 @@
     <main class="main-wrap">
         <header class="main-header navbar">
             <div class="col-search">
-                <form class="searchform">
-                    <div class="input-group">
-                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
-                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
-                    </div>
-                    <datalist id="search_terms">
-                        <option value="Products">
 
-                    </datalist>
-                </form>
             </div>
             <div class="col-nav">
-                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                        class="material-icons md-apps"></i> </button>
                 <ul class="nav">
-                    <!-- <li class="nav-item">
-                        <a class="nav-link btn-icon" href="#">
-                            <i class="material-icons md-notifications animation-shake"></i>
-                            <span class="badge rounded-pill">3</span>
-                        </a>
-                    </li> -->
+
                     <li class="nav-item">
-                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i>
+                        </a>
                     </li>
-                    <!-- <li class="nav-item">
-                        <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
-                    </li> -->
-                    <!-- <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
-                            <a class="dropdown-item text-brand" href="#"><img src="/assets/imgs/theme/flag-us.png" alt="English">English</a>
-                            <a class="dropdown-item" href="#"><img src="/assets/imgs/theme/flag-fr.png" alt="Français">Français</a>
-                            <a class="dropdown-item" href="#"><img src="/assets/imgs/theme/flag-jp.png" alt="Français">日本語</a>
-                            <a class="dropdown-item" href="#"><img src="/assets/imgs/theme/flag-cn.png" alt="Français">中国人</a>
-                        </div>
-                    </li> -->
+
                     <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/assets/imgs/people/user.png" alt="User"></a>
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
+                            aria-expanded="false"> <img class="img-xs rounded-circle" src="/assets/imgs/people/user.png"
+                                alt="User"></a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                            
-                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
-                            
-                           
+
+                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account
+                                Settings</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="/admin/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                            <a class="dropdown-item text-danger" href="/admin/logout"><i
+                                    class="material-icons md-exit_to_app"></i>Logout</a>
                         </div>
                     </li>
                 </ul>
             </div>
         </header>
-       
         <section class="content-main">
-            <div class="row">
-                <div class="col-9">
-                  <form action="/admin/products" method="post" enctype="multipart/form-data">
-                    <div class="content-header">
-                        <h2 class="content-title">Add New Product</h2>
-                        <div>
-                            <!-- <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button> -->
-                            <button class="btn btn-md rounded font-sm hover-up">Publich</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
-                                <!-- <label class="form-label">Category name</label> -->
-                                
-                                  
+            <form id="addproductForm">
+                <div class="row">
+                    <div class="col-8">
+                        <div class="content-header">
+                            <h2 class="content-title">Add New Product</h2>
+                            <div>
+                                <button form="addproductForm" id="submit-button"
+                                class="btn btn-md rounded font-sm hover-up">Publich</button>
                             </div>
                         </div>
-                       
-                        <div class="card-body">
-                            
-                                <div class="mb-4">
-                                    <label for="product_name" class="form-label">Product name</label>
-                                    <input type="text" name="product_name" placeholder="Type here" class="form-control" id="product_name">
-                                </div>
-                                <div class="mb-4">
-                                    <label for="category_id" class="form-label">Category</label>
-                                    <select class="form-control" name="category_id" id="category_id">
-                                        <option selected>Select category</option>
-    
+                    </div>
+                        
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <div class="card mb-4">
+                                
+                                <div class="card-body">
+
+                                    <div class="mb-4">
+                                        <label for="product_name" class="form-label">Product name</label>
+                                        <input type="text" name="product_name" placeholder="Type here"
+                                            class="form-control" id="product_name">
+                                        <p id="product_name_error" class="error-message" style="color: red;"></p>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="category_id" class="form-label">Category</label>
+                                        <select class="form-control" name="category_id" id="category_id">
+                                            <option selected>Select category</option>
+
                                             <% categories.forEach(function(category) { %>
-                                                <option value="<%= category._id %>" 
-                                                    
-                                                >
+                                                <option value="<%= category._id %>">
                                                     <%= category.categoryname %>
                                                 </option>
-                                            <% }); %>
+                                                <% }); %>
                                         </select>
-                                </div>
-                                
-                                <div class="mb-4">
-                                    <label class="form-label">Full description</label>
-                                    <textarea name="description" placeholder="Type here" class="form-control" rows="4"></textarea>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="mb-4">
-                                            <label class="form-label">Regular price</label>
-                                            <div class="row gx-2">
-                                                <input name="product_price" placeholder="price" type="text" class="form-control">
+                                        <p id="category_id_error" class="error-message" style="color: red;"></p>
+
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="Description" class="form-label">Description</label>
+                                        <textarea placeholder="Type here" name="description" class="form-control"
+                                            rows="4" id="description"></textarea>
+                                        <p id="descriptionError" class="error-message" style="color: red;"></p>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="mb-4">
+                                                <label for="regular_price" class="form-label">Regular price</label>
+                                                <div class="row gx-2">
+                                                    <input name="product_price" placeholder="price" type="text"
+                                                        class="form-control" id="product_price">
+                                                    <p id="product_price_error" class="error-message"
+                                                        style="color: red;"></p>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="mb-4">
+                                                <label for="Offer_percentage" class="form-label">Offer
+                                                    percentage</label>
+                                                <input name="product_sales_price" placeholder="%" type="text"
+                                                    class="form-control" id="product_sales_price">
+                                                <p id="offer_price_error" class="error-message" style="color: red;"></p>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="mb-4">
+                                                <label for="quantity" class="form-label">Quantity</label>
+                                                <input name="quantity" placeholder="Quantity" type="text"
+                                                    class="form-control" id="quantity">
+                                                <p id="Quantity_error" class="error-message" style="color: red;"></p>
+
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4">
-                                        <div class="mb-4">
-                                            <label class="form-label">Offer percentage</label>
-                                            <input name="product_sales_price" placeholder="%" type="text" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="mb-4">
-                                            <label class="form-label">Quantity</label>
-                                            <input name="quantity" placeholder="Quantity" type="text" class="form-control">
-                                        </div>
-                                    </div>
-                                   
-                              </div>
-                                
-                                <!-- <label class="form-check mb-4">
-                                    <input class="form-check-input" type="checkbox" value="">
-                                    <span class="form-check-label"> Make a template </span>
-                                </label> -->
-                            
+                                </div>
+                            </div>
                         </div>
-                    </div> 
+                    
+                        <div class="col-lg-3">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h4>Media</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="input-upload">
+                                        <div id="image-preview-container">
+                                        </div>
+                                        <!-- <img src="/assets/imgs/theme/upload.svg"  alt=""> -->
+                                        <input class="form-control" type="file" name="images" id="image-input"
+                                            accept="image/*" multiple>
+                                        <p id="file-error" style="color: red; display: none;">You can upload up to 4
+                                            images
+                                            only.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              
-                <!-- <div class="col-lg-3">
-                    <div class="card mb-4">
-                      <div class="card-header">
-                        <h4>Media</h4>
-                      </div>
-                      <div class="card-body">
-                        <div class="input-upload">
-                          <img id="image-preview" src="/assets/imgs/theme/upload.svg" alt="Image Preview">
-                          <input class="form-control" type="file" name="images" id="image-input" multiple>
-                        </div>
-                      </div>
-                    </div>
-                </div> -->
-                  
-                <div class="col-lg-3">
-                    <div class="card mb-4">
-                      <div class="card-header">
-                        <h4>Media</h4>
-                      </div>
-                      <div class="card-body">
-                        <div class="input-upload">
-                          <img id="image-preview" src="/assets/imgs/theme/upload.svg" alt="Image Preview">
-                          <input class="form-control" type="file" name="images" id="image-input" multiple>
-                          <!-- <button id="crop-button">Crop</button> -->
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                
-                  
-                  
-              </form>
+            </form>
             </div>
         </section> <!-- content-main end// -->
         <footer class="main-footer font-xs">
-            <!-- <div class="row pb-30 pt-15">
-                
+            <div class="row pb-30 pt-15">
                 <div class="col-sm-6">
-                    <div class="text-sm-end">
-                        All rights reserved
-                    </div>
+                    <script>
+                        document.write(new Date().getFullYear())
+                    </script> ©, AV TALKIES
                 </div>
-            </div> -->
+
+            </div>
         </footer>
+
         <script>
-            // Function to update the image preview
+            document.getElementById("addproductForm").addEventListener("submit", function (event) {
+                var categorySelect = document.getElementById("category_id");
+                var categoryError = document.getElementById("category_id_error");
+
+                // Check if a category is selected
+                if (categorySelect.value === "Select category") {
+                    categoryError.textContent = "Please select a category.";
+                    event.preventDefault(); // Prevent form submission
+                } else {
+                    categoryError.textContent = ""; // Clear error message
+                }
+
+
+            });
+        </script>
+        <script>
+            // Function to update the image previews
             function updateImagePreview() {
-              const imageInput = document.getElementById('image-input');
-              const imagePreview = document.getElementById('image-preview');
-          
-              // Check if any files were selected
-              if (imageInput.files && imageInput.files[0]) {
-                const reader = new FileReader();
-          
-                reader.onload = function (e) {
-                  imagePreview.src = e.target.result; // Display the selected image as a preview
-                };
-          
-                reader.readAsDataURL(imageInput.files[0]);
-              } else {
-                // If no file is selected or if the selection is cleared, reset to the default image
-                imagePreview.src = '/assets/imgs/theme/upload.svg';
-              }
+                const imageInput = document.getElementById('image-input');
+                const imagePreviewContainer = document.getElementById('image-preview-container');
+                const fileError = document.getElementById('file-error');
+                const submitButton = document.getElementById('submit-button');
+
+                // Clear previous image previews
+                imagePreviewContainer.innerHTML = '';
+
+                // Check if any files were selected
+                if (imageInput.files && imageInput.files.length > 0) {
+                    if (imageInput.files.length > 4) {
+                        fileError.style.display = 'block'; // Show error message
+                        submitButton.disabled = true; // Disable the submit button
+                        return;
+                    } else {
+                        fileError.style.display = 'none'; // Hide error message
+                        submitButton.disabled = false; // Enable the submit button
+                    }
+
+                    for (let i = 0; i < imageInput.files.length; i++) {
+                        const reader = new FileReader();
+                        const imagePreview = document.createElement('div');
+                        imagePreview.className = 'image-preview';
+
+                        // Create an image element for the preview
+                        const previewImage = document.createElement('img');
+                        previewImage.className = 'preview-image';
+                        previewImage.src = "/assets/imgs/theme/upload.svg"; // Default image
+                        imagePreview.appendChild(previewImage);
+
+                        imagePreviewContainer.appendChild(imagePreview);
+
+                        reader.onload = function (e) {
+                            // Display the selected image as a preview
+                            previewImage.src = e.target.result;
+                        };
+
+                        reader.readAsDataURL(imageInput.files[i]);
+                    }
+                }
             }
-          
+
             // Add an event listener to the file input to trigger the image preview function
             const imageInput = document.getElementById('image-input');
             imageInput.addEventListener('change', updateImagePreview);
-          </script>
-          
+
+            // Prevent form submission if more than 4 images are selected
+            const productForm = document.getElementById('addproductForm');
+            const submitButton = document.getElementById('submit-button');
+            productForm.addEventListener('submit', function (event) {
+                if (imageInput.files.length > 4) {
+                    event.preventDefault();
+
+                }
+            });
+
+
+        </script>
     </main>
+
+    
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $("#addproductForm").submit(function (event) {
+                event.preventDefault();
+                let formData = new FormData()
+                console.log(formData, "hi...");
+                // Get form input values
+                let product_name = $("#product_name").val().trim();
+                let description = $("#description").val().trim();
+                let product_sales_price = $("#product_sales_price").val().trim();
+                let product_price = $("#product_price").val().trim();
+                let quantity = $("#quantity").val().trim();
+                let category_id = $("#category_id").val();
+                console.log(category_id, 'catid')
+                formData.append('product_name', product_name)
+                formData.append('description', description)
+                formData.append('product_sales_price', product_sales_price)
+                formData.append('quantity', quantity)
+                formData.append('category_id', category_id)
+                formData.append('product_price', product_price)
+                const imageInput = document.getElementById('image-input');
+
+                for (let i = 0; i < imageInput.files.length; i++) {
+                    formData.append('images', imageInput.files[i]);
+                }
+
+                // Validation
+                var isValid = true;
+
+                if (product_name === "") {
+                    $("#product_name_error").text("Please enter coupon code.");
+                    isValid = false;
+                } else if (product_name.length > 50) {
+                    $("#product_name_error").text("Coupon Code must be 30 characters or less.");
+                    isValid = false;
+                }
+                else {
+                    $("#product_name_error").text("");
+                }
+
+                if (description === "") {
+                    $("#descriptionError").text("please enter description.");
+                    isValid = false;
+                }
+                // } else if (description.length < 200) {
+                //     $("#descriptionError").text("Description must be 100 characters or less.");
+                //     isValid = false;
+                // }
+                else {
+                    $("#descriptionError").text("");
+                }
+
+                if (product_price === "") {
+                    $("#product_price_error").text("Please enter amount.");
+                    isValid = false;
+                } else if (isNaN(product_price) || product_price <= 0) {
+                    $("#product_price_error").text("Maximum Price must be greater than Zero.");
+                    isValid = false;
+                } else {
+                    $("#product_price_error").text("");
+                }
+
+                if (product_sales_price === "") {
+                    $("#offer_price_error").text("please enter discount.");
+                    isValid = false;
+                } else if (isNaN(product_sales_price) || product_sales_price <= 0 || product_sales_price > 100) {
+                    $("#offer_price_error").text("Discount must be a valid percentage between 1% and 100%.");
+                    isValid = false;
+                }
+
+                else {
+                    $("#offer_price_error").text("");
+                }
+
+
+                if (quantity === "") {
+                    $("#Quantity_error").text("Please enter minimum quantity.");
+                    isValid = false;
+                } else if (isNaN(quantity) || quantity <= 0) {
+                    $("#Quantity_error").text("Minimum quantity must be greater than Zero.");
+                    isValid = false;
+                } else {
+                    $("#Quantity_error").text("");
+                }
+
+
+                // If all fields are valid, submit the form
+                if (isValid) {
+                    // Assuming formData is already prepared as explained in the previous response
+
+                    fetch("/admin/addProduct", {
+                        method: "POST",
+                        body: formData,
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Handle success
+                            window.location.href = '/admin/products';
+                        })
+                        .catch(error => {
+                            // Handle errors
+                            console.error("Error submitting the form", error);
+                        });
+
+                } else {
+                    console.log("hiii");
+                }
+            })
+        })
+    </script>
+
     <script src="/assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/vendors/select2.min.js"></script>
@@ -358,11 +445,10 @@
     <script src="/assets/js/vendors/jquery.fullscreen.min.js"></script>
     <!-- Main Script -->
     <script src="/assets/js/main.js" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script> 
-    
-      
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+
 </body>
 
 
-<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:32 GMT -->
 </html>

@@ -26,7 +26,6 @@ const salesReport = async (req, res, next) => {
 
 
       const orders = await Order.find({ createdAt: { $gte: from, $lte: to }, status: 'Delivered' }).populate('user')
-      console.log('orders:::', orders)
 
       from = from.split('T')[0]
       to = to.split('T')[0]
@@ -68,7 +67,6 @@ const salesReport = async (req, res, next) => {
 
 const adminDownloadReports = async (req, res, next) => {
   try {
-      console.log("Hi")
       const { type } = req.params
       let { from, to } = req.query
       to += 'T23:59:59.999Z'

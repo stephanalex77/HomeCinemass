@@ -122,9 +122,9 @@
                     <h4>
                       <%= product.product_name %>
                     </h4>
-                    <h3>Price: ₹<%= product.product_price.toFixed(2) %>
+                    <h3>Price: ₹<%= product.product_price.toFixed() %>
                     </h3>
-                    <h4>Sales Price: ₹<%= product.product_sales_price.toFixed(2) %>
+                    <h4>Sales Price: ₹<%= product.product_sales_price.toFixed() %>
                     </h4>
                     <% if (product.quantity <=0) { %>
                       <a href="#" class="add_cart">Out of Stock
@@ -742,8 +742,8 @@
         </a>
         <div class="single_product_text">
           <h4>${product.product_name}</h4>
-          <h3>Price: ₹${product.product_price.toFixed(2)}</h3>
-          <h4>Sales Price: ₹${product.product_sales_price.toFixed(2)}</h4>
+          <h3>Price: ₹${product.product_price.toFixed()}</h3>
+          <h4>Sales Price: ₹${product.product_sales_price.toFixed()}</h4>
           
               <div>
                <a href="/singleProduct/${product._id}" class="add_cart" onclick="addtocart('${product._id}')"

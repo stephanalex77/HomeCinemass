@@ -1,6 +1,5 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
-const mongoose = require("mongoose");
 
 const loadLogin = async (req, res) => {
   try {
@@ -20,10 +19,8 @@ const verifyLogin = async (req, res) => {
     const userData = await User.findOne({ email: email });
 
     if (userData) {
-        
-
       const passwordMatch = bcrypt.compare(password, userData.password);
-      
+
       if (passwordMatch) {
         if (userData.is_admin === false) {
           res.render("login", { message: "Email and password is incorrect" });
@@ -45,7 +42,7 @@ const loadDashboard = async (req, res) => {
   try {
     const userData = await User.findById({ _id: req.session.admin_id });
     res.set("cache-Control", "no-store");
-    res.render("home", { admin: userData});
+    res.render("home", { admin: userData });
   } catch (error) {
     console.log(error.message);
   }
@@ -67,50 +64,6 @@ const getUsers = async (req, res) => {
     console.log(error.message);
   }
 };
-
-// Handle toggle button state changes
-// const user_toggle = async (req, res) => {
-//     const userId = mongoose.Types.ObjectId(req.body._Id);
-
-//     try {
-//         const user = await User.findOne({ _id: userId });
-
-//         if (user) {
-//             user.active = !user.active;
-//             await user.save(); // Save the updated user document
-//             res.json({ success: true, active: user.active });
-//         } else {
-//             res.status(404).json({ success: false, message: 'User not found' });
-//         }
-//     } catch (error) {
-//         console.error(error.message);
-//         res.status(500).json({ success: false, message: 'Internal server error' });
-//     }
-// };
-//
-
-//     const user_toggle = async (req, res) => {
-//         console.log('User ID from request:', req.body._id);
-// console.log('is_block from request:', req.body.is_block);
-
-//         const userId = new mongoose.Types.ObjectId(req.body._id);
-//         const is_block = req.body.is_block; // Use the correct field name
-
-//         try {
-//             const user = await User.findOne({ _id: userId });
-
-//             if (user) {
-//                 user.is_block = is_block; // Use the correct field name
-//                 await user.save();
-//                 res.json({ success: true, is_blocked: user.is_block }); // Use the correct field name
-//             } else {
-//                 res.status(404).json({ success: false, message: 'User not found' });
-//             }
-//         } catch (error) {
-//             console.error(error.message);
-//             res.status(500).json({ success: false, message: 'Internal server error' });
-//         }
-//     };
 
 const blockUser = async (req, res) => {
   try {
@@ -189,7 +142,6 @@ const updateUsers = async (req, res) => {
   }
 };
 
-
 module.exports = {
   loadLogin,
   verifyLogin,
@@ -201,5 +153,4 @@ module.exports = {
   adminDashboard,
   editUserLoad,
   updateUsers,
-
 };

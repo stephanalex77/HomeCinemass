@@ -14,7 +14,7 @@
     --orange: #fd7e14;
     --yellow: #ffc107;
     --green: #28a745;
-    --teal: #20c997;
+    --teal: #a8f2a9;
     --cyan: #17a2b8;
     --white: #fff;
     --gray: #6c757d;
@@ -25,7 +25,7 @@
     --info: #17a2b8;
     --warning: #ffc107;
     --danger: #dc3545;
-    --light: #f8f9fa;
+    --light: #d7fbc7cc;
     --dark: #343a40;
     --breakpoint-xs: 0;
     --breakpoint-sm: 576px;
@@ -2692,8 +2692,8 @@ fieldset:disabled a.btn {
 
 .btn-light {
     color: #212529;
-    background-color: #f8f9fa;
-    border-color: #f8f9fa
+    background-color: #d7fbc7cc;
+    border-color: #d7fbc7cc
 }
 
 .btn-light:hover {
@@ -2710,8 +2710,8 @@ fieldset:disabled a.btn {
 .btn-light.disabled,
 .btn-light:disabled {
     color: #212529;
-    background-color: #f8f9fa;
-    border-color: #f8f9fa
+    background-color: #d7fbc7cc;
+    border-color: #d7fbc7cc
 }
 
 .btn-light:not(:disabled):not(.disabled).active,
@@ -2995,16 +2995,16 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-light {
-    color: #f8f9fa;
+    color: #d7fbc7cc;
     background-color: transparent;
     background-image: none;
-    border-color: #f8f9fa
+    border-color: #d7fbc7cc
 }
 
 .btn-outline-light:hover {
     color: #212529;
-    background-color: #f8f9fa;
-    border-color: #f8f9fa
+    background-color: #d7fbc7cc;
+    border-color: #d7fbc7cc
 }
 
 .btn-outline-light.focus,
@@ -3014,7 +3014,7 @@ fieldset:disabled a.btn {
 
 .btn-outline-light.disabled,
 .btn-outline-light:disabled {
-    color: #f8f9fa;
+    color: #d7fbc7cc;
     background-color: transparent
 }
 
@@ -3022,8 +3022,8 @@ fieldset:disabled a.btn {
 .btn-outline-light:not(:disabled):not(.disabled):active,
 .show>.btn-outline-light.dropdown-toggle {
     color: #212529;
-    background-color: #f8f9fa;
-    border-color: #f8f9fa
+    background-color: #d7fbc7cc;
+    border-color: #d7fbc7cc
 }
 
 .btn-outline-light:not(:disabled):not(.disabled).active:focus,
@@ -3333,7 +3333,7 @@ input[type=submit].btn-block {
 .dropdown-item:hover {
     color: #16181b;
     text-decoration: none;
-    background-color: #f8f9fa
+    background-color: #d7fbc7cc
 }
 
 .dropdown-item.active,
@@ -5082,7 +5082,7 @@ input[type=submit].btn-block {
 
 .badge-light {
     color: #212529;
-    background-color: #f8f9fa
+    background-color: #d7fbc7cc
 }
 
 .badge-light[href]:focus,
@@ -5352,7 +5352,7 @@ input[type=submit].btn-block {
 .list-group-item-action:hover {
     color: #495057;
     text-decoration: none;
-    background-color: #f8f9fa
+    background-color: #d7fbc7cc
 }
 
 .list-group-item-action:active {
@@ -6405,7 +6405,7 @@ button.bg-danger:hover {
 }
 
 .bg-light {
-    background-color: #f8f9fa !important
+    background-color: #d7fbc7cc !important
 }
 
 a.bg-light:focus,
@@ -6499,7 +6499,7 @@ button.bg-dark:hover {
 }
 
 .border-light {
-    border-color: #f8f9fa !important
+    border-color: #d7fbc7cc !important
 }
 
 .border-dark {
@@ -9183,7 +9183,7 @@ a.text-danger:hover {
 }
 
 .text-light {
-    color: #f8f9fa !important
+    color: #d7fbc7cc !important
 }
 
 a.text-light:focus,

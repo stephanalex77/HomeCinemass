@@ -29,13 +29,13 @@
                           </tr>
                       </thead>
                       <tbody>
-                        <% transactions.transactions.forEach(function(transaction) { %>
+                        
+                        <% transactions.forEach(function(transaction) { %>
                           <tr>
-                              
-                                <td><%= transaction.date.toDateString() %></td>
-                                <td><%= transaction.type %></td>
-                                <td><%= transaction.amount %></td>
-                                <td><%= transactions.balance %></td>
+                            <td><%= transaction.date.toDateString() %></td>
+                            <td><%= transaction.type %></td>
+                            <td><%= transaction.amount %></td>
+                            <td><%= transactions.balance %></td>
 
                           </tr>
                         <% }); %>

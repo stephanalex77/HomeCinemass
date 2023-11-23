@@ -6,6 +6,7 @@ const Product = require("../models/productModel");
 const nodemailer = require("nodemailer");
 const randomString = require("randomstring");
 const orders = require("../models/orderModel");
+const mongoose = require('mongoose');
 
 const securePassword = async (password) => {
   try {
@@ -15,6 +16,7 @@ const securePassword = async (password) => {
     console.log(error.message);
   }
 };
+
 //for send mail
 
 const sendVerifyMail = async (name, email, otp) => {
@@ -150,7 +152,6 @@ const verifyOtp = async (req, res) => {
 const verifyLogin = async (req, res) => {
   try {
     const email = req.body.email;
-    console.log("============", email);
     const password = req.body.password;
 
     const userData = await User.findOne({ email: email });
@@ -206,7 +207,6 @@ const forgetVerify = async (req, res) => {
         req.session.otp = otp;
         await sendResetPasswordMail(userData.name, userData.email, otp);
         res.render('forgetOtp',{userId:userData.id});
-        // res.render("otp",{userId:userData})
       }
     } else {
       res.render("forget", { message: "user not found" });
@@ -359,21 +359,7 @@ const userLogout = (req, res) => {
   }
 };
 
-// const editLoad = async (req, res) => {
-//   try {
-//     const id = req.query.id;
 
-//     const userData = await User.findById({ _id: id });
-
-//     if (userData) {
-//       res.render("edit", { user: userData });
-//     } else {
-//       res.redirect("/home");
-//     }
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// };
 
 const updateProfile = async (req, res) => {
   try {
@@ -436,7 +422,6 @@ const goToProfile = async (req, res) => {
       
       console.log(user.address);
       if (user) {
-        // console.log(user); // Check user data in the console
         res.render("userProfile", { user, addresses: user.address, orders });
 
       } else {
@@ -534,8 +519,6 @@ const changePassword = async (req, res) => {
 const deleteAddress = async (req, res) => {
   const userId = req.params.userId;
   const addressId = req.params.addressId;
-  // console.log(userId);
-  // console.log(addressId);
   try {
     // Find the user by their ID
     const user = await User.findById(userId);
@@ -585,15 +568,10 @@ const loadDefaultAddress = async (req, res) => {
 
 
 const makeDefaultAddress = async (req, res) => {
-  // const id = req.query.addressId
-  // console.log("========",id);
 
   try {
-    // console.log("response from backend")
       const userId = req.session.user_id;
-      // console.log("sdfghjk",userId);
       const addressIdToSetDefault = req.query.addressId;
-      // console.log(addressIdToSetDefault);
 
       await User.updateOne(
           { _id: userId, 'address.is_default': true },
@@ -617,10 +595,8 @@ const loadEditAddress = async (req, res) => {
   try {
     // Get the address ID from the query parameters
     const addressId = req.query.addressId;
-    console.log("which address:::", addressId);
     // Fetch the user's address data from the database
     const user = await User.findById(req.session.user_id);
-    console.log("who is the user:::", user);
     
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });
@@ -628,7 +604,6 @@ const loadEditAddress = async (req, res) => {
 
     // Find the specific address within the user's address array
     const address = user.address.find((addr) => addr._id.toString() === addressId);
-    console.log(":::::",address );
     if (!address) {
       return res.status(404).json({ success: false, message: 'Address not found' });
     }
@@ -642,10 +617,6 @@ const loadEditAddress = async (req, res) => {
 };
 
 
-
-
-
-const mongoose = require('mongoose');
 
 const editAddress = async (req, res) => {
   try {
@@ -690,7 +661,6 @@ const editAddress = async (req, res) => {
     // Save the updated user
     await user.save();
 
-    // return res.status(200).json({ success: true, message: 'Address updated successfully' });
     res.redirect("/profile")
   } catch (error) {
     console.error(error);

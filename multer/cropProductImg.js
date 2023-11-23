@@ -3,7 +3,6 @@ const fs = require('fs').promises; // Use promises-based fs
 
 module.exports = {
   crop: async (req) => {
-    console.log("Call comes");
     if (req.files && req.files.length > 0) {
       // Check if req.files is defined and has elements
       try {

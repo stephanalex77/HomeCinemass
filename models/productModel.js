@@ -17,6 +17,10 @@ const productSchema = new mongoose.Schema({
     type:Number,
     require:true
   },
+  discountPercentage:{
+    type:Number,
+
+  },
   quantity:{
     type:Number,
     require:true

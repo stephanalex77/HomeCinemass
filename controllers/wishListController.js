@@ -1,8 +1,6 @@
 const Products = require("../models/productModel");
 const Category = require("../models/categoryModel")
-const cropImage = require("../multer/cropProductImg");
 const User = require("../models/userModel");
-// const validator = require("validator")
 const Wishlist = require('../models/wishlistModel')
 
 
@@ -14,18 +12,11 @@ const getWishList = async (req, res) => {
     const userId = req.session.user_id;
     const user = await User.findById({ _id: userId });
     
-    // console.log("who is the user:",user)
     // Find the user's cart and populate it with product details
-    console.log(" show user id:::::::::",userId);
     const wishList = await Wishlist.findOne({ user: userId }).populate(
       "products"
     );
-
- 
-      console.log("this is my wishlist items",wishList )
-
       res.render("wishList", {user, wishList, category, products });
-    
   } catch (error) {
     console.error(error);
     res.status(500).send("An error occurred while processing the wishlist.");
@@ -42,7 +33,6 @@ const addToWishList = async (req, res) => {
     if (!product) {
       return res.status(404).json({ success: false, message: "Product not found" });
     }
-
     const wishlist = await Wishlist.findOne({ user: userId });
 
     if (wishlist) {
@@ -88,12 +78,10 @@ const removeFromWishList = async (req, res) => {
     if (!wishList) {
       return res.status(404).json({ success: false, message: 'Cart not found' });
     }
-
     // Use the 'filter' method to remove the product with the specified ID
     wishList.products = wishList.products.filter((item) => {
       return !item.equals(productId);
     });
-
     await wishList.save();
     res.status(200).json({ success: true });
   } catch (error) {
@@ -101,8 +89,6 @@ const removeFromWishList = async (req, res) => {
     res.status(500).json({ success: false, message: 'An error occurred while removing the product from the wishlist' });
   }
 };
-
-
 
 
 module.exports = {

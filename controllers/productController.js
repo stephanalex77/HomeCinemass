@@ -1,11 +1,8 @@
 const Product = require("../models/productModel");
-const path = require("path");
 const cropImage = require("../multer/cropProductImg");
 const User = require("../models/userModel");
-const validator = require("validator")
 const Category = require("../models/categoryModel")
 const Cart = require("../models/cartModel")
-const mongoose = require('mongoose')
 
 
 const getProduct = async (req, res) => {
@@ -20,32 +17,86 @@ const getProduct = async (req, res) => {
 
 
 // ADD PRODUCT AT ADMIN SIDE
+// const addProduct = async (req, res) => {
+//   try {
+//     if (!req.files || req.files.length === 0) {
+//       return res.status(400).send("No files were uploaded.");
+//     }
+//     const images = req.files.map((file) => file.filename);
+//     await cropImage.crop(req);
+//     const category =  await Category.find({ _id: req.body.category_id });
+
+//     if (!category) {
+//       return res.status(400).json({ error: "Category not found" });
+//     }
+
+//     // Parse specialOffer as a number
+//     const specialOffer = parseFloat(req.body.product_sales_price);
+//     if (isNaN(specialOffer) || specialOffer < 0 || specialOffer > 100) {
+//       return res.status(400).json({ error: "Invalid discount percentage" });
+//     }
+
+
+//     // Calculate the product_sales_price based on the discount percentage
+//     const product_price = parseFloat(req.body.product_price);
+//     if (isNaN(product_price) || product_price < 0) {
+//       return res.status(400).json({ error: "Invalid product price" });
+//     }
+//     const quantity = parseFloat(req.body.quantity);
+//     if (isNaN(quantity) || quantity < 0) {
+//       return res.status(400).json({ error: "Invalid quantity" });
+//     }
+
+//     console.log("product_price", product_price);
+//     const discount = (product_price * specialOffer) / 100;
+//     console.log("discount:::::::::", discount);
+//     const product_sales_price = product_price - discount;
+//     console.log("what in this:", product_sales_price);
+
+//     const product = new Product({
+//       product_name: req.body.product_name,
+//       product_price: product_price,
+//       product_sales_price: product_sales_price,
+//       quantity: req.body.quantity,
+//       description: req.body.description,
+//       image: images,
+//       category_id: category[0]._id,
+//     });
+
+//     await product.save();
+//     // const categories = await getCategoryList();
+//     res.json({ message: "Product added successfully" });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// };
+
+
 const addProduct = async (req, res) => {
   try {
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).send("No files were uploaded.");
-    }
-    const images = req.files.map((file) => file.filename);
-    await cropImage.crop(req);
 
-    console.log("hjgsdjhas", req.body);
+    console.log("vannoooo");
+    if (!req.files || req.files.length === 0) {
+      console.log(req.files);
+      return res.status(400).json('No files were uploaded.');
+    }
+    
+    const images = req.files.map(file => file.filename);
+    await cropImage.crop(req);
+    // Continue with the rest of your code...
+    
+
+    console.log("===========================");
+    // const images = req.files.map((file) => file.filename);
+    // await cropImage.crop(req);
 
     const category = await Category.find({ _id: req.body.category_id });
-    console.log("categoryyryrhfg", category, category[0].categoryname);
 
-    if (!category) {
-      return res.status(400).json({ error: "Category not found" });
-    }
+  
 
     // Parse specialOffer as a number
-    const specialOffer = parseFloat(req.body.product_sales_price);
-    console.log("qqqqqqqqqqqqq", specialOffer);
-
-    if (isNaN(specialOffer) || specialOffer < 0 || specialOffer > 100) {
-      return res.status(400).json({ error: "Invalid discount percentage" });
-    }
-
-    console.log("ccccccccccccc", category[0].OfferPrice);
+    const specialOffer = req.body.product_sales_price;
 
     // Calculate the product_sales_price based on the discount percentage
     const product_price = req.body.product_price;
@@ -62,17 +113,18 @@ const addProduct = async (req, res) => {
       quantity: req.body.quantity,
       description: req.body.description,
       image: images,
+      discountPercentage:specialOffer,
       category_id: category[0]._id,
     });
 
     await product.save();
     // const categories = await getCategoryList();
-    res.redirect("/admin/productlist");
+    res.json({ message: "Product added successfully" });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
-
 
 
 
@@ -87,16 +139,11 @@ const addProduct = async (req, res) => {
 const getProductDetails = async (req, res) => {
   try {
     const productId = req.params.productId;
-    // console.log("=============================================");
-    // console.log(productId);
-    // console.log("=============================================");
     const product = getProductDetails(productId);
     if (!product) {
       return res.status(404).send("Product not found");
     }
     res.render("users/productDetails", { product });
-    // const products = await Product.find();
-    // res.render("productDetails", { product });
   } catch (error) {
     console.log(error);
   }
@@ -107,22 +154,17 @@ const showProductDetails = async (req, res) => {
   try {
 
     const productId = req.params.productId;
-    // console.log("============================================");
-    // console.log(productId);
     const product = await Product.findOne({_id:productId});
     const userId = req.session.user_id;
     const user = await User.findById({ _id: userId });
     const category = await Category.findById(product.category_id);
     const cart = await Cart.findOne({ user: userId });
 
-    // console.log("++++++++++++++++++");
     if (!product) {
    
       return res.status(404).send("Product not found");
     }
     res.render("singleProduct", {user, product, categoryName: category.categoryname, cart  });
-    // const products = await Product.find();
-    // res.render("singleProduct", { product });
   } catch (error) {
     console.log(error);
   }
@@ -136,8 +178,6 @@ const editproductLoad = async (req, res) => {
     const productId = req.params.id;
     const product = await Product.findById( productId );
     const categories = await Category.find();
-      // console.log(categories);
-      // res.render("categories", { categories });
     if(product){
       res.render('editProduct', { product, categories });
     }else{
@@ -173,11 +213,8 @@ const listProduct = async (req, res) => {
 const deteEditeproduct = async (req, res) => {
   try {
     
-    console.log("hi hello");
         const productId = req.body.productId
         const removeindex = req.body.index
-      console.log("qwertyui",productId);
-      console.log("asdfghjk", removeindex);
         const findProduct = await Product.findOne({ _id: productId })
         if (!findProduct) {
             res.status(404).send('Product not found');
@@ -204,14 +241,13 @@ const editProduct = async (req, res) => {
       product_name,
       description,
       product_price,
-      product_sales_price,
+      discountPercentage,
       category_id,
       quantity,
     } = req.body;
 
     // Check if the product with the given id exists
     const existingProduct = await Product.findById(id);
-    console.log("qwerty:::", existingProduct);
     if (!existingProduct) {
       return res.status(404).json({ error: "Product not found" });
     }
@@ -232,10 +268,17 @@ const editProduct = async (req, res) => {
       }
   } 
 
+   // Parse specialOffer as a number
+  //  const specialOffer = req.body.discountPercentage;
+
+   const discount = (product_price * discountPercentage) / 100;
+   const product_sales_price1 = Math.trunc(product_price - discount);
+
     // Update the product fields other than images
     existingProduct.product_name = product_name;
     existingProduct.product_price = product_price;
-    existingProduct.product_sales_price = product_sales_price;
+    existingProduct.product_sales_price = product_sales_price1;
+    existingProduct.discountPercentage = discountPercentage;
     existingProduct.quantity = quantity;
     existingProduct.description = description;
     existingProduct.category_id = category_id;
@@ -279,10 +322,8 @@ const getShopProduct = async(req, res)=>{
      const pages = Array.from({ length: totalpages }, (_, i) => i + 1); // Create an array of page numbers
      const currentproduct = products.slice(startIndex, endIndex);
      
-    //  console.log(orders,"ods");
 
     res.render("shop", { user, products:currentproduct, categories,pages,currentpage, totalpages ,cart });
-    // await cropImage.crop(req);
   } catch (error) {
     console.log(error.message);
     
@@ -305,10 +346,6 @@ const getProductInsideCategory = async(req, res)=>{
   if (productCategory) {
     filter.category_id = { $in: productCategory }
   }
-
-  console.log("productCategory================",productCategory)
-  console.log("productRange================",productRange)
-
 
   if (productRange) {
     for (let i = 0; i < productRange.length; i++) {
@@ -334,7 +371,6 @@ const getProductInsideCategory = async(req, res)=>{
     }
   }
 
-  // console.log("range filter::::",rangeFilter );
   if (rangeFilter.length)
     filter.$or = rangeFilter
 
@@ -355,11 +391,6 @@ console.log("range filter::::",rangeFilter );
   }
   
   const products = await getFilteredProducts(filter, sort);
-  // console.log("=======>",products)
-
-
-
-
 
   const itemsPerPage = 6;
   let currentPage = parseInt(req.body.page);
@@ -393,11 +424,6 @@ const getFilteredProducts = async (filter, sort) => {
     throw error;
   }
 };
-
-
-
-
-
 
 
 

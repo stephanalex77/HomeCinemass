@@ -1,61 +1,41 @@
 <% include('../layouts/header.ejs') %>
-<head>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
-  />
-  <link rel="stylesheet" href="/public/css/adminLogin.css" />
-</head>
-<div class="header">
-  <a>
-    <h1>AV STORE</h1>
-  </a>
-</div>
-<div class="container w-25 my-5">
-  <h3 class="mb-4">Admin Login</h3>
-  <h5 class="mb-3 text-muted">* required fields</h5>
-  <% if (typeof message !== 'undefined') { %>
-  <h6><%= message %></h6>
-  <% } %>
-  <form
-    action=""
-    method="post"
-    class="needs-validation"
-    novalidate
-  >
-    <div class="mb-3">
-      <label for="email" class="form-label"></label>
-      <input
-        type="email"
-        name="email"
-        id="email"
-        class="form-control"
-        placeholder="Email*"
-        required
-      />
-      <div class="invalid-feedback">Please provide a valid email.</div>
-    </div>
 
-    <div class="mb-3">
-      <label for="password" class="form-label"></label>
-      <input
-        type="password"
-        name="password"
-        id="password"
-        class="form-control"
-        placeholder="Password*"
-        required
-      />
-      <div class="invalid-feedback">Please enter a password.</div>
-    </div>
+  <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/public/css/adminLogin.css" />
+  </head>
+  <div class="header">
+    <a>
+      <h1>AV STORE</h1>
+    </a>
+  </div>
+  <div class="container w-25 my-5">
+    <h3 class="mb-4">Admin Login</h3>
+    <h5 class="mb-3 text-muted">* required fields</h5>
+    <% if (typeof message !=='undefined' ) { %>
+      <h6>
+        <%= message %>
+      </h6>
+      <% } %>
+        <form action="" method="post" class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label for="email" class="form-label"></label>
+            <input type="email" name="email" id="email" class="form-control" placeholder="Email*" required />
+            <div class="invalid-feedback">Please provide a valid email.</div>
+          </div>
 
-    <!-- <button type="submit" class="btn btn-dark btn-center">Register</button> -->
-    <div class="text-center mb-3">
-      <!-- Center the button within the form -->
-      <button type="submit" class="btnn btn-dark full-width btn-outline-black btn-sm">
-        Login
-      </button>
-    </div>
-  </form>
-</div>
-<% include('../layouts/footer.ejs') %>
+          <div class="mb-3">
+            <label for="password" class="form-label"></label>
+            <input type="password" name="password" id="password" class="form-control" placeholder="Password*"
+              required />
+            <div class="invalid-feedback">Please enter a password.</div>
+          </div>
+
+          <div class="text-center mb-3">
+            <button type="submit" class="btnn btn-dark full-width btn-outline-black btn-sm">
+              Login
+            </button>
+          </div>
+        </form>
+  </div>
+  <% include('../layouts/footer.ejs') %>

@@ -1,5 +1,4 @@
 const Category = require("../models/categoryModel");
-const Multer = require("multer");
 
 const getCategory = async (req, res) => {
   try {
@@ -13,12 +12,7 @@ const getCategory = async (req, res) => {
 // add category
 const addCategory = async (req, res) => {
   try {
-    const { categoryname} = req.body;
-    
-  
-    // const category = new Category({
-    //   categoryname: req.body.categoryname,
-    // });
+    const { categoryname } = req.body;
 
     if (!categoryname) {
       res.send("Category name cannot be empty");
@@ -28,57 +22,49 @@ const addCategory = async (req, res) => {
       alert("Category name must be at least 3 characters long");
       return false;
     }
-    
+
     const existingCategory = await Category.findOne({
-      categoryname: { $regex: '^' + categoryname + '$', $options: 'i' }
+      categoryname: { $regex: "^" + categoryname + "$", $options: "i" },
     });
-    // const categories = await Category.find();
-    if(existingCategory){
+    if (existingCategory) {
       res.send("Category already exists");
-    }else{
+    } else {
       const newCategory = new Category({
         categoryname: req.body.categoryname,
-        OfferPrice:req.body.OfferPrice
+        OfferPrice: req.body.OfferPrice,
       });
       await newCategory.save();
-      if(newCategory){
-        
-      res.redirect("/admin/category");
+      if (newCategory) {
+        res.redirect("/admin/category");
       }
     }
-
   } catch (error) {
-    res.status(500).json({ error: 'Failed to add category' });
+    res.status(500).json({ error: "Failed to add category" });
   }
 };
 
-//edit category
-
-const editCategory = async(req, res)=>{
+const editCategory = async (req, res) => {
   try {
-    const categoryId=req.params.categoryId;
-    const categories = await categories.findById(categoryId)
-    res.render('category',{categories})
-  } catch (error) {
-
-  }
-}
-
-
-
-
-
-
+    const categoryId = req.params.categoryId;
+    const categories = await categories.findById(categoryId);
+    res.render("category", { categories });
+  } catch (error) { }
+};
 
 const listCategory = async (req, res) => {
   try {
     const categoryId = req.params.categoryId;
     const validCategoryId = new mongoose.Types.ObjectId(categoryId);
     await Category.findByIdAndUpdate(validCategoryId, { isListed: true });
-    res.redirect(302, '/admin/categories'); // Redirect back to the categories page
+    res.redirect(302, "/admin/categories"); // Redirect back to the categories page
   } catch (error) {
-    console.error('Error listing category:', error.message);
-    res.status(500).json({ success: false, message: 'An error occurred while listing the category' });
+    console.error("Error listing category:", error.message);
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "An error occurred while listing the category",
+      });
   }
 };
 
@@ -87,13 +73,17 @@ const unListCategory = async (req, res) => {
     const categoryId = req.params.categoryId;
     const validCategoryId = new mongoose.Types.ObjectId(categoryId);
     await Category.findByIdAndUpdate(validCategoryId, { isListed: false });
-    res.redirect(302, '/admin/categories'); // Redirect back to the categories page
+    res.redirect(302, "/admin/categories"); // Redirect back to the categories page
   } catch (error) {
-    console.error('Error unlisting category:', error.message);
-    res.status(500).json({ success: false, message: 'An error occurred while unlisting the category' });
+    console.error("Error unlisting category:", error.message);
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "An error occurred while unlisting the category",
+      });
   }
 };
-
 
 const deleteCategory = async (req, res) => {
   try {
@@ -103,7 +93,6 @@ const deleteCategory = async (req, res) => {
     console.log("Category deleted successfully.");
 
     res.redirect("/admin/category");
-
   } catch (error) {
     console.log(error.message);
   }
@@ -121,22 +110,23 @@ const loadCategoryOffer = async (req, res) => {
   }
 };
 
-const categoryOffer = async(req, res)=>{
+const categoryOffer = async (req, res) => {
   try {
     res.render("categoryOffer");
   } catch (error) {
     console.log(error.message);
   }
-}
+};
 
 
 module.exports = {
+ 
   getCategory,
   addCategory,
   unListCategory,
   listCategory,
   deleteCategory,
   loadCategoryOffer,
-  categoryOffer
-
+  categoryOffer,
+  editCategory,
 };

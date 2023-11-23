@@ -309,15 +309,16 @@
   if(!isNaN(grandTotal)){
      totalValue = parseInt(grandTotal)
   }
-  
-  if(totalValue !==data.cartSubtotal ){
+
+  if(Math.trunc(totalValue) !== Math.trunc(data.cartSubtotal) ){
+console.log('totlavalueuu ',);
    await Swal.fire({
     icon: 'warning', // You can use different icons (info, warning, error, etc.)
     title: 'Cart Changed',
     text: 'The contents of your cart have changed. Please place your order again.',
     confirmButtonText: 'OK',
   });
-        location.reload()
+      
         return
   }
 

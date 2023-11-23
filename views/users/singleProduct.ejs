@@ -39,8 +39,8 @@
                       <!-- <h5>previous <span>|</span> next</h5> -->
                       <h3><%= product.product_name %></h3>
                       <div class="product-price">
-                        <del class="old-price">₹<%= product.product_price %></del>
-                        <span class="new-price"><h2>₹<%= product.product_sales_price %></h2></span>
+                        <del class="old-price">₹<%= product.product_price.toFixed() %></del>
+                        <span class="new-price"><h2>₹<%= product.product_sales_price.toFixed() %></h2></span>
                       </div>
             
                       <ul class="list">
@@ -64,10 +64,10 @@
                       <div class="card_area d-flex justify-content-between align-items-center">
                         <% const productInCart = cart && cart.products.some(cartProduct => cartProduct.product.equals(product._id)); %>
                         <% if (productInCart) { %>
-                          <a href="/cartt"><button class="btn btn-primary add-to-cart btn_3" >Go to Cart</button></a>
+                          <a href="/cartt"><button class="btn btn-primary add-to-cart " >Go to Cart</button></a>
 
                         <% } else { %>
-                        <button class="btn btn-primary add-to-cart btn_3" onclick="addtocart('<%= product._id %>')" data-product-id="<%= product._id %>">Add to Cart</button>
+                        <button class="btn btn-primary add-to-cart " onclick="addtocart('<%= product._id %>')" data-product-id="<%= product._id %>">Add to Cart</button>
                         <% } %>
                         <a href="#" class="like_us" onclick="addToWishlist('<%= product._id %>')"> 
                             <svg class="" viewBox="0 0 24 24" width="15" height="15" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

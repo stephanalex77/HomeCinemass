@@ -166,7 +166,7 @@
 }
 .irs-line {
     height: 10px; top: 33px;
-    background: #EEE;
+    background: #2c973e;
     background: linear-gradient(to bottom, #DDD -50%, #FFF 150%); /* W3C */
     border: 1px solid #CCC;
     border-radius: 16px;

@@ -155,13 +155,13 @@
                       <td><%= product.product.product_name %> <strong class="mx-2">x</strong>
                         <span class="quantity-display" data-product-id="<%= product._id %>"><%= product.quantity %></span>
                       </td>
-                      <td class="price" data-product-id="<%= product._id %>">₹<%= product.product_total.toFixed(2) %></td>
+                      <td class="price" data-product-id="<%= product._id %>">₹<%= product.product_total.toFixed() %></td>
                     </tr>
                     
                   <% }); %>
                   <tr>
                     <td class="text-black font-weight-bold"><strong>Cart Sub Total</strong></td>
-                    <td class="text-black" id="cartSubtotalValue">₹<%= cart.cartSubtotal.toFixed(2) %></td>
+                    <td class="text-black" id="cartSubtotalValue">₹<%= cart.cartSubtotal.toFixed() %></td>
                   </tr>
                   <!-- <tr>
                     <td class="text-black font-weight-bold"><strong>Total</strong></td>

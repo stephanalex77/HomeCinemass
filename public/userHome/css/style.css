@@ -572,7 +572,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h6, .h6 {
       text-align: center;
       cursor: pointer;
       border-radius: 50%;
-      border: 1px solid #f8f9fa; }
+      border: 1px solid #d7fbc7cc; }
       .site-mobile-menu .site-nav-wrap .arrow-collapse:before {
         font-size: 14px;
         z-index: 20;
@@ -1028,12 +1028,12 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h6, .h6 {
       transform: rotate(-45deg); }
 
 .sort {
-  background: #f8f9fa;
+  background: #d7fbc7cc;
   padding: 20px; }
   .sort strong {
     font-weight: normal; }
   .sort select {
-    background: #f8f9fa;
+    background: #d7fbc7cc;
     border: none; }
     .sort select:active, .sort select:focus {
       outline: none; }
@@ -1042,7 +1042,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h6, .h6 {
   display: block;
   margin-bottom: 10px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #f8f9fa; }
+  border-bottom: 1px solid #d7fbc7cc; }
   .categories li a {
     color: #000000;
     display: block;
@@ -1081,7 +1081,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h6, .h6 {
       top: -3px;
       font-size: 16px; }
   .custom-pagination ul li > span {
-    background: #f8f9fa; }
+    background: #d7fbc7cc; }
     .custom-pagination ul li > span:hover {
       border-color: #ccc; }
 
@@ -1406,7 +1406,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h6, .h6 {
   height: 40px;
   position: relative;
   border-radius: 50%;
-  background: #f8f9fa; }
+  background: #d7fbc7cc; }
 
 .video-wrap {
   position: relative;

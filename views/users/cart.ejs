@@ -28,9 +28,9 @@
                       <h5 class="card-title">
                         <%= product.product.product_name %>
                       </h5>
-                      <del class="text-danger h4">₹<%= product.product.product_price %></del>
+                      <del class="text-danger h4">₹<%= product.product.product_price.toFixed() %></del>
                       <p class="card-text">
-                        ₹<%= product.product.product_sales_price %>
+                        ₹<%= product.product.product_sales_price.toFixed() %>
                       </p>
                     </div>
                     <div class="col-md-3">
@@ -49,7 +49,7 @@
                     <div class="col-md-2">
                       <p class="card-text price" data-product-id="<%= product._id %>"
                         data-sales-price="<%= product.product.product_sales_price %>">
-                        ₹<%= (product.product.product_sales_price * product.quantity).toFixed(2) %>
+                        ₹<%= (product.product.product_sales_price * product.quantity).toFixed() %>
                       </p>
                     </div>
 
@@ -80,22 +80,14 @@
             <div class="col-md-10">
               <div class="row">
                 <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
-                <div class="p-3 p-lg-5 border">
+                <div class=" p-lg-5 border">
                   <% if (cart && cart.products && cart.products.length> 0) { %>
                     <!-- Loop through products to calculate subtotals -->
                     <% let totalSubtotal=0; %>
                       <% cart.products.forEach(product=>
                         { %> <% const subtotal=product.product.product_sales_price * product.quantity; %>
-                          <% totalSubtotal +=subtotal; %>
-                            <!-- <div class="row mb-3">
-                  <div class="col-md-6 d-flex align-items-center">
-                    <span class="text-black"><%= product.product.product_name %></span>
-                  </div>
-                  <div class="col-md-6 text-right">
-                    <strong class="text-black">₹<%= subtotal.toFixed(2) %></strong>
-                  </div>
-                </div> -->
-                            <% }); %>
+                        <% totalSubtotal +=subtotal; %>
+                      <% }); %>
 
                               <table class="table site-block-order-table mb-5">
                                 <thead>
@@ -113,35 +105,21 @@
                                           </span>
                                       </td>
                                       <td class="price" data-product-id="<%= product._id %>">
-                                        ₹<%= product.product_total.toFixed(2) %>
+                                        ₹<%= product.product_total.toFixed() %>
                                       </td>
                                     </tr>
-
-                                    <% }); %>
+                                  <% }); %>
                                       <tr>
                                         <td class="text-black font-weight-bold">
                                           <strong>Cart Sub Total</strong>
                                         </td>
                                         <td class="text-black" id="cartSubtotalValue">
-                                          ₹<%= cart.cartSubtotal.toFixed(2) %>
+                                          ₹<%= cart.cartSubtotal.toFixed() %>
                                         </td>
                                       </tr>
-                                      <!-- <tr>
-                      <td class="text-black font-weight-bold"><strong>Total</strong></td>
-                      <td class="text-black font-weight-bold" id="cartSubtotalValue">₹<span><%= cart.cartSubtotal.toFixed(2) %></span></td>
-                    </tr> -->
+
                                 </tbody>
                               </table>
-
-                              <!-- Display the total subtotal -->
-                              <!-- <div class="row mb-5">
-                <div class="col-md-6">
-                  <span class="text-black">Total Subtotal</span>
-                </div>
-                <div class="col-md-6 text-right">
-                  <strong class="text-black">₹<%= totalSubtotal.toFixed(2) %></strong>
-                </div>
-              </div> -->
 
                               <div class="row">
                                 <div class="col-md-12">
@@ -151,9 +129,13 @@
                                   </button>
                                 </div>
                               </div>
-                              <% } else { %>
-                                <p>No products in the cart.</p>
-                                <% } %>
+                      <% } else { %>
+
+                                <div class="alert alert-info text-center" role="alert">
+                                  No products in the cart. <a href="/shop">Browse Products</a>
+                                </div>
+
+                  <% } %>
                 </div>
               </div>
             </div>
@@ -373,7 +355,7 @@
       });
     }
   </script>
-  
+
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -409,7 +391,7 @@
                 });
 
                 productContainer.remove();
-                updateCartProducts(data.cart.products,data.cart)
+                updateCartProducts(data.cart.products, data.cart)
                 // updateCartTotal(data);
               } else {
                 console.error("Failed to remove item from cart");
@@ -453,7 +435,7 @@
     }
 
 
-    function updateCartProducts(products,cart) {
+    function updateCartProducts(products, cart) {
       console.log(products, "products in updatecartproducst")
       const cartTable = document.getElementById('cartTable');
       cartTable.innerHTML = ''; // Clear the existing content.
